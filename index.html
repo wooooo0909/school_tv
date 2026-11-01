@@ -688,7 +688,16 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
   var DEMO = qs('demo') === '1';
   var OFFSET = 0, DOW = qs('dow') !== null ? +qs('dow') : null;
   if (qs('at')) { var at = qs('at').split(':'), tgt = new Date(); tgt.setHours(+at[0], +at[1], +(at[2] || 0), 0); OFFSET = tgt.getTime() - new Date().getTime(); }
-  function now() { return new Date(new Date().getTime() + OFFSET); }
+  // TV 시계가 틀려 있어도 수업 시간·버스·원격 명령이 맞도록, 관리자 서버(구글) 시각에 맞춤 (2초 넘게 차이 날 때만)
+  var SKEW = 0, SKEW_RTT = 1e9, USE_SKEW = !qs('at') && !qs('noskew');
+  function syncClock(serverMs, sentAt) {
+    if (!USE_SKEW || !serverMs) return;
+    var got = new Date().getTime(), rtt = got - sentAt;
+    if (rtt < 0 || rtt > 5000) return;
+    var sk = serverMs + rtt / 2 - got;
+    if (rtt <= SKEW_RTT * 1.5 || Math.abs(sk - SKEW) > 30000) { SKEW_RTT = Math.min(rtt, SKEW_RTT * 1.5); if (Math.abs(sk - SKEW) > 2000) SKEW = sk; }
+  }
+  function now() { return new Date(new Date().getTime() + OFFSET + SKEW); }
   var FORCE_THEME = qs('theme');
 
   /* ───────────── 유틸 ───────────── */
@@ -785,16 +794,41 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     s.src = url.replace('{cb}', name);
     (document.head || document.getElementsByTagName('head')[0]).appendChild(s);
   }
-  var BUILD = '10.31.8';   // 화면 파일 버전 (관리자 앱에서 확인)
+  var BUILD = '10.31.13';   // 화면 파일 버전 (관리자 앱에서 확인)
   function tvMode() {
     if ($('alertv') && $('alertv').className.indexOf('on') >= 0) return 'alert';
     if (SEAT.open) return 'seat';
+    if (TVAPP.hdmi) return 'hdmi';
     if (TOOL.open) return 'tool';
     if (inClass) return 'class';
     if (cleaning) return 'clean';
     if ($('pview') && $('pview').className.indexOf(' on') >= 0) return 'poster';
     if ($('idv') && $('idv').className.indexOf(' on') >= 0) return 'idiom';
     return 'dash';
+  }
+  /* TV 설치형 앱(껍데기) 안에서 돌 때의 연결: 앱이 HDMI 화면을 띄우면 알려 주고,
+     대시보드는 '꼭 앞에 보여야 하는 화면'(긴급 공지·자리 배치)일 때 앞으로 불러 달라고 요청. 일반 브라우저에서는 아무 일도 안 함 */
+  var TVAPP = { on: false, hdmi: false, front: null };
+  function tvAppPost(o) { if (window.parent === window) return; o.tvdash = 1; try { window.parent.postMessage(o, '*'); } catch (e) {} }
+  function tvAppFront(force) {
+    if (!TVAPP.on) return;
+    var want = !!((typeof SEAT !== 'undefined' && SEAT.open) || ($('alertv') && $('alertv').className.indexOf('on') >= 0));
+    if (!force && want === TVAPP.front) return;
+    TVAPP.front = want; tvAppPost({ front: want });
+  }
+  if (window.parent !== window) {
+    window.addEventListener('message', function (e) {
+      var d = e.data;
+      if (e.source !== window.parent || !d || typeof d !== 'object' || !d.tvapp) return;
+      var was = TVAPP.hdmi; TVAPP.on = true; TVAPP.hdmi = !!d.hdmi;
+      tvAppFront(true);
+      if (was !== TVAPP.hdmi && typeof syncMusic === 'function') try { syncMusic(); } catch (er) {}
+    });
+    document.addEventListener('keydown', function (e) {             // 색깔 키는 껍데기 앱이 처리
+      if (e.keyCode >= 403 && e.keyCode <= 406) tvAppPost({ key: e.keyCode });
+    });
+    tvAppPost({ hello: 1 });
+    setInterval(function () { tvAppPost({ hello: 1 }); tvAppFront(false); }, 1000);
   }
   function hb() { return '&tv=' + tvMode() + '&b=' + BUILD + (document.hidden ? '&hid=1' : ''); }
   function apiUrl(extra) {
@@ -995,9 +1029,11 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     if (nowMs - lastFull > 60000) { pinging = true; loadAdmin(function () { pinging = false; }); return; }
     pinging = true;
     var have = ADMIN ? ADMIN.version : '';
+    var sent = new Date().getTime();
     jsonp(apiUrl(hb() + '&v=1&have=' + encodeURIComponent(have == null ? '' : have) + '&hr=' + encodeURIComponent(reloadToken || '')), 8000, function (d) {
       pinging = false;
       if (!d || !d.ok) return;
+      syncClock(d.now, sent);
       if (d.state) { pinging = true; useState(d.state, function () { pinging = false; }); return; }   // 한 번에 받음
       if (reloadToken !== null && d.r && d.r !== reloadToken) { reloadToken = d.r; pinging = true; loadAdmin(function () { pinging = false; safeReload(); }); return; }
       if (!ADMIN || d.v !== ADMIN.version) { pinging = true; loadAdmin(function () { pinging = false; }); }
@@ -1006,7 +1042,9 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
   function loadAdmin(cb) {
     cb = cb || function () {};
     if (!CONFIG.api) { setStatus('admin', false); cb(); return; }
+    var sent = new Date().getTime();
     jsonp(apiUrl(hb()), 20000, function (d) {
+      if (d) syncClock(d.now, sent);
       if (!d || !d.ok || !d.state) { lastFull = new Date().getTime(); setStatus('admin', false); cb(); return; }
       useState(d.state, cb);
     }, function () {
@@ -1196,7 +1234,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
       out.push(n);
     }
     out.sort(function (a, b) { return (b.hot ? 1 : 0) - (a.hot ? 1 : 0); });
-    var dl = DIS && DIS.list || [], nowMs = new Date().getTime(), lim = ((DIS && DIS.noticeMin) || 60) * 60000;
+    var dl = DIS && DIS.list || [], nowMs = now().getTime(), lim = ((DIS && DIS.noticeMin) || 60) * 60000;
     for (i = dl.length - 1; i >= 0; i--) {
       var x = dl[i];
       if (nowMs - x.at >= lim) continue;
@@ -1573,7 +1611,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     // 하교 시간이면 버스 도착 정보
     var useBus = busWindow(d, blocks);
     if (useBus && new Date().getTime() - busAt > 30000) loadBus();
-    if (useBus && BUS && BUS.stations && !BUS.off && new Date().getTime() - (BUS.at || 0) < 180000) {
+    if (useBus && BUS && BUS.stations && !BUS.off && new Date().getTime() - busAt < 180000) {   // 받은 시각 기준 (TV 시계와 무관)
       L = '<span class="st-k">하교 버스</span>';
       var per = BUS.stations.length > 1 ? 3 : 6;
       for (var si = 0; si < BUS.stations.length; si++) {
@@ -1663,9 +1701,10 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     var isTomorrow = diffDays(today0(), nd) === 1;
     var h = '<div class="label"><span class="dot"></span>' + (isTomorrow ? '내일' : '다음 수업일') + ' 시간표' +
       (ttOverride(nd) ? '<span class="chgk">변경</span>' : '') + '<span class="tail">' + md(nd) + '</span></div>';
-    var exn = examName(nd);
+    var exn = examName(nd), dm0 = STATE.meals && STATE.meals[k] && STATE.meals[k]['석식'];
     if (exn && !holiday) {
       h += '<div class="empty">' + (isTomorrow ? '내일은 ' : '') + esc(exn) + '<small>시험 시간표와 준비물은 학급 게시판을 확인하세요</small></div>';
+      if (dm0 && dm0.items && dm0.items.length) h += '<div class="tmr-sup tmr-din"><b>석식</b><span>' + esc(dm0.items.join(' · ')) + '</span></div>';
       setHTML('tmrCard', h); return;
     }
     if (holiday || !blocks.length) {
@@ -1698,7 +1737,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     return null;
   }
   function updateAlert() {
-    var a = ADMIN && ADMIN.alert, nowMs = new Date().getTime(), el = $('alertv');
+    var a = ADMIN && ADMIN.alert, nowMs = now().getTime(), el = $('alertv');
     if (!(a && a.text && a.until > nowMs)) a = disUrgent(nowMs);
     var on = !!(a && a.text && a.until > nowMs);
     setHTML('alK', on && a.k ? esc(a.k) : '긴급 공지');
@@ -1785,6 +1824,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
         g.gain.setValueAtTime(0.0001, at); g.gain.exponentialRampToValueAtTime(0.4, at + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, at + 0.35);
         o.start(at); o.stop(at + 0.4);
       }
+      if (typeof sndSleep === 'function') sndSleep(3000);
     } catch (e) {}
   }
   // 스톱워치
@@ -1872,11 +1912,11 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
   }
   // 관리자 앱(휴대폰)에서 보낸 도구 명령
   function toolCommand(c) {
+    if (toolSeq === null) { toolSeq = c && c.seq ? c.seq : 0; return; }   // 처음 받은 값은 지난 명령(또는 '명령 없음')이므로 실행하지 않음
     if (!c || !c.seq) return;
-    if (toolSeq === null) { toolSeq = c.seq; return; }          // 처음 받은 값은 지난 명령이므로 실행하지 않음
     if (c.seq === toolSeq) return;
     toolSeq = c.seq;
-    if (new Date().getTime() - c.seq > 120000) return;
+    if (now().getTime() - c.seq > 120000) return;
     var a = c.a;
     if (a === 'open') openTools(c.v || null);
     else if (a === 'close') closeTools();
@@ -1961,7 +2001,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
   }
   function seatPaintAll(layout) { for (var i = 1; i <= 20; i++) seatPaint(i, layout[i] || ''); }
   /* 효과음 엔진 (웹 오디오로 직접 합성 — 파일 필요 없음)
-     조사 근거: 층을 쌓은 임팩트(서브+트랜지언트+잔향), 라이저 끝의 짧은 침묵, 셰퍼드 톤, 포화로 만든 배음(작은 TV 스피커용),
+     조사 근거: 층을 쌓은 임팩트(서브+트랜지언트+잔향), 라이저 끝의 짧은 침묵, 포화로 만든 배음(작은 TV 스피커용),
      잔향은 생성한 임펄스 응답 하나만, 마스터는 리미터로 보호. 모든 소리는 오디오 시계(currentTime)에 예약 */
   var SFX = { ctx: null };
   function sfxCtx() {
@@ -2016,6 +2056,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
   }
   // ── 기본 부품 ──
   function sG(v) { var g = SND.c.createGain(); g.gain.value = v === undefined ? 1 : v; return g; }
+  function sR(a, b) { return a + Math.random() * (b - a); }
   function sEnv(p, t, pk, a, d) { p.setValueAtTime(0.0001, t); p.exponentialRampToValueAtTime(pk, t + a); p.exponentialRampToValueAtTime(0.0001, t + a + d); }
   function sOsc(type, f, t, end) { var o = SND.c.createOscillator(); o.type = type; o.frequency.setValueAtTime(f, t); o.start(t); o.stop(end); return o; }
   function sNz(t, dur) { var s = SND.c.createBufferSource(); s.buffer = SND.nb; s.start(t, Math.random(), dur); return s; }
@@ -2029,49 +2070,48 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
   }
   // ── 소리 ──
   var SX = {
-    // 묵직한 임팩트: 순간 클릭 + 음높이가 떨어지는 서브 + (크게) 낮은 금관 같은 '브람' + 긴 잔향 꼬리
+    // 묵직한 임팩트: 매번 다르게 — 성격 3종(브람·큰북·쇳덩이)을 연달아 같은 게 안 나오게 고르고, 음높이·길이·밝기도 매번 흔듦
     impact: function (t, size) {
-      var c = SND.c, end = t + 3.2, g, o, n, f;
-      o = sOsc('sine', 150, t, end); o.frequency.exponentialRampToValueAtTime(46, t + 0.12); o.frequency.setTargetAtTime(31, t + 0.12, 0.45);
-      g = sG(0); sEnv(g.gain, t, 0.8 * size, 0.004, 1.5 + size); o.connect(g); sOut(g, 1, 0, 0.9);
-      o = sOsc('sine', 300, t, end); o.frequency.exponentialRampToValueAtTime(92, t + 0.12); o.frequency.setTargetAtTime(62, t + 0.12, 0.45);
-      g = sG(0); sEnv(g.gain, t, 0.16 * size, 0.004, 1.1); o.connect(g); sOut(g, 1, 0.2);
-      n = sNz(t, 0.06); f = sFlt('lowpass', 4200); g = sG(0); sEnv(g.gain, t, 0.5 * size, 0.001, 0.045); n.connect(f); f.connect(g); sOut(g, 1, 0.35);
-      n = sNz(t, 2.2); f = sFlt('lowpass', 1600); f.frequency.setValueAtTime(1600, t); f.frequency.exponentialRampToValueAtTime(130, t + 2); g = sG(0); sEnv(g.gain, t, 0.13 * size, 0.01, 1.9); n.connect(f); f.connect(g); sOut(g, 0.6, 1);
-      if (size > 0.9) {                               // 브람: 낮은 D(73Hz)·A(110Hz) 톱니파 두 겹, 필터가 확 열렸다 닫힘
-        var lp = sFlt('lowpass', 160, 1.5); lp.frequency.setValueAtTime(160, t); lp.frequency.exponentialRampToValueAtTime(1500, t + 0.09); lp.frequency.setTargetAtTime(220, t + 0.12, 0.6);
-        g = sG(0); g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.15, t + 0.03); g.gain.setTargetAtTime(0.0001, t + 0.4, 0.7);
-        var fr = [73.42, 73.42, 110, 146.83], dt = [-9, 9, -6, 5];
-        for (var i = 0; i < 4; i++) { o = sOsc('sawtooth', fr[i], t, end); o.detune.value = dt[i]; o.connect(lp); }
+      var end = t + 3.4, g, o, n, f, i, v = SND.iv = ((SND.iv || 0) + 1 + Math.floor(Math.random() * 2)) % 3;
+      var f0 = sR(130, 175), f1 = sR(41, 50), dk = 1.3 + size + sR(-0.3, 0.3);
+      o = sOsc('sine', f0, t, end); o.frequency.exponentialRampToValueAtTime(f1, t + sR(0.09, 0.15)); o.frequency.setTargetAtTime(f1 * 0.7, t + 0.13, sR(0.35, 0.55));
+      g = sG(0); sEnv(g.gain, t, 0.8 * size, 0.004, dk); o.connect(g); sOut(g, 1, 0, 0.9);
+      o = sOsc('sine', f0 * 2, t, end); o.frequency.exponentialRampToValueAtTime(f1 * 2, t + 0.12); g = sG(0); sEnv(g.gain, t, sR(0.08, 0.18) * size, 0.004, dk * 0.6); o.connect(g); sOut(g, 1, 0.2);
+      n = sNz(t, 0.06); f = sFlt('lowpass', sR(2500, 5500)); g = sG(0); sEnv(g.gain, t, sR(0.35, 0.5) * size, 0.001, sR(0.03, 0.06)); n.connect(f); f.connect(g); sOut(g, 1, 0.35, 0, sR(-0.2, 0.2));
+      n = sNz(t, 2.4); f = sFlt('lowpass', 1600); f.frequency.setValueAtTime(sR(900, 2200), t); f.frequency.exponentialRampToValueAtTime(120, t + sR(1.6, 2.3)); g = sG(0); sEnv(g.gain, t, sR(0.08, 0.15) * size, 0.01, 2); n.connect(f); f.connect(g); sOut(g, 0.6, 1);
+      if (v === 0 && size > 0.9) {                     // 브람: 낮은 금관 같은 톱니파 묶음, 필터가 확 열렸다 닫힘. 화음도 매번 바뀜
+        var vc = [[73.42, 110, 146.83], [73.42, 87.31, 110], [65.41, 98, 130.81]][Math.floor(Math.random() * 3)];
+        var lp = sFlt('lowpass', 160, 1.5); lp.frequency.setValueAtTime(160, t); lp.frequency.exponentialRampToValueAtTime(sR(1100, 1800), t + 0.09); lp.frequency.setTargetAtTime(200, t + 0.12, sR(0.45, 0.8));
+        g = sG(0); g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.14, t + 0.03); g.gain.setTargetAtTime(0.0001, t + 0.4, 0.7);
+        for (i = 0; i < 4; i++) { o = sOsc('sawtooth', vc[i % 3] * (i === 3 ? 0.5 : 1), t, end); o.detune.value = sR(-12, 12); o.frequency.setTargetAtTime(vc[i % 3] * (i === 3 ? 0.5 : 1) * 0.96, t + 0.3, 1.2); o.connect(lp); }
         lp.connect(g); sOut(g, 1, 0.5, 0.25);
+      } else if (v === 1 || size <= 0.9) {             // 큰북: 낮게 울리는 북통 + 가죽 소리, 잔향 넉넉히
+        o = sOsc('sine', sR(88, 104), t, end); o.frequency.exponentialRampToValueAtTime(sR(55, 62), t + 0.25); g = sG(0); sEnv(g.gain, t, 0.45 * size, 0.003, 0.9); o.connect(g); sOut(g, 1, 0.45, 0.4);
+        n = sNz(t, 0.4); f = sFlt('bandpass', sR(170, 240), 1.4); g = sG(0); sEnv(g.gain, t, 0.5 * size, 0.002, 0.3); n.connect(f); f.connect(g); sOut(g, 1, 0.7);
+      } else {                                         // 쇳덩이: 낮은 비정수배 배음이 길게 울리는 묵직한 금속음
+        var b = sR(96, 124), rt = [1, 2.41, 3.93, 5.62], dc = [2.2, 1.4, 0.9, 0.5], gn = [0.09, 0.06, 0.04, 0.025];
+        for (i = 0; i < 4; i++) { o = sOsc('sine', b * rt[i] * sR(0.99, 1.01), t, t + dc[i] + 0.1); g = sG(0); sEnv(g.gain, t, gn[i] * size, 0.002, dc[i]); o.connect(g); sOut(g, 1, 0.55, 0, (i % 2 ? 0.25 : -0.25)); }
       }
     },
-    // 라이저: 좁은 대역 잡음이 올라가고, 톱니파 두 개가 두 옥타브 상승 + 점점 빨라지는 떨림. 끝은 0.01초 만에 뚝 끊어 '숨 멈춤'
-    riser: function (t, T) {
-      var end = t + T, n = sNz(t, T + 0.05), bp = sFlt('bandpass', 300, 3), g = sG(0), o1, o2, lp, tg, tr, lfo, dep;
-      bp.frequency.setValueAtTime(300, t); bp.frequency.exponentialRampToValueAtTime(7000, end);
-      g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.3, end); g.gain.linearRampToValueAtTime(0.0001, end + 0.01);
-      n.connect(bp); bp.connect(g); sOut(g, 1, 0.35);
-      lp = sFlt('lowpass', 400, 2); lp.frequency.setValueAtTime(400, t); lp.frequency.exponentialRampToValueAtTime(5200, end);
-      tr = sG(0.6); lfo = sOsc('sine', 4, t, end + 0.05); lfo.frequency.exponentialRampToValueAtTime(15, end); dep = sG(0.4); lfo.connect(dep); dep.connect(tr.gain);
-      tg = sG(0); tg.gain.setValueAtTime(0.0001, t); tg.gain.exponentialRampToValueAtTime(0.085, end); tg.gain.linearRampToValueAtTime(0.0001, end + 0.01);
-      o1 = sOsc('sawtooth', 110, t, end + 0.05); o1.detune.value = -12; o1.frequency.exponentialRampToValueAtTime(440, end);
-      o2 = sOsc('sawtooth', 110, t, end + 0.05); o2.detune.value = 12; o2.frequency.exponentialRampToValueAtTime(440, end);
-      o1.connect(lp); o2.connect(lp); lp.connect(tr); tr.connect(tg); sOut(tg, 1, 0.3);
+    // 카운트다운 밑에 깔리는 압력: 음높이가 올라가는 '삐이잉' 대신, 어두운 저음이 점점 열리고 커지다가
+    // 마지막 1.5초는 거꾸로 튼 심벌처럼 '쉬이이—' 차오른 뒤 뚝 끊김(직후 정적 → 임팩트)
+    swell: function (t, T) {
+      var end = t + T, lp = sFlt('lowpass', 90, 1.2), g = sG(0), i, o, n, f, hp;
+      lp.frequency.setValueAtTime(90, t); lp.frequency.exponentialRampToValueAtTime(sR(600, 800), end);
+      g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.12, end); g.gain.linearRampToValueAtTime(0.0001, end + 0.012);
+      var fr = [36.71, 36.71, 55, 73.42];
+      for (i = 0; i < 4; i++) { o = sOsc('sawtooth', fr[i], t, end + 0.05); o.detune.value = sR(-10, 10); o.connect(lp); }
+      lp.connect(g); sOut(g, 1, 0.2, 0.35);
+      n = sNz(t, T + 0.05); f = sFlt('lowpass', 300); f.frequency.setValueAtTime(300, t); f.frequency.exponentialRampToValueAtTime(1400, end);
+      g = sG(0); g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.07, end); g.gain.linearRampToValueAtTime(0.0001, end + 0.012); n.connect(f); f.connect(g); sOut(g, 1, 0.3);
+      SX.revcym(end - 1.5, 1.5);
     },
-    // 셰퍼드 톤: 옥타브 간격 사인파 9겹이 함께 올라가고 양끝은 사라져 '끝없이 올라가는' 착각
-    shepard: function (t, T) {
-      var L = 9, R = 0.42, cen = (L - 1) / 2, sg = 1.5, lp = sFlt('lowpass', 3200), out = sG(1);
-      lp.connect(out); sOut(out, 1, 0.45);
-      for (var k = 0; k < L; k++) {
-        var f0 = 55 * Math.pow(2, k), o = sOsc('sine', f0, t, t + T + 0.03), g = sG(0), cv = new Float32Array(40);
-        o.frequency.exponentialRampToValueAtTime(f0 * Math.pow(2, R * T), t + T);
-        for (var j = 0; j < 40; j++) {
-          var x = k + R * T * j / 39 - cen, w = Math.exp(-x * x / (2 * sg * sg)) * 0.055;
-          cv[j] = w * Math.min(1, (j + 1) / 8) * (j === 39 ? 0 : 1);
-        }
-        g.gain.setValueCurveAtTime(cv, t, T); o.connect(g); g.connect(lp);
-      }
+    // 거꾸로 튼 심벌: 높은 잡음이 지수적으로 차오르다 끝에서 뚝 (공명 필터 없이 → 휘파람 같은 소리가 안 남)
+    revcym: function (t, T) {
+      var end = t + T, n = sNz(t, T + 0.05), hp = sFlt('highpass', 2600, 0.6), lp = sFlt('lowpass', 4000, 0.6), g = sG(0);
+      lp.frequency.setValueAtTime(4000, t); lp.frequency.exponentialRampToValueAtTime(13000, end);
+      g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.004, t + T * 0.45); g.gain.exponentialRampToValueAtTime(0.2, end); g.gain.linearRampToValueAtTime(0.0001, end + 0.01);
+      n.connect(hp); hp.connect(lp); lp.connect(g); sOut(g, 1, 0.45);
     },
     // 시계 초침: 짧은 고음 클릭 + 비정수배 두 음의 '톡' + 100Hz '무게'. 틱/톡 번갈아 좌우로 살짝
     tick: function (t, k, w) {
@@ -2129,16 +2169,37 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
       };
     }
   };
-  function sndNow() { var c = sndInit(); return c ? c.currentTime + 0.03 : -1; }
-  function sndDo(fn) { try { var t = sndNow(); if (t >= 0) return fn(t); } catch (e) {} return null; }
+  /* 소리 장치는 페이지를 열 때 미리 만들어 두고(켜 둔 것과 똑같이 준비 완료), 쓰지 않을 때만 '일시정지'.
+     일시정지 중에 소리를 내야 하면 깨어날 때까지 기다렸다가, 기다린 시간만큼 앞당겨 예약해 화면과 박자를 맞춤 */
+  var SNDSL = null;
+  function sndSleep(ms) {                          // 자리배치모드가 아니면 ms 뒤 일시정지 (CPU 사용 0에 가깝게)
+    clearTimeout(SNDSL);
+    SNDSL = setTimeout(function () { try { if (!SEAT.open && SND.ok && SND.c.suspend && SND.c.state === 'running') SND.c.suspend(); } catch (e) {} }, ms);
+  }
+  function sndWake() { clearTimeout(SNDSL); return sndInit(); }   // sndInit → sfxCtx 가 일시정지를 풂
+  function sndDo(fn) {
+    try {
+      var c = sndWake(); if (!c) return null;
+      if (c.state === 'running') return fn(c.currentTime + 0.03);
+      var asked = new Date().getTime(), pr = c.resume && c.resume();
+      if (pr && pr.then) pr.then(function () {
+        var lag = Math.min(0.5, (new Date().getTime() - asked) / 1000);
+        try { fn(c.currentTime + 0.03 - lag); } catch (e) {}
+      });
+    } catch (e) {}
+    return null;
+  }
+  setTimeout(function () { if (!SND.ok) sndInit(); sndSleep(800); }, 4000);   // 페이지 열고 4초 뒤 미리 준비
   // 리모컨·클릭 한 번이면 소리가 켜지도록 (일부 브라우저는 사용자 조작 전에는 소리를 막음)
-  document.addEventListener('click', function () { sndInit(); }, true);
-  document.addEventListener('keydown', function () { sndInit(); }, true);
+  // 리모컨·클릭이 있을 때마다 소리 장치를 '허용' 상태로 깨워 둠(일부 브라우저의 자동재생 제한 대비) → 모드가 아니면 곧 다시 일시정지
+  function sndGesture() { sndWake(); if (!SEAT.open) sndSleep(1500); }
+  document.addEventListener('click', sndGesture, true);
+  document.addEventListener('keydown', sndGesture, true);
   function seatDate() { var d = now(); return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + DAYS[d.getDay()] + '요일' + (TT().className ? ' · ' + esc(TT().className) : ''); }
   function openSeat(seat, intro) {
     if (SEAT.open) return;
     SEAT.open = true; seatBuild(); seatStop();
-    sndInit();                                   // 잔향 등 준비는 화면이 조용할 때 미리
+    sndWake();                                   // 일시정지 해제(진입 효과음보다 먼저)
     clearTimeout(cycleTimer);
     if (TOOL.open) { TOOL.open = false; TOOL.pushed = false; }
     document.body.className = '';
@@ -2152,7 +2213,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     if (!intro) { v.className = 'view on ready'; return; }
     // 웅장하고 깔끔하게: 검은 화면 → 선이 펼쳐짐 → 제목 → 자리판
     v.className = 'view on';
-    sndDo(function (t) { SX.riser(t + 0.05, 0.6); SX.impact(t + 0.7, 1); });   // 짧게 빨아들였다가 '쿵'
+    sndDo(function (t) { SX.revcym(t + 0.05, 0.65); SX.impact(t + 0.7, 1); });   // 짧게 차올랐다가 '쿵'
     seatLater(function () { v.className = 'view on s1'; }, 700);
     seatLater(function () { v.className = 'view on s1 s2'; }, 1400);
     seatLater(function () { v.className = 'view on s1 s2 ready'; }, 3600);
@@ -2161,6 +2222,8 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     if (!SEAT.open) return;
     SEAT.open = false; seatStop();
     SEATFX.reset();
+    // 소리 꼬리가 끝난 뒤 오디오 처리를 멈춰 둠(평소 대시보드에서는 TV 자원을 쓰지 않게). 수업 타이머 알림음은 스스로 다시 켬
+    sndSleep(6000);
     if (inClass) { document.body.className = 'classmode'; setView('class'); } else showDash();
   }
   /* 발표 연출 — 조사 근거: 주변을 단계적으로 어둡게(조명 빼기) 하고 남은 자리만 밝게, 확정은 '살짝 눌렸다 커졌다 자리 잡는' 무게감 있는 이징,
@@ -2171,7 +2234,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
       var d = $('stDim'), cd = $('stCd');
       d.className = 'st-dim on';
       sndDo(function (t) {
-        SX.shepard(t, 3.3); SX.riser(t + 0.8, 2.5);
+        SX.swell(t, 3.3);
         for (var i = 0; i < 3; i++) SX.count(t + 0.4 + i, i === 2);
       });
       var nums = ['3', '2', '1'];
@@ -2184,7 +2247,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
       $('stDim').className = 'st-dim';
       var vg = $('stVig'); vg.style.opacity = '0.35';
       SEATFX.flash();
-      SEATFX.drone = sndDo(function (t) { SX.impact(t, 1); return SX.drone(t + 0.15); });
+      sndDo(function (t) { SX.impact(t, 1); SEATFX.drone = SX.drone(t + 0.15); });
     },
     progress: function (p) { $('stVig').style.opacity = String(0.35 + 0.45 * p); if (SEATFX.drone) try { SEATFX.drone.level(p, SND.c.currentTime); } catch (e) {} },
     hush: function () { if (SEATFX.drone) try { SEATFX.drone.stop(SND.c.currentTime, 0.3); } catch (e) {} SEATFX.drone = null; },
@@ -2278,8 +2341,8 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     var r = seat.roster || [];
     for (var i = 0; i < r.length; i++) SEAT.roster[r[i].n] = r[i].g;
     var firstSeen = SEAT.rev === null;
-    var fresh = seat.onAt && new Date().getTime() - seat.onAt < 40 * 60000;   // 켜 두고 잊어도 40분 뒤엔 원래 화면
-    if (seat.on && fresh && !SEAT.open) openSeat(seat, !firstSeen || new Date().getTime() - seat.onAt < 60000);
+    var fresh = seat.onAt && now().getTime() - seat.onAt < 40 * 60000;   // 켜 두고 잊어도 40분 뒤엔 원래 화면
+    if (seat.on && fresh && !SEAT.open) openSeat(seat, !firstSeen || now().getTime() - seat.onAt < 60000);
     else if ((!seat.on || !fresh) && SEAT.open) closeSeat();
     if (seat.rev && seat.rev !== SEAT.rev) {
       var isNew = !firstSeen && SEAT.rev !== seat.rev;
@@ -2362,7 +2425,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
   function trackAt(i) { var L = tracks(); return L.length ? L[((i % L.length) + L.length) % L.length] : null; }
   function musicWant() {
     var m = ADMIN && ADMIN.music;
-    return !!(m && (m.playing || (m.playing === undefined && m.enabled)) && tracks().length && !inClass && !sleeping && !DEMO && CONFIG.api);
+    return !!(m && (m.playing || (m.playing === undefined && m.enabled)) && tracks().length && !inClass && !sleeping && !TVAPP.hdmi && !DEMO && CONFIG.api);   // HDMI 화면일 때는 음악 멈춤
   }
   function isSilent() { return String(audio.src).indexOf('data:audio/wav') === 0; }
 
