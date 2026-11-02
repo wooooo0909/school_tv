@@ -315,7 +315,8 @@ main{-webkit-flex:1;flex:1;display:flex;margin-top:24px;min-height:0;}
 .tmr-din + .tmr-sup{margin-top:0;}
 
 /* 긴급 공지 (모든 화면 위) */
-#ytBox{position:absolute;display:none;z-index:40;background:#000;border-radius:14px;overflow:hidden;box-shadow:0 18px 50px rgba(0,0,0,.45);}
+#ytBox{position:absolute;display:none;z-index:40;background:#000;border-radius:14px;overflow:hidden;box-shadow:0 18px 50px rgba(0,0,0,.45);-webkit-transition:left .45s cubic-bezier(.2,0,0,1),top .45s cubic-bezier(.2,0,0,1),width .45s cubic-bezier(.2,0,0,1),height .45s cubic-bezier(.2,0,0,1);transition:left .45s cubic-bezier(.2,0,0,1),top .45s cubic-bezier(.2,0,0,1),width .45s cubic-bezier(.2,0,0,1),height .45s cubic-bezier(.2,0,0,1);}
+#ytBox iframe{width:100% !important;height:100% !important;}
 #ytBox.on{display:block;}
 #ytBox.full{border-radius:0;box-shadow:none;}
 #ytBox.blocked{visibility:hidden;}
@@ -803,7 +804,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     s.src = url.replace('{cb}', name);
     (document.head || document.getElementsByTagName('head')[0]).appendChild(s);
   }
-  var BUILD = '11.2.1';   // 화면 파일 버전 (관리자 앱에서 확인)
+  var BUILD = '11.2.2';   // 화면 파일 버전 (관리자 앱에서 확인)
   function tvMode() {
     if ($('alertv') && $('alertv').className.indexOf('on') >= 0) return 'alert';
     if (SEAT.open) return 'seat';
@@ -2403,15 +2404,15 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
       if (box.className) { box.className = ''; box.innerHTML = ''; }
       return;
     }
-    var sz = YTSIZE[y.size] || YTSIZE.small;
+    var sz = y.size === 'full' ? YTSIZE.full : (y.size === 'custom' && y.rect && y.rect.w) ? [+y.rect.w, Math.round(y.rect.w * 9 / 16), +y.rect.x || 0, +y.rect.y || 0] : (YTSIZE[y.size] || YTSIZE.small);
     box.style.width = sz[0] + 'px'; box.style.height = sz[1] + 'px'; box.style.left = sz[2] + 'px'; box.style.top = sz[3] + 'px';
-    var cls = 'on ' + (YTSIZE[y.size] ? y.size : 'small') + (ytBlocked() ? ' blocked' : '');
+    var cls = 'on ' + (y.size === 'full' ? 'full' : 'pip') + (ytBlocked() ? ' blocked' : '');
     if (box.className !== cls) box.className = cls;
     var key = y.kind + ':' + y.id + ':' + (y.v || '');
     if (!YT_.p || YT_.key !== key) { ytCreate(y, key, sz); return; }
     if (!YT_.ready) return;
+    if (YT_.sz !== sz.join()) { YT_.sz = sz.join(); try { YT_.p.setSize(sz[0], sz[1]); } catch (e) {} }
     var P = YT_.p;
-    try { P.setSize(sz[0], sz[1]); } catch (e) {}
     try { P.setVolume(y.vol == null ? 60 : +y.vol); if (y.muted) { if (!P.isMuted()) P.mute(); } else if (P.isMuted()) P.unMute(); } catch (e) {}
     var c = YT_.pending; YT_.pending = null;
     try { if (c === 'next') P.nextVideo(); else if (c === 'prev') P.previousVideo(); else if (c === 'restart') P.seekTo(0, true); } catch (e) {}
@@ -2421,7 +2422,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
   }
   function ytCreate(y, key, sz) {
     if (YT_.p) { try { YT_.p.destroy(); } catch (e) {} YT_.p = null; }
-    YT_.key = key; YT_.ready = false; YT_.st = 'loading';
+    YT_.key = key; YT_.ready = false; YT_.st = 'loading'; YT_.sz = '';
     $('ytBox').innerHTML = '<div id="ytPl"></div><div id="ytMsg"></div>';
     ytLoadApi(function () {
       if (YT_.key !== key || !YT_.want) return;
