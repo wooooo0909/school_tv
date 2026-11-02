@@ -315,6 +315,14 @@ main{-webkit-flex:1;flex:1;display:flex;margin-top:24px;min-height:0;}
 .tmr-din + .tmr-sup{margin-top:0;}
 
 /* 긴급 공지 (모든 화면 위) */
+#ytBox{position:absolute;display:none;z-index:40;background:#000;border-radius:14px;overflow:hidden;box-shadow:0 18px 50px rgba(0,0,0,.45);}
+#ytBox.on{display:block;}
+#ytBox.full{border-radius:0;box-shadow:none;}
+#ytBox.blocked{visibility:hidden;}
+#ytBox iframe{display:block;border:0;}
+#ytMsg{position:absolute;left:0;top:0;right:0;bottom:0;display:none;flex-direction:column;align-items:center;justify-content:center;background:#111;color:#fff;font-size:30px;text-align:center;}
+#ytMsg.on{display:flex;}
+#ytMsg small{display:block;margin-top:10px;font-size:20px;color:#aaa;}
 #alertv{position:absolute;left:0;top:0;width:1920px;height:1080px;display:none;z-index:50;color:#fff;background:#c81e1e;background-image:linear-gradient(160deg,#ef4444,#b91c1c);}
 #alertv.blue{background:#1d4ed8;background-image:linear-gradient(160deg,#3b82f6,#1e3a8a);}
 #alertv.on{display:flex;align-items:center;justify-content:center;}
@@ -609,6 +617,7 @@ html[data-theme=light]{--cl1:#14b8a6;--cl2:#0d9488;}
 
   <button id="tlBadge"></button>
 
+  <div id="ytBox"></div>
   <div id="alertv"><div class="al-in">
     <div class="al-k"><i></i><span id="alK">긴급 공지</span></div>
     <div class="al-t" id="alT"></div>
@@ -794,11 +803,12 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     s.src = url.replace('{cb}', name);
     (document.head || document.getElementsByTagName('head')[0]).appendChild(s);
   }
-  var BUILD = '10.31.13';   // 화면 파일 버전 (관리자 앱에서 확인)
+  var BUILD = '11.2.1';   // 화면 파일 버전 (관리자 앱에서 확인)
   function tvMode() {
     if ($('alertv') && $('alertv').className.indexOf('on') >= 0) return 'alert';
     if (SEAT.open) return 'seat';
     if (TVAPP.hdmi) return 'hdmi';
+    if (typeof YT_ !== 'undefined' && YT_.want && YT_.want.size === 'full') return 'yt';
     if (TOOL.open) return 'tool';
     if (inClass) return 'class';
     if (cleaning) return 'clean';
@@ -830,7 +840,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     tvAppPost({ hello: 1 });
     setInterval(function () { tvAppPost({ hello: 1 }); tvAppFront(false); }, 1000);
   }
-  function hb() { return '&tv=' + tvMode() + '&b=' + BUILD + (document.hidden ? '&hid=1' : ''); }
+  function hb() { return '&tv=' + tvMode() + '&b=' + BUILD + (document.hidden ? '&hid=1' : '') + (typeof YT_ !== 'undefined' && YT_.want ? '&ys=' + encodeURIComponent(YT_.st || '') : ''); }
   function apiUrl(extra) {
     return CONFIG.api + (CONFIG.api.indexOf('?') < 0 ? '?' : '&') + 'callback={cb}' + (extra || '') + '&_=' + new Date().getTime();
   }
@@ -1082,6 +1092,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     if (typeof updateAlert === 'function') updateAlert();
     toolCommand(s.toolCmd);
     seatSync(s.seat);
+    ytSync(s.yt);
   }
 
   /* ───────────── 테마 ───────────── */
@@ -2354,6 +2365,80 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     } else if (firstSeen) SEAT.rev = seat.rev || 0;
   }
 
+  /* ───────────── 유튜브 보기 (관리자 앱의 '유튜브' 탭에서 켤 때만 나타남) ─────────────
+     유튜브 공식 내장 플레이어(IFrame Player API)를 그대로 씀. 규정상 플레이어 위를 가리거나 광고를 건드리지 않음
+     (광고 건너뛰기는 리모컨 포인터로 직접 누르거나, 관리자 앱에서 음소거) */
+  var YT_ = { want: null, p: null, ready: false, loading: false, seq: null, pending: null, key: '', st: '', cbs: [] };
+  var YTSIZE = { small: [640, 360, 1232, 650], mid: [1152, 648, 384, 216], full: [1920, 1080, 0, 0] };
+  function ytLoadApi(cb) {
+    if (window.YT && YT.Player) { cb(); return; }
+    YT_.cbs.push(cb);
+    if (YT_.loading) return;
+    YT_.loading = true;
+    var prev = window.onYouTubeIframeAPIReady;
+    window.onYouTubeIframeAPIReady = function () {
+      if (prev) try { prev(); } catch (e) {}
+      var c = YT_.cbs; YT_.cbs = [];
+      for (var i = 0; i < c.length; i++) c[i]();
+    };
+    var sc = document.createElement('script');
+    sc.src = 'https://www.youtube.com/iframe_api';
+    sc.onerror = function () { YT_.loading = false; YT_.st = 'err:api'; ytMsg('유튜브에 연결하지 못했습니다', '인터넷 연결을 확인해 주세요'); };
+    document.getElementsByTagName('head')[0].appendChild(sc);
+  }
+  function ytBlocked() { return SEAT.open || !!($('alertv') && $('alertv').className.indexOf('on') >= 0); }   // 자리 배치·긴급 공지가 우선
+  function ytMsg(t, sub) { var m = $('ytMsg'); if (!m) return; m.innerHTML = t ? '<b>' + esc(t) + '</b><small>' + esc(sub || '') + '</small>' : ''; m.className = t ? 'on' : ''; }
+  function ytSync(y) {
+    y = y || {};
+    YT_.want = y.on && y.id ? y : null;
+    if (YT_.seq === null) YT_.seq = y.seq || 0;                    // 처음 받은 명령은 지난 것이므로 실행하지 않음
+    else if (y.seq && y.seq !== YT_.seq) { YT_.seq = y.seq; YT_.pending = y.cmd; }
+    ytApply();
+  }
+  function ytApply() {
+    var y = YT_.want, box = $('ytBox');
+    if (!y) {
+      if (YT_.p) { try { YT_.p.destroy(); } catch (e) {} }
+      YT_.p = null; YT_.ready = false; YT_.key = ''; YT_.st = '';
+      if (box.className) { box.className = ''; box.innerHTML = ''; }
+      return;
+    }
+    var sz = YTSIZE[y.size] || YTSIZE.small;
+    box.style.width = sz[0] + 'px'; box.style.height = sz[1] + 'px'; box.style.left = sz[2] + 'px'; box.style.top = sz[3] + 'px';
+    var cls = 'on ' + (YTSIZE[y.size] ? y.size : 'small') + (ytBlocked() ? ' blocked' : '');
+    if (box.className !== cls) box.className = cls;
+    var key = y.kind + ':' + y.id + ':' + (y.v || '');
+    if (!YT_.p || YT_.key !== key) { ytCreate(y, key, sz); return; }
+    if (!YT_.ready) return;
+    var P = YT_.p;
+    try { P.setSize(sz[0], sz[1]); } catch (e) {}
+    try { P.setVolume(y.vol == null ? 60 : +y.vol); if (y.muted) { if (!P.isMuted()) P.mute(); } else if (P.isMuted()) P.unMute(); } catch (e) {}
+    var c = YT_.pending; YT_.pending = null;
+    try { if (c === 'next') P.nextVideo(); else if (c === 'prev') P.previousVideo(); else if (c === 'restart') P.seekTo(0, true); } catch (e) {}
+    var st = -9; try { st = P.getPlayerState(); } catch (e) {}
+    var want = y.playing && !ytBlocked();
+    try { if (want && st !== 1 && st !== 3 && st !== 0) P.playVideo(); else if (!want && (st === 1 || st === 3)) P.pauseVideo(); } catch (e) {}
+  }
+  function ytCreate(y, key, sz) {
+    if (YT_.p) { try { YT_.p.destroy(); } catch (e) {} YT_.p = null; }
+    YT_.key = key; YT_.ready = false; YT_.st = 'loading';
+    $('ytBox').innerHTML = '<div id="ytPl"></div><div id="ytMsg"></div>';
+    ytLoadApi(function () {
+      if (YT_.key !== key || !YT_.want) return;
+      var pv = { autoplay: 1, controls: 1, playsinline: 1, rel: 0, start: +y.t || 0 };
+      var opt = { width: sz[0], height: sz[1], playerVars: pv, events: {
+        onReady: function () { YT_.ready = true; YT_.st = 'ready'; ytApply(); },
+        onStateChange: function (e) { YT_.st = ({ '-1': 'unstarted', '0': 'ended', '1': 'playing', '2': 'paused', '3': 'buffering', '5': 'cued' })[e.data] || String(e.data); if (e.data === 1) ytMsg(''); },
+        onError: function (e) {
+          YT_.st = 'err:' + e.data;
+          ytMsg(({ 2: '주소가 올바르지 않습니다', 5: '이 TV에서 재생할 수 없는 영상입니다', 100: '삭제되었거나 비공개인 영상입니다', 101: '다른 곳에서 재생이 막힌 영상입니다', 150: '다른 곳에서 재생이 막힌 영상입니다' })[e.data] || ('재생 오류 ' + e.data), '관리자 앱에서 다른 영상을 골라 주세요');
+        } } };
+      if (y.kind === 'list') { pv.listType = 'playlist'; pv.list = y.id; if (y.v) opt.videoId = y.v; } else opt.videoId = y.id;
+      try { YT_.p = new YT.Player('ytPl', opt); } catch (e) { YT_.st = 'err:init'; ytMsg('플레이어를 만들지 못했습니다', String(e && e.message || e)); }
+    });
+  }
+  setInterval(function () { if (YT_.want) ytApply(); }, 1000);
+
   /* 대시보드 ↔ 포스터 순환 */
   var cycleTimer = null, posterPtr = 0;
   function setView(v) {
@@ -2425,7 +2510,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
   function trackAt(i) { var L = tracks(); return L.length ? L[((i % L.length) + L.length) % L.length] : null; }
   function musicWant() {
     var m = ADMIN && ADMIN.music;
-    return !!(m && (m.playing || (m.playing === undefined && m.enabled)) && tracks().length && !inClass && !sleeping && !TVAPP.hdmi && !DEMO && CONFIG.api);   // HDMI 화면일 때는 음악 멈춤
+    return !!(m && (m.playing || (m.playing === undefined && m.enabled)) && tracks().length && !inClass && !sleeping && !TVAPP.hdmi && !(typeof YT_ !== 'undefined' && YT_.want && YT_.want.playing) && !DEMO && CONFIG.api);   // HDMI 화면일 때는 음악 멈춤
   }
   function isSilent() { return String(audio.src).indexOf('data:audio/wav') === 0; }
 
