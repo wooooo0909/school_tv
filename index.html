@@ -740,12 +740,15 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     el.style.webkitTransition = t; el.style.transition = t; el.style.width = '100%';
   }
 
-  function safeReload() {
+  // force: 관리자 앱의 'TV 화면 새로고침' (30초 안 반복만 막음) · 평소 자동 새로고침은 10분 안 반복 금지
+  // 주소 끝에 _v=시각을 붙여 새로 받으므로, GitHub에 올린 새 파일이 캐시에 막히지 않음
+  function safeReload(force) {
     var nowMs = new Date().getTime(), last = 0;
     try { last = +localStorage.getItem('tvdash:lastReload') || 0; } catch (e) {}
-    if (nowMs - last < 10 * 60000) return false;
+    if (nowMs - last < (force ? 30000 : 10 * 60000)) return false;
     try { localStorage.setItem('tvdash:lastReload', String(nowMs)); } catch (e) {}
-    location.reload();
+    var u = location.href.split('#')[0].replace(/([?&])_v=\d+(&|$)/, '$1').replace(/[?&]$/, '');
+    try { location.replace(u + (u.indexOf('?') < 0 ? '?' : '&') + '_v=' + nowMs); } catch (e) { location.reload(); }
     return true;
   }
   var LAST_HTML = {};
@@ -804,7 +807,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     s.src = url.replace('{cb}', name);
     (document.head || document.getElementsByTagName('head')[0]).appendChild(s);
   }
-  var BUILD = '11.2.2';   // 화면 파일 버전 (관리자 앱에서 확인)
+  var BUILD = '11.2.3';   // 화면 파일 버전 (관리자 앱에서 확인)
   function tvMode() {
     if ($('alertv') && $('alertv').className.indexOf('on') >= 0) return 'alert';
     if (SEAT.open) return 'seat';
@@ -1046,7 +1049,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
       if (!d || !d.ok) return;
       syncClock(d.now, sent);
       if (d.state) { pinging = true; useState(d.state, function () { pinging = false; }); return; }   // 한 번에 받음
-      if (reloadToken !== null && d.r && d.r !== reloadToken) { reloadToken = d.r; pinging = true; loadAdmin(function () { pinging = false; safeReload(); }); return; }
+      if (reloadToken !== null && d.r && d.r !== reloadToken) { reloadToken = d.r; pinging = true; loadAdmin(function () { pinging = false; safeReload(true); }); return; }
       if (!ADMIN || d.v !== ADMIN.version) { pinging = true; loadAdmin(function () { pinging = false; }); }
     }, function () { pinging = false; });
   }
@@ -1070,7 +1073,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     // 서버가 잠깐 이상한(예전·빈) 내용을 주면 무시하고, 저장해 둔 공지·숙제·D-day를 그대로 유지
     if (gotServer && ADMIN && ADMIN.version && (!s.version || s.version < ADMIN.version)) { setStatus('admin', false); cb(); return; }
     gotServer = true;
-    if (reloadToken !== null && s.reloadToken && s.reloadToken !== reloadToken) { save('admin', s); reloadToken = s.reloadToken; safeReload(); return; }
+    if (reloadToken !== null && s.reloadToken && s.reloadToken !== reloadToken) { save('admin', s); reloadToken = s.reloadToken; safeReload(true); return; }
     reloadToken = s.reloadToken || '';
     setStatus('admin', true);
     if (!ADMIN || ADMIN.version !== s.version) { applyAdmin(s); save('admin', s); }
