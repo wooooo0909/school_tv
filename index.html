@@ -85,6 +85,44 @@ html[data-theme=light] .tl-btn.main{color:#fff;}
 /* ── 수업 중 수업 도구: 수업 화면과 같은 어두운 색 ── */
 #toolv.cls{--bg:#040507;--surface:#0b0e13;--surface2:#141821;--text:#d2d8e2;--sub:#7d8798;--dim:#4a5363;--body:#aab3c2;--line:rgba(255,255,255,.06);--accent:#2f7f78;--accentbg:rgba(47,127,120,.16);--red:#e5655f;--shadow:none;}
 #toolv.cls .tl-btn.main{color:#e8fffb;}
+/* ── 리모컨 조작: 선택 표시 + 옆 안내 ── */
+#toolv .tl-tab,#toolv .tl-btn,#toolv .tl-close{-webkit-transition:background-color .15s,color .15s,box-shadow .15s,-webkit-transform .15s;transition:background-color .15s,color .15s,box-shadow .15s,transform .15s;}
+#toolv .kf{position:relative;z-index:2;box-shadow:0 0 0 5px var(--text),0 0 0 14px var(--accentbg)!important;-webkit-transform:scale(1.07);transform:scale(1.07);}
+#toolv .tl-tab.kf,#toolv .tl-close.kf{-webkit-transform:scale(1.03);transform:scale(1.03);color:var(--text);}
+.tl-help{width:372px;flex:none;margin:56px 64px 56px 0;padding:34px 30px 28px;border-radius:40px;border:2px solid var(--line);box-sizing:border-box;display:flex;flex-direction:column;}
+.tl-help h3{margin:0;font-size:30px;font-weight:800;color:var(--text);letter-spacing:-.5px;}
+.tl-help h4{margin:26px 0 4px;font-size:21px;font-weight:700;color:var(--accent);letter-spacing:.5px;}
+.hl-r{display:flex;align-items:center;margin-top:16px;}
+.hl-k{width:132px;flex:none;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;}
+.hl-t{flex:1;min-width:0;word-break:keep-all;padding-left:16px;font-size:22px;line-height:1.3;color:var(--sub);font-weight:600;}
+.hl-t b{display:block;font-size:25px;color:var(--text);font-weight:700;}
+.hl-foot{margin-top:auto;padding-top:20px;}
+.kc{display:inline-block;min-width:46px;height:46px;line-height:46px;margin:3px;padding:0 10px;border-radius:12px;background:#16191f;color:#eef1f5;font-size:21px;font-weight:700;text-align:center;box-sizing:border-box;box-shadow:inset 0 -3px 0 rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.12);white-space:nowrap;}
+.kc.rd{border-radius:23px;padding:0;}
+.kc svg{width:22px;height:22px;fill:currentColor;vertical-align:-4px;}
+.kc.rk{width:58px;min-width:0;height:96px;line-height:1;padding:8px 0;border-radius:29px;display:inline-flex;flex-direction:column;align-items:center;justify-content:space-between;font-size:17px;}
+.kc.rk svg{width:20px;height:20px;}
+.kpad{position:relative;width:118px;height:118px;border-radius:59px;background:#16191f;box-shadow:inset 0 -3px 0 rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.12);}
+.kpad i{position:absolute;width:0;height:0;border:9px solid transparent;}
+.kpad .u{left:50px;top:6px;border-bottom:11px solid #eef1f5;border-top-width:0;}
+.kpad .d{left:50px;bottom:6px;border-top:11px solid #eef1f5;border-bottom-width:0;}
+.kpad .l{top:50px;left:6px;border-right:11px solid #eef1f5;border-left-width:0;}
+.kpad .r{top:50px;right:6px;border-left:11px solid #eef1f5;border-right-width:0;}
+.kpad b{position:absolute;left:30px;top:30px;width:58px;height:58px;line-height:58px;border-radius:29px;background:#2a2f39;color:#eef1f5;font-size:20px;font-weight:800;text-align:center;}
+.tl-hint{display:none;margin:auto 0 16px 8px;font-size:22px;color:var(--dim);font-weight:600;}
+.tl-hint .kc{height:38px;line-height:38px;font-size:18px;}
+#toolv.nohelp .tl-help{display:none;}
+#toolv.nohelp .tl-main{margin-right:64px;}
+#toolv.nohelp .tl-hint{display:block;}
+#toolv.nohelp .tl-close{margin-top:0;}
+#toolv:not(.nohelp) .tl-big{font-size:250px;letter-spacing:-8px;}
+#toolv:not(.nohelp) .tl-big small{font-size:100px;}
+#toolv:not(.nohelp) .pk-num{font-size:300px;}
+#toolv:not(.nohelp) .tl-bar{width:760px;}
+.gp-grid{max-width:100%;}
+#toolv:not(.nohelp) .gp-grid{width:960px;}
+.tool-entry .kc{display:none;height:28px;line-height:28px;min-width:0;margin:0 0 0 10px;padding:0 8px;font-size:15px;border-radius:8px;}
+html.tvapp .tool-entry .kc{display:inline-block;}
 .cv-tool{display:none;margin-top:30px;padding:14px 34px;border-radius:999px;background:#0d1a19;color:#8fd3c8;font-size:46px;font-weight:800;font-variant-numeric:tabular-nums;border:0;font-family:inherit;cursor:pointer;}
 .cv-tool small{font-size:26px;font-weight:700;color:#4f8f86;margin-right:16px;vertical-align:6px;}
 .cv-tool.on{display:inline-block;}
@@ -543,7 +581,7 @@ html[data-theme=light]{--cl1:#14b8a6;--cl2:#0d9488;}
       <span class="st" id="st-admin">관리</span>
       <span class="st" id="st-weather">날씨</span>
       <span id="updated"></span>
-      <button class="tool-entry" id="toolBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>수업 도구</button>
+      <button class="tool-entry" id="toolBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>수업 도구<span class="kc">OK</span></button>
       <span class="music" id="music"><span class="eq"><i></i><i></i><i></i></span><span id="mName"></span></span>
     </footer>
   </div>
@@ -566,6 +604,7 @@ html[data-theme=light]{--cl1:#14b8a6;--cl2:#0d9488;}
       <button class="tl-tab" data-tool="watch">스톱워치</button>
       <button class="tl-tab" data-tool="pick">번호 뽑기</button>
       <button class="tl-tab" data-tool="group">모둠 나누기</button>
+      <div class="tl-hint" id="tlHint"><span class="kc">정보표시</span> 리모컨 안내 보기</div>
       <button class="tl-close" id="tlClose">← 돌아가기</button>
     </div>
     <div class="tl-main">
@@ -600,6 +639,7 @@ html[data-theme=light]{--cl1:#14b8a6;--cl2:#0d9488;}
         </div>
       </section>
     </div>
+    <div class="tl-help" id="tlHelp"></div>
   </div></div>
 
   <div id="seatv" class="view"><div class="st-in">
@@ -637,7 +677,7 @@ html[data-theme=light]{--cl1:#14b8a6;--cl2:#0d9488;}
       <button class="cv-tool" id="cvTool"></button>
     </div>
     <div class="cv-next" id="cvNext"></div>
-    <button class="tool-entry cv" id="toolBtn2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>수업 도구</button>
+    <button class="tool-entry cv" id="toolBtn2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>수업 도구<span class="kc">OK</span></button>
   </div>
 
   <div id="pview" class="view">
@@ -807,7 +847,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     s.src = url.replace('{cb}', name);
     (document.head || document.getElementsByTagName('head')[0]).appendChild(s);
   }
-  var BUILD = '11.4.1';   // 화면 파일 버전 (관리자 앱에서 확인)
+  var BUILD = '11.5.0';   // 화면 파일 버전 (관리자 앱에서 확인)
   function tvMode() {
     if ($('alertv') && $('alertv').className.indexOf('on') >= 0) return 'alert';
     if (SEAT.open) return 'seat';
@@ -1793,7 +1833,8 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     setView('tool');
     if (!TOOL.pushed && window.history && history.pushState) { try { history.pushState({ tvtool: 1 }, ''); TOOL.pushed = true; } catch (e) {} }
     toolTick();
-    setTimeout(function () { var b = document.querySelector('.tl-tab.on'); if (b && b.focus) try { b.focus(); } catch (e) {} }, 400);
+    if (document.activeElement && document.activeElement.blur) try { document.activeElement.blur(); } catch (e) {}
+    tlFocusMain();                                 // 리모컨 선택은 지금 도구의 주 버튼(시작·뽑기 등)에서 시작
   }
   function closeTools(fromBack) {
     if (!TOOL.open) return;
@@ -1813,6 +1854,8 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     var ids = ['timer', 'watch', 'pick', 'group'];
     for (var j = 0; j < ids.length; j++) { var el = $('tp-' + ids[j]); el.className = 'tl-pane' + (ids[j] === p ? ' on' : '') + (ids[j] === 'timer' && TOOL.tm.done ? ' done' : ''); }
     renderTools();
+    if (TOOL.kf) { if (TOOL.kf.classList.contains('tl-btn') && !TOOL.kf.offsetWidth) tlFocusMain(); else tlFocus(TOOL.kf); }  // 탭 이름표를 다시 그려도 선택 표시 유지
+    tlHelpRender();
   }
   function mmss(sec) { sec = Math.max(0, Math.ceil(sec)); return pad(Math.floor(sec / 60)) + ':' + pad(sec % 60); }
 
@@ -1900,6 +1943,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
       setHTML('pkHist', hh);
     }
     setHTML('gpGo', TOOL.gp.n + '모둠으로 나누기');
+    if (TOOL.open && TOOL.pane === 'pick') tlHelpRender();       // 안내의 '지금 1 ~ N번' 갱신
   }
   function toolBadge() {
     var b = $('tlBadge'), t = TOOL.tm, sw = TOOL.sw;
@@ -1946,6 +1990,156 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     else if (a === 'watch') { openTools('watch'); swGo(); }
     TOOL.lastAct = new Date().getTime();
   }
+  /* ── 리모컨 조작 (BN59-01302A 기준) ──
+     방향 = 선택 이동, 가운데(OK) = 누르기, 채널∧∨ = 도구 바꾸기, 복귀 = 닫기, 정보표시 = 안내 숨기기/보이기
+     숫자 = 타이머 분(두 자리 가능) / 모둠 수, ▶ ❚❚ ■ ◀◀ ▶▶ = 도구별 바로 가기. 빨강·초록(A·B)은 TV 앱이 씀 */
+  var RK = { OK: 13, L: 37, U: 38, R: 39, D: 40, BACK: 10009, ESC: 27, CHU: 427, CHD: 428, PLAY: 415, PAUSE: 19, PP: 10252, STOP: 413, REW: 412, FF: 417, INFO: 457 };
+  var TOOL_ORDER = ['timer', 'watch', 'pick', 'group'], TOOL_MAIN = { timer: 'tmGo', watch: 'swGo', pick: 'pkGo', group: 'gpGo' };
+  TOOL.kf = null; TOOL.dig = ''; TOOL.digAt = 0;
+  TOOL.help = (function () { try { return localStorage.getItem('tvToolHelp') !== '0'; } catch (e) { return true; } })();
+  if (/[?&]app=1/.test(location.search)) document.documentElement.className += ' tvapp';
+  function tlFocus(el) {
+    if (TOOL.kf && TOOL.kf !== el) TOOL.kf.classList.remove('kf');
+    TOOL.kf = el || null;
+    if (el) el.classList.add('kf');
+  }
+  function tlFocusMain() { tlFocus($(TOOL_MAIN[TOOL.pane] || 'tmGo')); }
+  function tlItems() {
+    var q = document.querySelectorAll('#toolv .tl-tab, #toolv .tl-close, #toolv .tl-pane.on .tl-btn'), out = [];
+    for (var i = 0; i < q.length; i++) if (q[i].offsetWidth) out.push(q[i]);
+    return out;
+  }
+  function tlMove(k) {
+    var cur = TOOL.kf && TOOL.kf.offsetWidth ? TOOL.kf : null;
+    if (!cur) { tlFocusMain(); return; }
+    var a = cur.getBoundingClientRect(), ax = a.left + a.width / 2, ay = a.top + a.height / 2;
+    var list = tlItems(), best = null, bs = 1e9, horiz = k === RK.L || k === RK.R;
+    for (var i = 0; i < list.length; i++) {
+      var el = list[i]; if (el === cur) continue;
+      var b = el.getBoundingClientRect(), dx = b.left + b.width / 2 - ax, dy = b.top + b.height / 2 - ay;
+      var main = k === RK.L ? -dx : k === RK.R ? dx : k === RK.U ? -dy : dy;
+      if (main < 8) continue;
+      if (!horiz && el.classList.contains('tl-btn') !== cur.classList.contains('tl-btn')) continue;   // 위·아래는 같은 칸(왼쪽 목록/가운데) 안에서만
+      var off = horiz ? Math.abs(dy) : Math.abs(dx);
+      var line = horiz ? b.top < a.bottom && b.bottom > a.top : b.left < a.right && b.right > a.left;  // 같은 줄(열)을 먼저
+      var sc = main + off * (horiz ? 3 : 1.5) + (line ? 0 : 1e5);
+      if (sc < bs) { bs = sc; best = el; }
+    }
+    if (best && horiz && bs >= 1e5 && cur.classList.contains('tl-btn')) best = k === RK.L ? document.querySelector('.tl-tab.on') : null;   // 줄 끝: 왼쪽은 목록으로, 오른쪽은 멈춤
+    // 내용 ↔ 왼쪽 목록을 오갈 때는 '지금 도구 탭'과 '주 버튼'으로 (가장 가까운 칸보다 덜 헷갈림)
+    if (best && k === RK.L && cur.classList.contains('tl-btn') && !best.classList.contains('tl-btn')) best = document.querySelector('.tl-tab.on') || best;
+    if (best && k === RK.R && !cur.classList.contains('tl-btn') && best.classList.contains('tl-btn')) best = $(TOOL_MAIN[TOOL.pane]) || best;
+    if (best) tlFocus(best);
+  }
+  function tlCycle(d) {
+    var i = TOOL_ORDER.indexOf(TOOL.pane);
+    setPane(TOOL_ORDER[(i + d + TOOL_ORDER.length) % TOOL_ORDER.length]);
+    tlFocusMain();
+  }
+  function tlDigit(n) {
+    var t = new Date().getTime();
+    if (TOOL.pane === 'group') { if (n >= 2 && n <= 8) { TOOL.gp.n = n; renderTools(); tlFocusMain(); } return; }
+    if (TOOL.pane !== 'timer') setPane('timer');
+    var buf = (t - TOOL.digAt < 1500 ? TOOL.dig : '') + n;        // 1 → 5 를 이어 누르면 15분
+    var m = buf === '0' ? 10 : parseInt(buf, 10);
+    if (!m || m > 90) { buf = '' + n; m = n || 10; }
+    TOOL.dig = buf; TOOL.digAt = t;
+    tmSet(m * 60); tlFocusMain();
+  }
+  function tlPlay(k) {
+    var p = TOOL.pane, t = TOOL.tm, sw = TOOL.sw;
+    if (p === 'timer') {
+      if (t.done) { tmSet(t.total); if (k !== RK.PAUSE) tmGo(); }
+      else if (k === RK.PP || (k === RK.PLAY) !== t.run) tmGo();     // ▶ = 시작, ❚❚ = 멈춤, 겸용 키 = 바꾸기
+    } else if (p === 'watch') {
+      if (k === RK.PP || (k === RK.PLAY) !== sw.run) swGo();
+    } else if (k !== RK.PAUSE) { if (p === 'pick') pkGo(); else gpGo(); }
+    tlFocusMain();
+  }
+  function tlStop() {
+    var p = TOOL.pane;
+    if (p === 'timer') tmSet(TOOL.tm.total);
+    else if (p === 'watch') { TOOL.sw = { acc: 0, startAt: 0, run: false }; renderTools(); }
+    else if (p === 'pick') { TOOL.pk.used = []; TOOL.pk.hist = []; setHTML('pkNum', '?'); renderTools(); }
+  }
+  function tlStep(d) {
+    var p = TOOL.pane;
+    if (p === 'timer') tmAdd(d * 60);
+    else if (p === 'pick') { TOOL.pk.max = Math.max(2, Math.min(60, pkMax() + d)); TOOL.pk.used = []; TOOL.pk.hist = []; setHTML('pkNum', '?'); renderTools(); }
+    else if (p === 'group') { TOOL.gp.n = Math.max(2, Math.min(8, TOOL.gp.n + d)); renderTools(); }
+  }
+  function tlHelp(on) {
+    TOOL.help = !!on;
+    try { localStorage.setItem('tvToolHelp', on ? '1' : '0'); } catch (e) {}
+    $('toolv').classList.toggle('nohelp', !on);
+    tlHelpRender();
+  }
+  var KI = {
+    play: '<svg viewBox="0 0 24 24"><path d="M7 4.5l13 7.5-13 7.5z"/></svg>',
+    pause: '<svg viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>',
+    stop: '<svg viewBox="0 0 24 24"><path d="M6 6h12v12H6z"/></svg>',
+    rew: '<svg viewBox="0 0 24 24"><path d="M12 6v12L3 12zM21 6v12l-9-6z"/></svg>',
+    ff: '<svg viewBox="0 0 24 24"><path d="M3 6l9 6-9 6zM12 6l9 6-9 6z"/></svg>',
+    up: '<svg viewBox="0 0 24 24"><path d="M12 6l8 9h-16z"/></svg>',
+    dn: '<svg viewBox="0 0 24 24"><path d="M12 18l8-9h-16z"/></svg>',
+    back: '<svg viewBox="0 0 24 24"><path d="M9 5L3 10.5 9 16v-3.5h6.5a3.5 3.5 0 0 1 0 7H11V22h4.5a6 6 0 0 0 0-12H9z"/></svg>'
+  };
+  function kc(x, round) { return '<span class="kc' + (round ? ' rd' : '') + '">' + x + '</span>'; }
+  function hlRow(keys, title, sub) { return '<div class="hl-r"><div class="hl-k">' + keys + '</div><div class="hl-t"><b>' + title + '</b>' + (sub || '') + '</div></div>'; }
+  function tlHelpRender() {
+    var box = $('tlHelp'); if (!box) return;
+    var p = TOOL.pane, h = '<h3>리모컨으로 조작</h3>';
+    h += hlRow('<div class="kpad"><i class="u"></i><i class="d"></i><i class="l"></i><i class="r"></i><b>OK</b></div>', '고르고 누르기', '방향 버튼 → 가운데 OK');
+    h += hlRow('<span class="kc rk">' + KI.up + '채널' + KI.dn + '</span>', '도구 바꾸기', '채널 위·아래');
+    h += hlRow(kc(KI.back + ' 복귀'), '닫기');
+    h += '<h4>' + ({ timer: '타이머', watch: '스톱워치', pick: '번호 뽑기', group: '모둠 나누기' }[p] || '') + ' 바로 가기</h4>';
+    if (p === 'timer') {
+      h += hlRow(kc('1') + kc('5'), '분 맞추기', '1·5 → 15분 · 0 → 10분');
+      h += hlRow(kc(KI.play, 1) + kc(KI.pause, 1), '시작 · 멈춤');
+      h += hlRow(kc(KI.rew, 1) + kc(KI.ff, 1), '−1분 · +1분');
+      h += hlRow(kc(KI.stop, 1), '처음으로');
+    } else if (p === 'watch') {
+      h += hlRow(kc(KI.play, 1) + kc(KI.pause, 1), '시작 · 멈춤');
+      h += hlRow(kc(KI.stop, 1), '0으로');
+    } else if (p === 'pick') {
+      h += hlRow(kc(KI.play, 1), '번호 뽑기');
+      h += hlRow(kc(KI.rew, 1) + kc(KI.ff, 1), '인원 − · +', '지금 1 ~ ' + pkMax() + '번');
+      h += hlRow(kc(KI.stop, 1), '처음부터');
+    } else {
+      h += hlRow(kc('2') + kc('8'), '모둠 수', '숫자 2 ~ 8');
+      h += hlRow(kc(KI.rew, 1) + kc(KI.ff, 1), '모둠 수 − · +');
+      h += hlRow(kc(KI.play, 1), '나누기');
+    }
+    h += '<div class="hl-foot">' + hlRow(kc('정보표시'), '안내 숨기기') + '</div>';
+    if (box.innerHTML !== h) box.innerHTML = h;
+  }
+  function tlYtFull() { return typeof YT_ !== 'undefined' && YT_.want && YT_.want.size === 'full'; }
+  function tlKey(e) {
+    var k = e.keyCode;
+    if (k >= 96 && k <= 105) k -= 48;                          // 키보드 숫자판
+    if (!toolsOn() || SEAT.open || TVAPP.hdmi) return;           // 자리 배치 중·노트북 화면일 때는 무시
+    if ($('alertv') && $('alertv').className.indexOf('on') >= 0) return;
+    var done = true;
+    if (!TOOL.open) {                                            // 대시보드·수업 화면에서: OK·채널·숫자로 수업 도구 열기
+      if (sleeping || tlYtFull()) return;
+      if (k === RK.OK || k === RK.CHU || k === RK.CHD) openTools();
+      else if (k >= 48 && k <= 57) { openTools('timer'); tlDigit(k - 48); }
+      else done = false;
+    } else {
+      TOOL.lastAct = new Date().getTime();
+      if (k === RK.ESC || k === RK.BACK) closeTools();
+      else if (k >= 37 && k <= 40) tlMove(k);
+      else if (k === RK.OK) { if (TOOL.kf && TOOL.kf.offsetWidth) TOOL.kf.click(); else tlFocusMain(); }
+      else if (k === RK.CHU || k === RK.CHD) tlCycle(k === RK.CHU ? -1 : 1);
+      else if (k >= 48 && k <= 57) tlDigit(k - 48);
+      else if (k === RK.PLAY || k === RK.PAUSE || k === RK.PP) tlPlay(k);
+      else if (k === RK.STOP) tlStop();
+      else if (k === RK.REW || k === RK.FF) tlStep(k === RK.REW ? -1 : 1);
+      else if (k === RK.INFO) tlHelp(!TOOL.help);
+      else done = false;
+    }
+    if (done && e.preventDefault) e.preventDefault();               // OK가 버튼을 두 번 누르지 않도록
+  }
   (function bindTools() {
     if (!toolsOn()) { var e1 = $('toolBtn'), e2 = $('toolBtn2'); if (e1) e1.style.display = 'none'; if (e2) e2.style.display = 'none'; return; }
     $('toolBtn').onclick = function () { openTools(); };
@@ -1971,14 +2165,8 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
       else if (el.id === 'pkReset') { TOOL.pk.used = []; TOOL.pk.hist = []; setHTML('pkNum', '?'); renderTools(); }
       else if (el.id === 'gpGo') gpGo();
     };
-    // 리모컨 숫자 키가 전달되는 경우(기종·모드에 따라 다름): 타이머 화면에서 1~9 → 그 분, 0 → 10분
-    document.addEventListener('keydown', function (e) {
-      if (!TOOL.open) return;
-      var k = e.keyCode;
-      TOOL.lastAct = new Date().getTime();
-      if (k === 27 || k === 10009) { closeTools(); e.preventDefault && e.preventDefault(); return; }
-      if (TOOL.pane === 'timer' && k >= 48 && k <= 57) tmSet((k === 48 ? 10 : k - 48) * 60);
-    });
+    document.addEventListener('keydown', tlKey);
+    tlHelp(TOOL.help);
     setInterval(toolTick, 200);
   })();
 
