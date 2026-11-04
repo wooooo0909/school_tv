@@ -807,7 +807,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     s.src = url.replace('{cb}', name);
     (document.head || document.getElementsByTagName('head')[0]).appendChild(s);
   }
-  var BUILD = '11.2.3';   // 화면 파일 버전 (관리자 앱에서 확인)
+  var BUILD = '11.4.1';   // 화면 파일 버전 (관리자 앱에서 확인)
   function tvMode() {
     if ($('alertv') && $('alertv').className.indexOf('on') >= 0) return 'alert';
     if (SEAT.open) return 'seat';
@@ -836,10 +836,14 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
       if (e.source !== window.parent || !d || typeof d !== 'object' || !d.tvapp) return;
       var was = TVAPP.hdmi; TVAPP.on = true; TVAPP.hdmi = !!d.hdmi;
       tvAppFront(true);
+      if (d.key) {                                   // 앱이 받은 리모컨 키 → 이 화면에서 직접 누른 것처럼
+        TVAPP.keyName = d.name || '';
+        try { var ke = document.createEvent('Event'); ke.initEvent('keydown', true, true); ke.keyCode = ke.which = +d.key; ke.tvapp = 1; document.dispatchEvent(ke); } catch (er) {}
+      }
       if (was !== TVAPP.hdmi && typeof syncMusic === 'function') try { syncMusic(); } catch (er) {}
     });
     document.addEventListener('keydown', function (e) {             // 색깔 키는 껍데기 앱이 처리
-      if (e.keyCode >= 403 && e.keyCode <= 406) tvAppPost({ key: e.keyCode });
+      if (!e.tvapp && (e.keyCode === 403 || e.keyCode === 404)) tvAppPost({ key: e.keyCode });   // 빨강(HDMI)·초록(새로고침)은 앱이 처리
     });
     tvAppPost({ hello: 1 });
     setInterval(function () { tvAppPost({ hello: 1 }); tvAppFront(false); }, 1000);
