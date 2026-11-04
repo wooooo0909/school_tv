@@ -89,38 +89,24 @@ html[data-theme=light] .tl-btn.main{color:#fff;}
 #toolv .tl-tab,#toolv .tl-btn,#toolv .tl-close{-webkit-transition:background-color .15s,color .15s,box-shadow .15s,-webkit-transform .15s;transition:background-color .15s,color .15s,box-shadow .15s,transform .15s;}
 #toolv .kf{position:relative;z-index:2;box-shadow:0 0 0 5px var(--text),0 0 0 14px var(--accentbg)!important;-webkit-transform:scale(1.07);transform:scale(1.07);}
 #toolv .tl-tab.kf,#toolv .tl-close.kf{-webkit-transform:scale(1.03);transform:scale(1.03);color:var(--text);}
-.tl-help{width:372px;flex:none;margin:56px 64px 56px 0;padding:34px 30px 28px;border-radius:40px;border:2px solid var(--line);box-sizing:border-box;display:flex;flex-direction:column;}
-.tl-help h3{margin:0;font-size:30px;font-weight:800;color:var(--text);letter-spacing:-.5px;}
-.tl-help h4{margin:26px 0 4px;font-size:21px;font-weight:700;color:var(--accent);letter-spacing:.5px;}
-.hl-r{display:flex;align-items:center;margin-top:16px;}
-.hl-k{width:132px;flex:none;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;}
-.hl-t{flex:1;min-width:0;word-break:keep-all;padding-left:16px;font-size:22px;line-height:1.3;color:var(--sub);font-weight:600;}
-.hl-t b{display:block;font-size:25px;color:var(--text);font-weight:700;}
-.hl-foot{margin-top:auto;padding-top:20px;}
+.tl-help{width:520px;flex:none;margin:56px 44px 56px 0;padding:30px 12px 16px 16px;border-radius:40px;border:2px solid var(--line);box-sizing:border-box;display:flex;flex-direction:column;}
+.tl-help h3{margin:0 0 18px 10px;font-size:30px;font-weight:800;color:var(--text);letter-spacing:-.5px;}
+.tl-help svg{display:block;width:100%;flex:1;min-height:0;font-family:inherit;}
 .kc{display:inline-block;min-width:46px;height:46px;line-height:46px;margin:3px;padding:0 10px;border-radius:12px;background:#16191f;color:#eef1f5;font-size:21px;font-weight:700;text-align:center;box-sizing:border-box;box-shadow:inset 0 -3px 0 rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.12);white-space:nowrap;}
-.kc.rd{border-radius:23px;padding:0;}
-.kc svg{width:22px;height:22px;fill:currentColor;vertical-align:-4px;}
-.kc.rk{width:58px;min-width:0;height:96px;line-height:1;padding:8px 0;border-radius:29px;display:inline-flex;flex-direction:column;align-items:center;justify-content:space-between;font-size:17px;}
-.kc.rk svg{width:20px;height:20px;}
-.kpad{position:relative;width:118px;height:118px;border-radius:59px;background:#16191f;box-shadow:inset 0 -3px 0 rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.12);}
-.kpad i{position:absolute;width:0;height:0;border:9px solid transparent;}
-.kpad .u{left:50px;top:6px;border-bottom:11px solid #eef1f5;border-top-width:0;}
-.kpad .d{left:50px;bottom:6px;border-top:11px solid #eef1f5;border-bottom-width:0;}
-.kpad .l{top:50px;left:6px;border-right:11px solid #eef1f5;border-left-width:0;}
-.kpad .r{top:50px;right:6px;border-left:11px solid #eef1f5;border-right-width:0;}
-.kpad b{position:absolute;left:30px;top:30px;width:58px;height:58px;line-height:58px;border-radius:29px;background:#2a2f39;color:#eef1f5;font-size:20px;font-weight:800;text-align:center;}
+.kc svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2.4;vertical-align:-4px;}
 .tl-hint{display:none;margin:auto 0 16px 8px;font-size:22px;color:var(--dim);font-weight:600;}
 .tl-hint .kc{height:38px;line-height:38px;font-size:18px;}
 #toolv.nohelp .tl-help{display:none;}
 #toolv.nohelp .tl-main{margin-right:64px;}
 #toolv.nohelp .tl-hint{display:block;}
 #toolv.nohelp .tl-close{margin-top:0;}
-#toolv:not(.nohelp) .tl-big{font-size:250px;letter-spacing:-8px;}
+#toolv:not(.nohelp) .tl-big{font-size:240px;letter-spacing:-8px;}
 #toolv:not(.nohelp) .tl-big small{font-size:100px;}
 #toolv:not(.nohelp) .pk-num{font-size:300px;}
-#toolv:not(.nohelp) .tl-bar{width:760px;}
+#toolv:not(.nohelp) .tl-bar{width:720px;}
 .gp-grid{max-width:100%;}
-#toolv:not(.nohelp) .gp-grid{width:960px;}
+#toolv:not(.nohelp) .gp-grid{width:840px;}
+#toolv:not(.nohelp) .gp-card{width:256px;}
 .tool-entry .kc{display:none;height:28px;line-height:28px;min-width:0;margin:0 0 0 10px;padding:0 8px;font-size:15px;border-radius:8px;}
 html.tvapp .tool-entry .kc{display:inline-block;}
 .cv-tool{display:none;margin-top:30px;padding:14px 34px;border-radius:999px;background:#0d1a19;color:#8fd3c8;font-size:46px;font-weight:800;font-variant-numeric:tabular-nums;border:0;font-family:inherit;cursor:pointer;}
@@ -581,7 +567,7 @@ html[data-theme=light]{--cl1:#14b8a6;--cl2:#0d9488;}
       <span class="st" id="st-admin">관리</span>
       <span class="st" id="st-weather">날씨</span>
       <span id="updated"></span>
-      <button class="tool-entry" id="toolBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>수업 도구<span class="kc">OK</span></button>
+      <button class="tool-entry" id="toolBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>수업 도구<span class="kc"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="1.5"/><path d="M16 9v4H8M10.5 10.5 8 13l2.5 2.5"/></svg></span></button>
       <span class="music" id="music"><span class="eq"><i></i><i></i><i></i></span><span id="mName"></span></span>
     </footer>
   </div>
@@ -677,7 +663,7 @@ html[data-theme=light]{--cl1:#14b8a6;--cl2:#0d9488;}
       <button class="cv-tool" id="cvTool"></button>
     </div>
     <div class="cv-next" id="cvNext"></div>
-    <button class="tool-entry cv" id="toolBtn2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>수업 도구<span class="kc">OK</span></button>
+    <button class="tool-entry cv" id="toolBtn2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>수업 도구<span class="kc"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="1.5"/><path d="M16 9v4H8M10.5 10.5 8 13l2.5 2.5"/></svg></span></button>
   </div>
 
   <div id="pview" class="view">
@@ -847,7 +833,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     s.src = url.replace('{cb}', name);
     (document.head || document.getElementsByTagName('head')[0]).appendChild(s);
   }
-  var BUILD = '11.5.0';   // 화면 파일 버전 (관리자 앱에서 확인)
+  var BUILD = '11.5.1';   // 화면 파일 버전 (관리자 앱에서 확인)
   function tvMode() {
     if ($('alertv') && $('alertv').className.indexOf('on') >= 0) return 'alert';
     if (SEAT.open) return 'seat';
@@ -2074,43 +2060,95 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     $('toolv').classList.toggle('nohelp', !on);
     tlHelpRender();
   }
-  var KI = {
-    play: '<svg viewBox="0 0 24 24"><path d="M7 4.5l13 7.5-13 7.5z"/></svg>',
-    pause: '<svg viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>',
-    stop: '<svg viewBox="0 0 24 24"><path d="M6 6h12v12H6z"/></svg>',
-    rew: '<svg viewBox="0 0 24 24"><path d="M12 6v12L3 12zM21 6v12l-9-6z"/></svg>',
-    ff: '<svg viewBox="0 0 24 24"><path d="M3 6l9 6-9 6zM12 6l9 6-9 6z"/></svg>',
-    up: '<svg viewBox="0 0 24 24"><path d="M12 6l8 9h-16z"/></svg>',
-    dn: '<svg viewBox="0 0 24 24"><path d="M12 18l8-9h-16z"/></svg>',
-    back: '<svg viewBox="0 0 24 24"><path d="M9 5L3 10.5 9 16v-3.5h6.5a3.5 3.5 0 0 1 0 7H11V22h4.5a6 6 0 0 0 0-12H9z"/></svg>'
-  };
-  function kc(x, round) { return '<span class="kc' + (round ? ' rd' : '') + '">' + x + '</span>'; }
-  function hlRow(keys, title, sub) { return '<div class="hl-r"><div class="hl-k">' + keys + '</div><div class="hl-t"><b>' + title + '</b>' + (sub || '') + '</div></div>'; }
+  /* 오른쪽 안내: 교실 리모컨(BN59-01302A) 모양 그대로 그리고, 지금 쓸 수 있는 버튼만 밝게 + 설명 선 */
+  // 버튼 위치는 리모컨 사진에서 잰 값(리모컨 폭 = 400)
+  var RC_KEYS = [
+    ['pw', 31, 33, 115, 117, '', 'pw'], ['src', 248, 42, 338, 115, 'TV/외부입력', 's'],
+    ['n1', 31, 138, 119, 196, '1'], ['n2', 141, 138, 229, 196, '2'], ['n3', 251, 138, 339, 196, '3'],
+    ['n4', 31, 216, 119, 274, '4'], ['n5', 141, 216, 229, 274, '5'], ['n6', 251, 216, 339, 274, '6'],
+    ['n7', 31, 296, 119, 354, '7'], ['n8', 141, 296, 229, 354, '8'], ['n9', 251, 296, 339, 354, '9'],
+    ['dash', 31, 376, 119, 434, '-'], ['n0', 141, 376, 229, 434, '0'], ['pre', 251, 376, 339, 434, '이전채널', 's'],
+    ['vol', 30, 473, 130, 693, '음량', 'vol'], ['mute', 152, 483, 220, 560, '조용히', 's'], ['chl', 152, 585, 220, 665, '채널|목록', 's'],
+    ['ch', 242, 473, 345, 693, '채널', 'ch'],
+    ['slp', 30, 718, 125, 788, '취침|예약', 's'], ['home', 148, 700, 228, 788, '', 'home'], ['epg', 248, 718, 345, 788, '방송안내', 's'],
+    ['set', 30, 817, 125, 885, '설정', 's'], ['info', 248, 817, 348, 885, 'i 정보표시', 's'],
+    ['up', 158, 810, 218, 897, '', 'up'], ['lf', 25, 930, 128, 990, '', 'lf'], ['rt', 248, 930, 350, 990, '', 'rt'],
+    ['dn', 158, 1020, 218, 1105, '', 'dn'], ['ok', 155, 927, 222, 995, '', 'ok'],
+    ['ret', 28, 1032, 125, 1103, '복귀', 's'], ['exit', 252, 1032, 350, 1103, '종료', 's'],
+    ['ka', 28, 1135, 90, 1190, 'A', 'a'], ['kb', 115, 1135, 178, 1190, 'B', 'b'], ['kc', 203, 1135, 265, 1190, 'C', 'c'], ['kd', 290, 1135, 352, 1190, 'D', 'd'],
+    ['eman', 22, 1213, 98, 1265, 'E-설명서', 's'], ['cap', 110, 1213, 180, 1265, '자막선택', 's'], ['pic', 200, 1213, 270, 1265, '화면모드', 's'], ['stop', 290, 1213, 355, 1265, '', 'stop'],
+    ['rew', 22, 1287, 90, 1340, '', 'rew'], ['play', 112, 1287, 178, 1340, '', 'play'], ['pause', 202, 1287, 268, 1340, '', 'pause'], ['ff', 290, 1287, 355, 1340, '', 'ff']
+  ];
+  var RC_COL = { a: '#c8343a', b: '#1f8a55', c: '#d9a400', d: '#2450c4' };
+  function rcIcon(kind, cx, cy, lit) {
+    var f = lit ? '#05211d' : '#e9edf3', t = 'transform="translate(' + cx + ',' + cy + ')"';
+    var P = {
+      up: 'M0-16L17 13H-17z', dn: 'M0 16L17-13H-17z', lf: 'M-16 0L13-17V17z', rt: 'M16 0L-13-17V17z',
+      play: 'M-9-13L13 0-9 13z', pause: 'M-12-13h8v26h-8zM4-13h8v26h-8z', stop: 'M-11-11h22v22h-22z',
+      rew: 'M0-12v24L-17 0zM17-12v24L0 0z', ff: 'M-17-12L0 0-17 12zM0-12L17 0 0 12z',
+      home: 'M-16 2L0-14 16 2M-11-2v16h22v-16'
+    };
+    if (kind === 'ok') return '<g ' + t + ' fill="none" stroke="' + f + '" stroke-width="4"><rect x="-17" y="-13" width="34" height="26" rx="2"/><path d="M8-5v8H-8M-3-2l-5 5 5 5"/></g>';
+    if (kind === 'home') return '<path ' + t + ' d="' + P.home + '" fill="none" stroke="' + f + '" stroke-width="4"/>';
+    if (kind === 'pw') return '<g ' + t + ' fill="none" stroke="#fff" stroke-width="5"><path d="M-12-9a17 17 0 1 0 24 0"/><path d="M0-20v16"/></g>';
+    return P[kind] ? '<path ' + t + ' d="' + P[kind] + '" fill="' + f + '"/>' : '';
+  }
+  function rcKey(k, lit) {
+    var x = k[1], y = k[2], w = k[3] - k[1], h = k[4] - k[2], cx = x + w / 2, cy = y + h / 2, kind = k[6] || '', txt = k[5];
+    var fill = kind === 'pw' ? '#d9302c' : RC_COL[kind] || (lit ? '#2fd0b4' : '#24272e');
+    var tc = lit ? '#05211d' : '#e9edf3', o = '';
+    if (kind === 'pw') o += '<circle cx="' + cx + '" cy="' + cy + '" r="' + w / 2 + '" fill="' + fill + '"/>';
+    else o += '<rect class="' + (lit ? 'lit' : '') + '" x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="10" fill="' + fill + '"' + (lit ? ' stroke="#fff" stroke-width="5"' : '') + '/>';
+    if (kind === 'vol' || kind === 'ch') {
+      var up = kind === 'vol' ? '<path d="M' + (cx - 18) + ' ' + (y + 40) + 'h36M' + cx + ' ' + (y + 22) + 'v36" stroke="' + tc + '" stroke-width="6"/>' : '<path d="M' + (cx - 20) + ' ' + (y + 50) + 'l20-20 20 20" fill="none" stroke="' + tc + '" stroke-width="6"/>';
+      var dn = kind === 'vol' ? '<path d="M' + (cx - 18) + ' ' + (y + h - 40) + 'h36" stroke="' + tc + '" stroke-width="6"/>' : '<path d="M' + (cx - 20) + ' ' + (y + h - 50) + 'l20 20 20-20" fill="none" stroke="' + tc + '" stroke-width="6"/>';
+      o += up + dn + '<text x="' + cx + '" y="' + (cy + 12) + '" fill="' + tc + '" font-size="34" font-weight="700" text-anchor="middle">' + txt + '</text>';
+    } else if (txt) {
+      var lines = txt.split('|'), ln = 0; for (var li = 0; li < lines.length; li++) ln = Math.max(ln, lines[li].length);
+      var fs = kind === 's' ? Math.min(24, Math.floor((w - 10) / ln)) : 40;
+      if (kind === 'a' || kind === 'b' || kind === 'c' || kind === 'd') fs = 30;
+      for (var i = 0; i < lines.length; i++)
+        o += '<text x="' + cx + '" y="' + (cy + fs * 0.36 + (i - (lines.length - 1) / 2) * fs * 1.1) + '" fill="' + (kind === 'c' ? '#1a1a1a' : tc) + '" font-size="' + fs + '" font-weight="700" text-anchor="middle">' + lines[i] + '</text>';
+    } else o += rcIcon(kind, cx, cy, lit);
+    return o;
+  }
+  // 설명: lit = 밝힐 버튼, pts = 설명 선(꺾은선), y = 글자 위치
+  function rcCallouts(p) {
+    var L = [], dig = ['n1', 'n2', 'n3', 'n4', 'n5', 'n6', 'n7', 'n8', 'n9', 'n0'];
+    L.push({ lit: ['ch'], pts: [[349, 583], [418, 583]], y: 583, t: '도구 바꾸기' });
+    L.push({ lit: ['info'], pts: [[352, 851], [418, 851]], y: 851, t: '이 안내 숨기기' });
+    L.push({ lit: ['up', 'dn', 'lf', 'rt', 'ok'], pts: [[354, 960], [418, 960]], y: 960, t: '화살표: 고르기', s: '가운데: 누르기' });
+    L.push({ lit: ['ret'], pts: [[76, 1107], [76, 1119], [418, 1119]], y: 1119, t: '닫기' });
+    var stop = function (t) { return { lit: ['stop'], pts: [[359, 1239], [418, 1239]], y: 1239, t: t }; };
+    // 맨 아래 재생 버튼 줄은 버튼 바로 밑에 글자로 (선이 엉키지 않게)
+    var under = function (m) { var c = { lit: [], under: m, pts: null }; for (var q in m) c.lit.push(q); return c; };
+    if (p === 'timer') { L.push({ lit: dig, pts: [[343, 245], [418, 245]], y: 245, t: '숫자: 분 맞추기', s: '1·5 → 15분 / 0 → 10분' }); L.push(stop('처음으로'), under({ rew: '−1분', play: '시작', pause: '멈춤', ff: '+1분' })); }
+    else if (p === 'watch') L.push(stop('0으로'), under({ play: '시작', pause: '멈춤' }));
+    else if (p === 'pick') L.push(stop('처음부터'), under({ rew: '−1명', play: '뽑기', ff: '+1명' }));
+    else { L.push({ lit: ['n2', 'n3', 'n4', 'n5', 'n6', 'n7', 'n8'], pts: [[343, 245], [418, 245]], y: 245, t: '숫자: 모둠 수', s: '2 ~ 8' }); L.push(under({ rew: '−1', play: '나누기', ff: '+1' })); }
+    if (p === 'pick') L.push({ lit: [], pts: null, y: 1458, t: '', s: '지금 1 ~ ' + pkMax() + '번', left: 1 });
+    return L;
+  }
   function tlHelpRender() {
     var box = $('tlHelp'); if (!box) return;
-    var p = TOOL.pane, h = '<h3>리모컨으로 조작</h3>';
-    h += hlRow('<div class="kpad"><i class="u"></i><i class="d"></i><i class="l"></i><i class="r"></i><b>OK</b></div>', '고르고 누르기', '방향 버튼 → 가운데 OK');
-    h += hlRow('<span class="kc rk">' + KI.up + '채널' + KI.dn + '</span>', '도구 바꾸기', '채널 위·아래');
-    h += hlRow(kc(KI.back + ' 복귀'), '닫기');
-    h += '<h4>' + ({ timer: '타이머', watch: '스톱워치', pick: '번호 뽑기', group: '모둠 나누기' }[p] || '') + ' 바로 가기</h4>';
-    if (p === 'timer') {
-      h += hlRow(kc('1') + kc('5'), '분 맞추기', '1·5 → 15분 · 0 → 10분');
-      h += hlRow(kc(KI.play, 1) + kc(KI.pause, 1), '시작 · 멈춤');
-      h += hlRow(kc(KI.rew, 1) + kc(KI.ff, 1), '−1분 · +1분');
-      h += hlRow(kc(KI.stop, 1), '처음으로');
-    } else if (p === 'watch') {
-      h += hlRow(kc(KI.play, 1) + kc(KI.pause, 1), '시작 · 멈춤');
-      h += hlRow(kc(KI.stop, 1), '0으로');
-    } else if (p === 'pick') {
-      h += hlRow(kc(KI.play, 1), '번호 뽑기');
-      h += hlRow(kc(KI.rew, 1) + kc(KI.ff, 1), '인원 − · +', '지금 1 ~ ' + pkMax() + '번');
-      h += hlRow(kc(KI.stop, 1), '처음부터');
-    } else {
-      h += hlRow(kc('2') + kc('8'), '모둠 수', '숫자 2 ~ 8');
-      h += hlRow(kc(KI.rew, 1) + kc(KI.ff, 1), '모둠 수 − · +');
-      h += hlRow(kc(KI.play, 1), '나누기');
+    var p = TOOL.pane, L = rcCallouts(p), lit = {}, i, j;
+    for (i = 0; i < L.length; i++) for (j = 0; j < L[i].lit.length; j++) lit[L[i].lit[j]] = 1;
+    var g = '<rect x="-14" y="-14" width="428" height="1436" rx="44" fill="#0c0d10" stroke="#3a3e47" stroke-width="3"/>';
+    for (i = 0; i < RC_KEYS.length; i++) {
+      var k = RC_KEYS[i], on = !!lit[k[0]];
+      g += '<g opacity="' + (on || /^[abcd]$|pw/.test(k[6] || '') ? 1 : 0.55) + '">' + rcKey(k, on) + '</g>';
     }
-    h += '<div class="hl-foot">' + hlRow(kc('정보표시'), '안내 숨기기') + '</div>';
+    var line = function (pts) { var d = ''; for (var q = 0; q < pts.length; q++) d += (q ? 'L' : 'M') + pts[q][0] + ' ' + pts[q][1]; return '<path d="' + d + '" style="fill:none;stroke:var(--accent);stroke-width:5;stroke-linejoin:round"/>'; };
+    var kpos = {}; for (i = 0; i < RC_KEYS.length; i++) kpos[RC_KEYS[i][0]] = RC_KEYS[i];
+    for (i = 0; i < L.length; i++) {
+      var c = L[i];
+      if (c.under) { for (var u in c.under) { var kk = kpos[u]; g += '<text x="' + (kk[1] + kk[3]) / 2 + '" y="1398" font-size="38" font-weight="800" text-anchor="middle" style="fill:var(--accent)">' + c.under[u] + '</text>'; } continue; }
+      if (c.left) { g += '<text x="190" y="' + (c.y + 12) + '" font-size="30" font-weight="600" text-anchor="middle" style="fill:var(--sub)">' + c.s + '</text>'; continue; }
+      g += line(c.pts) + (c.pts2 ? line(c.pts2) : '') + '<circle cx="' + c.pts[0][0] + '" cy="' + c.pts[0][1] + '" r="8" style="fill:var(--accent)"/>' + (c.pts2 ? '<circle cx="' + c.pts2[0][0] + '" cy="' + c.pts2[0][1] + '" r="8" style="fill:var(--accent)"/>' : '');
+      g += '<text x="432" y="' + (c.y + 14) + '" font-size="44" font-weight="800" style="fill:var(--text)">' + c.t + '</text>';
+      if (c.s) g += '<text x="432" y="' + (c.y + 60) + '" font-size="34" font-weight="600" style="fill:var(--sub)">' + c.s + '</text>';
+    }
+    var h = '<h3>리모컨 사용법</h3><svg viewBox="-24 -24 860 1500" preserveAspectRatio="xMidYMin meet">' + g + '</svg>';
     if (box.innerHTML !== h) box.innerHTML = h;
   }
   function tlYtFull() { return typeof YT_ !== 'undefined' && YT_.want && YT_.want.size === 'full'; }
