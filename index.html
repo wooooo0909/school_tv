@@ -493,6 +493,18 @@ html.tvapp .tool-entry .kc{display:inline-block;}
 .gm-end .gm-win.sc{font-size:44px;}
 .gm-end .gm-fs.one b{font-size:130px;}
 .gm-bi.ok b{color:#2fd0b4;}
+/* 성어 도전: 추가 문제 유형 */
+.gm-pr.lit{font-size:56px;}
+.gm-pr.mid{font-size:96px;letter-spacing:-3px;line-height:1.1;}
+.gm-pr em{font-style:normal;color:#f4b740;border-bottom:4px solid rgba(244,183,64,.6);}
+.gm-pr s{color:#ef6f6c;text-decoration:line-through;text-decoration-color:rgba(239,111,108,.8);}
+.gm-stm{margin-top:18px;font-size:38px;font-weight:700;line-height:1.45;color:#dfe5ec;word-break:keep-all;}
+.gm-stm.sm{font-size:28px;color:#8d97a6;font-weight:600;}
+.gm-sl{display:inline-block;min-width:120px;margin:0 6px;border-radius:18px;background:rgba(244,183,64,.14);color:#f4b740;text-align:center;}
+.gm-opts.syl .gm-o{width:-webkit-calc(25% - 24px);width:calc(25% - 24px);justify-content:center;font-size:72px;padding:26px 0;}
+.gm-opts.syl .gm-o .lk{margin-right:20px;}
+.gm-opts.ox .gm-o{font-size:46px;justify-content:center;}
+.gm-hl{color:#2fd0b4;}
 /* 학번 로그인 */
 .lg{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;}
 .lg-t{font-size:30px;font-weight:800;color:var(--sub);letter-spacing:2px;}
@@ -1243,7 +1255,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     s.src = url.replace('{cb}', name);
     (document.head || document.getElementsByTagName('head')[0]).appendChild(s);
   }
-  var BUILD = '11.8.0';   // 화면 파일 버전 (관리자 앱에서 확인)
+  var BUILD = '11.9.0';   // 화면 파일 버전 (관리자 앱에서 확인)
   function tvMode() {
     if ($('alertv') && $('alertv').className.indexOf('on') >= 0) return 'alert';
     if (SEAT.open) return 'seat';
@@ -2637,15 +2649,66 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     for (var i = 0; i < P.length; i++) if (P[i].n.indexOf(d.n) >= 0) { var o = P[i].n.filter(function (x) { return x !== d.n; }); if (o.length) { var x = lnBy(o[Math.floor(Math.random() * o.length)]); return x ? { d: x, txt: P[i].n.length === 2 ? P[i].d : '' } : null; } }
     return null;
   }
-  function gmMakeQ(d, fin) {
-    var q = lnMakeQ(d), pp = gmPartner(d), pt = pp && pp.d;
-    if (q.t === 't2m' && Math.random() < 0.5) q.t = 'm2t';
-    if (pt && !fin && Math.random() < 0.3) {
-      var opts = Math.random() < 0.5 ? [d, pt] : [pt, d];
-      q = { t: d.eb ? 'm2t' : (Math.random() < 0.5 ? 'm2t' : 'ex'), d: d, opts: opts, ans: opts.indexOf(d), pick: -1, pair: true, pd: pp.txt };
+  /* 문제 유형 10가지 — 같은 성어를 여러 각도에서 떠올리게(인출 경로를 늘림). 한자 읽기·쓰기는 넣지 않음
+     m2t 뜻→성어 · dm 사전 뜻풀이→성어 · lit 글자 그대로 푼 말→성어 · ex 용례 빈칸 · t2m 성어→뜻 · pair 헷갈리는 짝 둘 중 하나
+     ox 문장 속 쓰임 O/X · fix 어색하게 쓰인 성어 바꾸기 · mo 뜻풀이 O/X · syl 성어 속 빈칸 글자 */
+  var GM_TW = { m2t: 3, ex: 2, dm: 1, lit: 1, t2m: 1, pair: 1.5, ox: 1.5, fix: 1.5, mo: 1, syl: 1 };
+  function gmTypeOk(d, t, pt) {
+    if (t === 'ex') return !d.eb;
+    if (t === 'dm') return !!d.dm;
+    if (t === 'lit') return !!d.l;
+    if (t === 'pair') return !!pt;
+    if (t === 'fix' || t === 'ox') return !!(d.ms && d.ms.h !== d.n && lnBy(d.ms.h));
+    return true;
+  }
+  function gmType(d, pt, prev) {
+    var c = [], tot = 0, t;
+    for (t in GM_TW) if (t !== prev && gmTypeOk(d, t, pt)) { c.push(t); tot += GM_TW[t]; }
+    var r = Math.random() * tot;
+    for (var i = 0; i < c.length; i++) { r -= GM_TW[c[i]]; if (r <= 0) return c[i]; }
+    return c[0] || 'm2t';
+  }
+  function gmTermOpts(d, avoid, meanx) {   // 정답 + 헷갈리는 것(같은 무리·짝) 최대 2 + 나머지
+    var all = LN.data.items, part = lnPartners(d.n), pick = [], used = {}, i;
+    used[d.n] = 1; avoid = avoid || []; for (i = 0; i < avoid.length; i++) used[avoid[i]] = 1;
+    var okf = function (x) { return !used[x.n] && !(meanx && lnMeanX(d.n, x.n)); };
+    var add = function (arr, max) { for (var j = 0; j < arr.length && pick.length < max; j++) if (okf(arr[j])) { pick.push(arr[j]); used[arr[j].n] = 1; } };
+    add(lnShuffle(all.filter(function (x) { return x.cl === d.cl || part.indexOf(x.n) >= 0; })), 2);
+    add(lnShuffle(all), 3);
+    var opts = lnShuffle(pick.concat([d]));
+    return { opts: opts, ans: opts.indexOf(d) };
+  }
+  function gmMakeQ(d, fin, prev) {
+    var pp = gmPartner(d), pt = pp && pp.d, q, o;
+    if (fin) { q = { t: d.eb || Math.random() < 0.6 ? 'm2t' : 'ex', d: d, recall: true, fin: true, opts: [], ans: -1, pick: -1 }; return q; }
+    var t = gmType(d, pt, prev);
+    if (t === 'pair') {
+      var two = Math.random() < 0.5 ? [d, pt] : [pt, d];
+      q = { t: d.eb ? 'm2t' : (Math.random() < 0.5 ? 'm2t' : 'ex'), d: d, opts: two, ans: two.indexOf(d), pair: true, pd: pp.txt };
+    } else if (t === 'ox') {
+      var right = !d.eb && Math.random() < 0.5;
+      q = { t: 'ox', d: d, s: right ? d.e : d.ms.s, okUse: right, host: right ? null : lnBy(d.ms.h), lab: ['O · 알맞다', 'X · 어색하다'], opts: [d, d], ans: right ? 0 : 1 };
+    } else if (t === 'fix') {
+      var H = lnBy(d.ms.h); o = gmTermOpts(H, [d.n]);
+      q = { t: 'fix', d: H, wrong: d, s: d.ms.s, opts: o.opts, ans: o.ans };
+    } else if (t === 'mo') {
+      var oth = pt && !lnMeanX(d.n, pt.n) ? pt : gmTermOpts(d, [], true).opts.filter(function (x) { return x !== d; })[0], isO = Math.random() < 0.5;
+      q = { t: 'mo', d: d, stmt: isO ? d.m : oth.m, other: isO ? null : oth, lab: ['O · 맞다', 'X · 틀리다'], opts: [d, d], ans: isO ? 0 : 1 };
+    } else if (t === 'syl') {
+      var pos = Math.floor(Math.random() * d.t.length), diff = [];
+      if (pt) for (var k = 0; k < d.t.length; k++) if (pt.t.charAt(k) !== d.t.charAt(k)) diff.push(k);
+      if (diff.length && Math.random() < 0.7) pos = diff[Math.floor(Math.random() * diff.length)];     // 짝과 다른 글자를 주로
+      var c = d.t.charAt(pos), lab = [c], seen = {}; seen[c] = 1;
+      if (pt && !seen[pt.t.charAt(pos)] && pt.t.charAt(pos)) { lab.push(pt.t.charAt(pos)); seen[pt.t.charAt(pos)] = 1; }
+      var pool = lnShuffle(LN.data.items);
+      for (var j = 0; j < pool.length && lab.length < 4; j++) { var ch = pool[j].t.charAt(pos); if (ch && !seen[ch]) { lab.push(ch); seen[ch] = 1; } }
+      lab = lnShuffle(lab);
+      q = { t: 'syl', d: d, pos: pos, lab: lab, opts: [d, d, d, d], ans: lab.indexOf(c) };
+    } else {
+      o = gmTermOpts(d, [], t === 't2m');
+      q = { t: t, d: d, opts: o.opts, ans: o.ans };
     }
-    q.fin = !!fin;
-    if (fin) { q.t = d.eb || Math.random() < 0.6 ? 'm2t' : 'ex'; q.recall = true; }
+    q.pick = -1; q.fin = false;
     return q;
   }
   function gmStart() {
@@ -2746,10 +2809,18 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
       var ll = $('gmL' + k); if (ll) ll.className = 'gm-ll' + (GM.half[k] ? '' : ' used');
     }
   }
-  var GM_QT = { m2t: '뜻에 맞는 성어는?', ex: '빈칸에 들어갈 성어는?', t2m: '이 성어의 뜻은?' };
+  var GM_QT = { m2t: '뜻에 맞는 성어는?', ex: '빈칸에 들어갈 성어는?', t2m: '이 성어의 뜻은?', dm: '사전 뜻풀이에 맞는 성어는?', lit: '글자 그대로 풀면 이런 말 · 어떤 성어일까요?',
+    ox: '밑줄 친 성어, 알맞게 쓰였을까요?', fix: '어색하게 쓰인 성어를 바꾼다면?', mo: '이 뜻풀이, 맞을까요?', syl: '빈칸에 들어갈 글자는?' };
+  function gmSent(s, term, tag) { var e = esc(s), t = esc(term), i = e.indexOf(t); return i < 0 ? e : e.slice(0, i) + '<' + tag + '>' + t + '</' + tag + '>' + e.slice(i + t.length); }
   function gmPrompt(q) {
     var d = q.d;
     if (q.t === 'm2t') return '<div class="gm-pr">' + esc(d.m) + '</div>';
+    if (q.t === 'dm') return '<div class="gm-pr">' + esc(d.dm) + '</div>';
+    if (q.t === 'lit') return '<div class="gm-pr lit">“' + esc(d.l) + '”</div>';
+    if (q.t === 'ox') return '<div class="gm-pr ex' + (q.s.length > 70 ? ' long' : '') + '">' + gmSent(q.s, d.t, 'em') + '</div>';
+    if (q.t === 'fix') return '<div class="gm-pr ex' + (q.s.length > 70 ? ' long' : '') + '">' + gmSent(q.s, q.wrong.t, 's') + '</div>';
+    if (q.t === 'mo') return '<div class="gm-pr mid">' + esc(d.t) + '</div><div class="gm-stm">“' + esc(q.stmt) + '”</div>';
+    if (q.t === 'syl') { var w = ''; for (var i = 0; i < d.t.length; i++) w += i === q.pos ? '<span class="gm-sl">?</span>' : esc(d.t.charAt(i)); return '<div class="gm-pr big">' + w + '</div><div class="gm-stm sm">' + esc(d.m) + '</div>'; }
     if (q.t === 'ex') return '<div class="gm-pr ex' + (d.e.length > 70 ? ' long' : '') + '">' + esc(d.e).replace(esc(d.t), '<u>' + esc(d.t) + '</u>') + '</div>';
     return '<div class="gm-pr big">' + esc(d.t) + '</div>';
   }
@@ -2763,16 +2834,16 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     gmDots(); gmTurnUI();
     $('gmv').className = 'gm on' + (q.fin ? ' fin' : '') + (GM.solo ? ' solo' : '');
     var o = '';
-    if (!q.recall) for (var i = 0; i < q.opts.length; i++) o += '<div class="gm-o" id="gmO' + i + '"><span class="lk">' + (i + 1) + '</span><span class="t">' + esc(q.t === 't2m' ? q.opts[i].m : q.opts[i].t) + '</span></div>';
+    if (!q.recall) for (var i = 0; i < q.opts.length; i++) o += '<div class="gm-o" id="gmO' + i + '"><span class="lk">' + (i + 1) + '</span><span class="t">' + esc(q.lab ? q.lab[i] : q.t === 't2m' ? q.opts[i].m : q.opts[i].t) + '</span></div>';
     var tag = (q.again ? '<span class="gm-tag">다시 한 번</span>' : '') + (q.pair ? '<span class="gm-tag">헷갈리는 짝</span>' : '') + (q.fin ? '<span class="gm-tag f">200점</span>' : '');
     var who = q.recall ? (GM.solo ? '<b>결승</b> · 보기 없이 떠올려 보세요' : '<b>두 팀 모두</b> · 공책에 성어를 적으세요') : (GM.solo ? GM_QT[q.t] : '<b>' + GM.T[GM.turn] + '</b> · ' + GM_QT[q.t]);
     setHTML('gmStage', '<div class="gm-q t' + (q.recall && !GM.solo ? 'f' : GM.turn) + '" id="gmQ"><div class="gm-who"><i></i>' + who + tag + '</div>' + gmPrompt(q) +
       '<div class="gm-ow"><div class="gm-think" id="gmThink"><span>먼저 떠올려 보세요</span><div class="gm-tb"><i id="gmTb"></i></div></div>' +
-      '<div class="gm-opts' + (q.t === 't2m' ? ' long' : '') + (q.opts.length === 2 ? ' two' : '') + '" id="gmOpts">' + o + '</div></div>' +
+      '<div class="gm-opts' + (q.t === 't2m' ? ' long' : '') + (q.opts.length === 2 ? ' two' : '') + (q.t === 'syl' ? ' syl' : '') + (q.lab && q.t !== 'syl' ? ' ox' : '') + '" id="gmOpts">' + o + '</div></div>' +
       '<div class="gm-time" id="gmTimeW"><i id="gmTime"></i></div><div class="gm-fb" id="gmFb"></div></div>');
     if (q.recall) { gmRecall(q); return; }
     gmHint([['먼저 떠올리는 시간', 'dim']]);
-    var th = q.t === 't2m' ? 900 : GM_THINK;
+    var th = q.t === 't2m' || q.t === 'mo' ? 900 : q.t === 'ox' ? 1400 : GM_THINK;
     if ($('gmTb')) runBar($('gmTb'), th / 1000);
     gmSnd(function (t) { SX.gmWhoosh(t, 0.35); SX.gmBell(t + 0.05, GM.turn ? 392 : 329.63, 0.2, 1.2); });
     gmLater(gmShowOpts, th);
@@ -2821,7 +2892,8 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     var q = GM.qs[GM.qi], live = gmLive(q); if (!live.length) return;
     if (GM.sel < 0) { gmSelect(live[0]); return; }
     var n = q.opts.length, t = GM.sel;
-    if (n === 4) t = k === RK.L || k === RK.R ? GM.sel ^ 1 : GM.sel ^ 2; else t = 1 - GM.sel;
+    if (q.t === 'syl') { if (k === RK.U || k === RK.D) return; t = -1; }                       // 글자 보기는 한 줄
+    else if (n === 4) t = k === RK.L || k === RK.R ? GM.sel ^ 1 : GM.sel ^ 2; else t = 1 - GM.sel;
     if (live.indexOf(t) < 0) { var p = live.indexOf(GM.sel); t = live[(p + (k === RK.L || k === RK.U ? live.length - 1 : 1)) % live.length]; }
     gmSelect(t);
   }
@@ -2897,8 +2969,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     var regEnd = 0; while (regEnd < GM.qs.length && !GM.qs[regEnd].fin) regEnd++;
     var at = Math.min(GM.qi + (GM.solo ? 4 : 5), regEnd);
     if (at <= GM.qi + 1) return;
-    var nq = gmMakeQ(q.d, false); nq.again = true; nq.tries = (q.tries || 0) + 1;
-    if (nq.t === q.t && !nq.pair) nq.t = q.t === 'ex' ? 'm2t' : (q.d.eb ? 't2m' : 'ex');
+    var nq = gmMakeQ(q.d, false, q.pair ? 'pair' : q.t); nq.again = true; nq.tries = (q.tries || 0) + 1;   // 다른 유형으로
     GM.qs.splice(at, 0, nq); GM.ins++;
     for (var j = regEnd; j > at; j--) if (GM.qs[j] && !GM.qs[j].fin && !GM.qs[j].again && !GM.qs[j].res) { GM.qs.splice(j, 1); break; }   // 새 문제 하나를 빼서 길이 유지
   }
@@ -2909,10 +2980,15 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     B[d.n] = good && !stealing && !q.again ? Math.min(3, (B[d.n] || 0) + 1) : 0;   // 같은 판에서 다시 맞힌 건 아직 '다시 볼 것' → 다음 판에 또 나옴
     gmSaveBox(B);
     if (!(good && !stealing)) gmReask(q);
-    var info = q.t === 'ex' ? '<div class="gm-fbm">' + esc(d.m) + '</div>' : (!d.eb ? '<div class="gm-fbe">' + lnHl(d.e, d.t) + '</div>' : (q.t === 't2m' ? '' : '<div class="gm-fbm">' + esc(d.m) + '</div>'));
+    var exl = !d.eb ? '<div class="gm-fbe">' + lnHl(d.e, d.t) + '</div>' : '', ml = '<div class="gm-fbm">' + esc(d.m) + '</div>', info;
+    if (q.t === 'ex' || q.t === 'lit' || q.t === 'syl') info = ml + (q.t === 'ex' ? '' : exl);
+    else if (q.t === 'ox') info = q.okUse ? '<div class="gm-fbm">알맞은 쓰임 · ' + esc(d.m) + '</div>' : '<div class="gm-fbm">이 문장엔 <b class="gm-hl">' + esc(q.host.t) + '</b>가 어울려요 · ' + esc(q.host.m) + '</div><div class="gm-fbx">' + esc(d.t) + ' · ' + esc(d.m) + '</div>';
+    else if (q.t === 'fix') info = ml + '<div class="gm-fbx">원래 문장의 <b>' + esc(q.wrong.t) + '</b> · ' + esc(q.wrong.m) + '</div>';
+    else if (q.t === 'mo') info = ml + (q.other ? '<div class="gm-fbx">보여 준 뜻풀이는 <b>' + esc(q.other.t) + '</b>의 뜻</div>' : '');
+    else info = exl || (q.t === 't2m' ? '' : ml);
     var mine = '';
-    if (!good && GM.sel >= 0 && GM.sel !== q.ans && q.opts[GM.sel] && q.t !== 't2m') mine = '<div class="gm-fbx">고른 <b>' + esc(q.opts[GM.sel].t) + '</b> · ' + esc(q.opts[GM.sel].m) + '</div>';
-    $('gmFb').innerHTML = '<div class="gm-fbt"><b class="' + (good ? 'g' : 'w') + '">' + (good ? (stealing ? '가로채기 성공' : '정답') : '정답은') + '</b><span>' + esc(d.t) + '</span></div>' + info + mine +
+    if (!good && !q.lab && GM.sel >= 0 && GM.sel !== q.ans && q.opts[GM.sel] && q.t !== 't2m') mine = '<div class="gm-fbx">고른 <b>' + esc(q.opts[GM.sel].t) + '</b> · ' + esc(q.opts[GM.sel].m) + '</div>';
+    $('gmFb').innerHTML = '<div class="gm-fbt"><b class="' + (good ? 'g' : 'w') + '">' + (good ? (stealing ? '가로채기 성공' : '정답') : '정답은') + '</b><span>' + (q.lab && q.t !== 'syl' ? esc(q.lab[q.ans]) : esc(d.t)) + '</span></div>' + info + mine +
       (q.pair && q.pd ? '<div class="gm-fbp">' + esc(q.pd) + '</div>' : '');
     $('gmQ').className += ' fbon';
     gmHint([[lk('ok', GM.qi + 1 < GM.qs.length ? '다음 문제' : '결과 보기'), 'pri pulse'], [lk('pause', '멈춤')]]);
