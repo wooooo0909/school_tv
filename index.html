@@ -109,7 +109,6 @@ html[data-theme=light] .tl-btn.main{color:#fff;}
 #toolv:not(.nohelp) .gp-card{width:256px;}
 .tool-entry .kc{display:none;height:28px;line-height:28px;min-width:0;margin:0 0 0 10px;padding:0 8px;font-size:15px;border-radius:8px;}
 html.tvapp .tool-entry .kc{display:inline-block;}
-/* ── 한자성어 학습 (수업 도구 안) ── */
 .tl-name{margin:0 0 4px 8px;font-size:22px;font-weight:800;color:var(--accent);letter-spacing:2px;}
 #toolv.mlearn .tl-tab[data-tool]{display:none;}
 #toolv:not(.mlearn) #lnTabs{display:none;}
@@ -122,73 +121,122 @@ html.tvapp .tool-entry .kc{display:inline-block;}
 .n-steps b{flex:none;width:34px;height:34px;line-height:34px;margin-right:14px;border-radius:17px;background:var(--accentbg);color:var(--accent);font-size:20px;text-align:center;}
 .n-steps .kc{height:36px;line-height:36px;min-width:36px;margin:0 6px;padding:0 9px;font-size:18px;border-radius:9px;}
 .n-steps .kc svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2.4;vertical-align:-5px;}
+/* ── 학습 화면 (수업 도구와 같은 틀, 오른쪽 리모컨 그림 대신 화면 아래 버튼 안내) ── */
+#toolv.mlearn .tl-help{display:none;}
+#toolv.mlearn .tl-main{margin-right:64px;}
+#toolv.mlearn.lnhelp .tl-help{display:flex;}
+#toolv.mlearn.lnhelp .tl-main{margin-right:24px;}
 .tl-pane.ln{display:none;text-align:center;align-items:stretch;justify-content:flex-start;}
 .tl-pane.ln.on{display:flex;}
-.ln-in{position:absolute;left:52px;right:52px;top:44px;bottom:40px;display:flex;flex-direction:column;}
-.ln-top{display:flex;align-items:center;font-size:24px;color:var(--sub);font-weight:700;min-height:40px;}
-.ln-top .chip{font-size:22px;}
-.ln-top .r{margin-left:auto;}
-.ln-head b{display:block;font-size:64px;font-weight:800;letter-spacing:-2px;color:var(--text);line-height:1.1;}
-.ln-head span{display:block;margin-top:10px;font-size:28px;color:var(--sub);font-weight:600;}
-.ln-head em{font-style:normal;color:var(--accent);font-weight:800;}
-.ln-lab{margin:34px 0 12px;font-size:22px;color:var(--dim);font-weight:700;letter-spacing:1px;}
-.ln-rng{display:flex;flex-wrap:wrap;margin:0 -7px;}
-.ln-rng .tl-btn{margin:7px;min-width:0;padding:16px 24px;font-size:26px;}
-#toolv .tl-btn.sel{background:var(--accentbg);color:var(--accent);box-shadow:inset 0 0 0 3px var(--accent);}
-.ln-modes{display:flex;margin:0 -9px;}
-.ln-modes .tl-btn{flex:1;min-width:0;padding:28px 22px;text-align:left;border-radius:28px;}
-.ln-modes .tl-btn b{display:block;font-size:30px;white-space:nowrap;}
-.ln-modes .tl-btn small{display:block;margin-top:10px;font-size:21px;font-weight:600;opacity:.75;line-height:1.35;word-break:keep-all;}
-.ln-tip{margin-top:auto;font-size:22px;line-height:1.5;color:var(--sub);word-break:keep-all;}
-.ln-tip b{color:var(--text);}
-.ln-card{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;}
-.ln-term{font-size:150px;font-weight:800;letter-spacing:-4px;line-height:1.05;color:var(--text);}
-.ln-hz{margin-top:8px;font-size:66px;font-weight:700;letter-spacing:10px;color:var(--sub);font-family:"Noto Serif KR","Noto Serif CJK KR",serif;}
-.ln-chars{margin-top:14px;font-size:22px;color:var(--dim);font-weight:600;}
-.ln-ans{margin-top:30px;min-height:250px;max-width:820px;}
-.ln-mean{font-size:38px;font-weight:800;line-height:1.35;color:var(--text);word-break:keep-all;}
-.ln-lit{margin-top:14px;font-size:24px;color:var(--sub);font-weight:600;word-break:keep-all;}
-.ln-ex{margin-top:16px;font-size:26px;line-height:1.5;color:var(--body);word-break:keep-all;}
+.ln-in{position:absolute;left:64px;right:64px;top:46px;bottom:36px;display:flex;flex-direction:column;}
+.lk{display:inline-block;min-width:40px;height:40px;line-height:40px;padding:0 8px;border-radius:10px;background:#16191f;color:#eef1f5;font-size:21px;font-weight:800;font-style:normal;text-align:center;box-sizing:border-box;box-shadow:inset 0 -3px 0 rgba(0,0,0,.5);vertical-align:middle;}
+.lk svg{width:20px;height:20px;vertical-align:-4px;fill:none;stroke:currentColor;stroke-width:2.4;}
+.lk svg.f{fill:currentColor;stroke:none;}
+.lk.rd{border-radius:20px;}
+.ln-h .lk+.lk{margin-left:-2px;}
+.ln-hint{display:flex;justify-content:center;flex:none;margin-top:16px;}
+.ln-h{display:flex;align-items:center;margin:0 16px;padding:6px 4px;border:0;background:none;font:inherit;font-size:24px;font-weight:700;color:var(--sub);cursor:pointer;outline:none;-webkit-transition:opacity .3s,color .3s;transition:opacity .3s,color .3s;}
+.ln-h .lk{margin-right:6px;}
+.ln-h em{font-style:normal;margin-left:6px;}
+.ln-h.pri{color:var(--text);}
+.ln-h.pri .lk,.ln-h.on .lk{background:#2fd0b4;color:#05211d;}
+.ln-h.off{opacity:.22;}
+.ln-h.pulse .lk{-webkit-animation:lnPulse 1.3s ease-in-out infinite;animation:lnPulse 1.3s ease-in-out infinite;}
+@-webkit-keyframes lnPulse{0%,100%{box-shadow:0 0 0 0 rgba(47,208,180,.55)}50%{box-shadow:0 0 0 12px rgba(47,208,180,0)}}
+@keyframes lnPulse{0%,100%{box-shadow:0 0 0 0 rgba(47,208,180,.55)}50%{box-shadow:0 0 0 12px rgba(47,208,180,0)}}
+@-webkit-keyframes lnIn{from{opacity:0;-webkit-transform:translateY(26px)}to{opacity:1;-webkit-transform:none}}
+@keyframes lnIn{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+@-webkit-keyframes lnInR{from{opacity:0;-webkit-transform:translateX(90px)}to{opacity:1;-webkit-transform:none}}
+@keyframes lnInR{from{opacity:0;transform:translateX(90px)}to{opacity:1;transform:none}}
+@-webkit-keyframes lnInL{from{opacity:0;-webkit-transform:translateX(-90px)}to{opacity:1;-webkit-transform:none}}
+@keyframes lnInL{from{opacity:0;transform:translateX(-90px)}to{opacity:1;transform:none}}
+@-webkit-keyframes lnShake{0%,100%{-webkit-transform:none}20%{-webkit-transform:translateX(-14px)}40%{-webkit-transform:translateX(11px)}60%{-webkit-transform:translateX(-7px)}80%{-webkit-transform:translateX(4px)}}
+@keyframes lnShake{0%,100%{transform:none}20%{transform:translateX(-14px)}40%{transform:translateX(11px)}60%{transform:translateX(-7px)}80%{transform:translateX(4px)}}
+#lnBox .in{-webkit-animation:lnIn .5s cubic-bezier(.2,.8,.2,1) both;animation:lnIn .5s cubic-bezier(.2,.8,.2,1) both;}
+#lnBox .in-r{-webkit-animation:lnInR .42s cubic-bezier(.2,.8,.2,1) both;animation:lnInR .42s cubic-bezier(.2,.8,.2,1) both;}
+#lnBox .in-l{-webkit-animation:lnInL .42s cubic-bezier(.2,.8,.2,1) both;animation:lnInL .42s cubic-bezier(.2,.8,.2,1) both;}
+/* 메뉴 */
+.ln-menu{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.ln-head b{display:block;font-size:88px;font-weight:800;letter-spacing:-3px;line-height:1.1;color:var(--text);-webkit-animation:lnIn .5s both;animation:lnIn .5s both;}
+.ln-head span{display:block;margin-top:14px;font-size:28px;color:var(--sub);font-weight:600;-webkit-animation:lnIn .5s .05s both;animation:lnIn .5s .05s both;}
+.ln-head em{margin-left:16px;padding:4px 14px;border-radius:10px;background:var(--accentbg);color:var(--accent);font-style:normal;font-weight:800;}
+.ln-rng{display:flex;align-items:center;margin-top:50px;-webkit-animation:lnIn .5s .1s both;animation:lnIn .5s .1s both;}
+.ln-ra{width:56px;height:56px;border:0;border-radius:28px;background:transparent;color:var(--dim);cursor:pointer;outline:none;}
+.ln-ra svg{width:30px;height:30px;fill:currentColor;}
+.ln-seg{display:flex;margin:0 12px;padding:6px;border-radius:20px;background:var(--surface2);}
+.ln-sg{border:0;background:transparent;font:inherit;font-size:27px;font-weight:700;color:var(--sub);padding:14px 28px;border-radius:14px;cursor:pointer;outline:none;-webkit-transition:background-color .25s,color .25s,-webkit-transform .25s;transition:background-color .25s,color .25s,transform .25s;}
+.ln-sg.on{background:#2fd0b4;color:#05211d;-webkit-transform:scale(1.05);transform:scale(1.05);}
+.ln-modes{display:flex;margin-top:56px;}
+.ln-md{width:310px;margin:0 14px;padding:34px 30px 32px;border:0;border-radius:30px;background:var(--surface2);font:inherit;text-align:left;color:var(--text);cursor:pointer;outline:none;-webkit-animation:lnIn .5s .16s both;animation:lnIn .5s .16s both;}
+.ln-md:nth-child(2){-webkit-animation-delay:.22s;animation-delay:.22s;}
+.ln-md:nth-child(3){-webkit-animation-delay:.28s;animation-delay:.28s;}
+.ln-md .lk{display:block;width:54px;height:54px;line-height:54px;font-size:28px;border-radius:14px;margin-bottom:24px;}
+.ln-md b{display:block;font-size:38px;font-weight:800;letter-spacing:-1px;white-space:nowrap;}
+.ln-md small{display:block;margin-top:8px;font-size:22px;color:var(--sub);font-weight:600;}
+/* 진행 막대 */
+.ln-bar{display:flex;align-items:center;flex:none;height:36px;}
+.ln-bar span{margin-left:22px;font-size:22px;color:var(--dim);font-weight:700;white-space:nowrap;}
+.ln-prog{flex:1;height:6px;border-radius:3px;background:var(--surface2);overflow:hidden;}
+.ln-prog i{display:block;height:100%;background:#2fd0b4;border-radius:3px;}
+/* 카드 */
+.ln-card{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.ln-term{font-size:176px;font-weight:800;letter-spacing:-6px;line-height:1;color:var(--text);-webkit-transition:-webkit-transform .5s cubic-bezier(.2,.8,.2,1);transition:transform .5s cubic-bezier(.2,.8,.2,1);}
+.ln-card.show .ln-term{-webkit-transform:translateY(-6px) scale(.74);transform:translateY(-6px) scale(.74);}
+.ln-sub{position:relative;width:100%;max-width:1120px;height:370px;margin-top:20px;}
+.ln-back,.ln-front{position:absolute;left:0;right:0;top:0;-webkit-transition:opacity .35s,-webkit-transform .5s cubic-bezier(.2,.8,.2,1);transition:opacity .35s,transform .5s cubic-bezier(.2,.8,.2,1);}
+.ln-front{padding-top:24px;font-size:28px;color:var(--dim);font-weight:600;}
+.ln-back{opacity:0;-webkit-transform:translateY(34px);transform:translateY(34px);}
+.ln-card.show .ln-back{opacity:1;-webkit-transform:none;transform:none;}
+.ln-card.show .ln-front{opacity:0;-webkit-transform:translateY(-14px);transform:translateY(-14px);}
+.ln-mean{font-size:46px;font-weight:800;line-height:1.35;color:var(--text);word-break:keep-all;}
+.ln-lit{margin-top:14px;font-size:24px;color:var(--dim);font-weight:600;word-break:keep-all;}
+.ln-ex{margin-top:22px;font-size:27px;line-height:1.55;color:var(--sub);word-break:keep-all;}
 .ln-ex u{text-decoration:none;color:var(--accent);font-weight:800;}
-.ln-wait{font-size:28px;color:var(--dim);font-weight:600;padding-top:60px;}
-.ln-think{width:520px;height:10px;margin:22px auto 0;border-radius:5px;background:var(--surface2);overflow:hidden;}
-.ln-think i{display:block;height:100%;width:0;background:var(--accent);}
-.ln-btns{display:flex;justify-content:center;flex:none;margin-top:16px;}
-.ln-btns .tl-btn{min-width:0;margin:0 7px;padding:18px 20px;font-size:26px;white-space:nowrap;}
-.ln-btns .tl-btn.main{min-width:200px;}
-.ln-q{flex:1;min-height:0;display:flex;flex-direction:column;}
-.ln-ask{margin-top:18px;font-size:26px;color:var(--sub);font-weight:700;}
-.ln-pr{margin-top:10px;font-size:40px;font-weight:800;line-height:1.35;color:var(--text);word-break:keep-all;}
-.ln-pr.big{font-size:96px;letter-spacing:-2px;line-height:1.1;}
-.ln-pr.hz{font-size:96px;letter-spacing:12px;font-family:"Noto Serif KR","Noto Serif CJK KR",serif;}
-.ln-pr small{font-size:40px;color:var(--sub);margin-left:18px;letter-spacing:4px;}
-.ln-pr.ex{font-size:32px;font-weight:700;line-height:1.5;}
-.ln-pr u{text-decoration:none;display:inline-block;min-width:160px;border-bottom:4px solid var(--accent);color:transparent;}
-.ln-opts{margin-top:22px;}
-.ln-opt{display:flex;align-items:center;width:100%;margin:0 0 12px;padding:16px 24px;border-radius:20px;background:var(--surface2);color:var(--text);font:inherit;font-size:34px;font-weight:700;text-align:left;border:0;box-sizing:border-box;}
-.ln-opt.tl-btn{min-width:0;margin:0 0 12px;}
-.ln-opt.sm{font-size:25px;line-height:1.35;padding:14px 22px;word-break:keep-all;}
-.ln-opt i{flex:none;width:44px;height:44px;line-height:44px;margin-right:20px;border-radius:12px;background:#16191f;color:#eef1f5;font-style:normal;font-size:24px;text-align:center;}
-.ln-opt.ok{background:var(--accentbg);box-shadow:inset 0 0 0 4px var(--accent);}
-.ln-opt.ok i{background:var(--accent);color:#05211d;}
-.ln-opt.no{background:var(--redbg);box-shadow:inset 0 0 0 4px var(--red);}
-.ln-opt.no i{background:var(--red);}
-.ln-opt.dim{opacity:.45;}
-.ln-fb{min-height:44px;font-size:26px;font-weight:700;line-height:1.4;color:var(--body);word-break:keep-all;}
-.ln-fb b{color:var(--accent);}
-.ln-fb b.no{color:var(--red);}
-.ln-score{font-size:150px;font-weight:800;letter-spacing:-4px;color:var(--text);line-height:1;}
-.ln-score small{font-size:60px;color:var(--sub);}
-.ln-wrong{margin-top:26px;display:flex;flex-wrap:wrap;justify-content:center;max-width:820px;}
-.ln-wrong span{margin:6px;padding:10px 18px;border-radius:14px;background:var(--redbg);color:var(--red);font-size:26px;font-weight:700;}
+.ln-think{width:440px;height:8px;margin:0 auto;border-radius:4px;background:var(--surface2);overflow:hidden;}
+.ln-think i{display:block;height:100%;width:0;background:#2fd0b4;}
+/* 퀴즈 */
+.ln-dots{flex:1;display:flex;}
+.ln-dots i{flex:1;height:6px;margin-right:8px;border-radius:3px;background:var(--surface2);-webkit-transition:background-color .35s;transition:background-color .35s;}
+.ln-dots i:last-child{margin-right:0;}
+.ln-dots i.cur{background:var(--dim);}
+.ln-dots i.ok{background:#2fd0b4;}
+.ln-dots i.no{background:var(--red);}
+.ln-q{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:center;}
+.ln-ask{font-size:26px;color:var(--dim);font-weight:700;}
+.ln-pr{margin-top:14px;font-size:46px;font-weight:800;line-height:1.35;color:var(--text);word-break:keep-all;}
+.ln-pr.big{font-size:112px;letter-spacing:-4px;line-height:1.1;}
+.ln-pr.ex{font-size:36px;font-weight:700;line-height:1.55;}
+.ln-pr u{display:inline-block;min-width:210px;border-bottom:5px solid #2fd0b4;color:transparent;text-decoration:none;line-height:1.1;}
+.ln-opts{display:flex;flex-wrap:wrap;margin:38px -10px 0;}
+.ln-opt{width:-webkit-calc(50% - 20px);width:calc(50% - 20px);margin:10px;display:flex;align-items:center;padding:24px 28px;border:0;border-radius:24px;background:var(--surface2);font:inherit;color:var(--text);font-size:40px;font-weight:800;text-align:left;box-sizing:border-box;cursor:pointer;outline:none;-webkit-animation:lnIn .4s both;animation:lnIn .4s both;-webkit-transition:background-color .3s,color .3s,opacity .3s,-webkit-transform .3s;transition:background-color .3s,color .3s,opacity .3s,transform .3s;}
+.ln-opts.one .ln-opt{font-size:26px;font-weight:700;line-height:1.38;padding:18px 24px;word-break:keep-all;}
+.ln-opt .lk{flex:none;width:48px;height:48px;line-height:48px;font-size:26px;margin-right:22px;border-radius:13px;}
+.ln-opt.ok{background:#2fd0b4;color:#05211d;-webkit-transform:scale(1.03);transform:scale(1.03);}
+.ln-opt.no{background:var(--redbg);color:var(--red);-webkit-animation:lnShake .45s 0s both!important;animation:lnShake .45s 0s both!important;}
+.ln-opt.dim{opacity:.28;}
+.ln-fb{margin-top:24px;min-height:46px;font-size:28px;font-weight:700;color:var(--sub);word-break:keep-all;opacity:0;-webkit-transform:translateY(12px);transform:translateY(12px);-webkit-transition:opacity .3s,-webkit-transform .3s;transition:opacity .3s,transform .3s;}
+.ln-fb.on{opacity:1;-webkit-transform:none;transform:none;}
+.ln-fb b{margin-right:14px;padding:4px 14px;border-radius:10px;font-size:24px;}
+.ln-fb b.g{background:#2fd0b4;color:#05211d;}
+.ln-fb b.w{background:var(--red);color:#fff;}
+.ln-res{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.ln-score b{font-size:210px;font-weight:800;letter-spacing:-6px;line-height:1;color:var(--text);}
+.ln-score small{margin-left:14px;font-size:66px;color:var(--sub);font-weight:700;}
+.ln-rt{margin-top:16px;font-size:28px;color:var(--sub);font-weight:700;}
+.ln-wrong{display:flex;flex-wrap:wrap;justify-content:center;margin-top:20px;max-width:1120px;}
+.ln-wrong span{margin:8px;padding:12px 22px;border-radius:16px;background:var(--redbg);color:var(--red);font-size:30px;font-weight:800;-webkit-animation:lnIn .4s both;animation:lnIn .4s both;}
+/* 헷갈리는 성어 */
 .ln-cmp{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:center;}
-.ln-cg{display:flex;margin:0 -10px;}
-.ln-cg div{flex:1;min-width:0;margin:0 10px;padding:26px 24px;border-radius:26px;background:var(--surface2);}
-.ln-cg b{display:block;font-size:50px;font-weight:800;letter-spacing:-1px;color:var(--text);}
-.ln-cg em{display:block;font-style:normal;margin-top:4px;font-size:30px;letter-spacing:4px;color:var(--sub);font-family:"Noto Serif KR","Noto Serif CJK KR",serif;}
-.ln-cg p{margin:14px 0 0;font-size:24px;line-height:1.45;color:var(--body);font-weight:600;word-break:keep-all;}
-.ln-diff{margin-top:24px;min-height:120px;padding:22px 28px;border-radius:24px;border:3px dashed var(--line);font-size:28px;line-height:1.5;font-weight:700;color:var(--text);word-break:keep-all;}
-.ln-diff.hid{color:var(--dim);font-weight:600;text-align:center;}
+.ln-cg{display:flex;margin:0 -12px;}
+.ln-cg div{flex:1;min-width:0;margin:0 12px;padding:34px 30px;border-radius:28px;background:var(--surface2);text-align:left;}
+.ln-cg b{display:block;font-size:60px;font-weight:800;letter-spacing:-2px;color:var(--text);white-space:nowrap;}
+.ln-cg p{margin:16px 0 0;font-size:27px;line-height:1.45;color:var(--sub);font-weight:600;word-break:keep-all;}
+.ln-diff{position:relative;margin-top:30px;height:190px;}
+.ln-diff .q,.ln-diff .a{position:absolute;left:0;right:0;top:0;-webkit-transition:opacity .35s,-webkit-transform .5s cubic-bezier(.2,.8,.2,1);transition:opacity .35s,transform .5s cubic-bezier(.2,.8,.2,1);}
+.ln-diff .q{padding-top:40px;font-size:30px;color:var(--dim);font-weight:700;}
+.ln-diff .a{opacity:0;-webkit-transform:translateY(26px);transform:translateY(26px);padding:28px 34px;border-radius:24px;background:var(--accentbg);color:var(--text);font-size:30px;line-height:1.5;font-weight:700;text-align:left;word-break:keep-all;}
+.ln-cmp.show .ln-diff .q{opacity:0;}
+.ln-cmp.show .ln-diff .a{opacity:1;-webkit-transform:none;transform:none;}
 .ln-msg{flex:1;display:flex;align-items:center;justify-content:center;font-size:32px;color:var(--sub);font-weight:700;text-align:center;}
 /* 공지 자리의 신기능 소개 카드 */
 .n-promo{position:relative;padding-left:26px;}
@@ -926,7 +974,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     s.src = url.replace('{cb}', name);
     (document.head || document.getElementsByTagName('head')[0]).appendChild(s);
   }
-  var BUILD = '11.6.0';   // 화면 파일 버전 (관리자 앱에서 확인)
+  var BUILD = '11.6.1';   // 화면 파일 버전 (관리자 앱에서 확인)
   function tvMode() {
     if ($('alertv') && $('alertv').className.indexOf('on') >= 0) return 'alert';
     if (SEAT.open) return 'seat';
@@ -2001,58 +2049,77 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     var a = LN.data.test.split('-'), t = new Date(+a[0], +a[1] - 1, +a[2]), d = Math.round((t - today0()) / 86400000);
     return d > 0 ? 'D-' + d : d === 0 ? 'D-DAY' : '';
   }
-  function lnBtn(act, html, cls, id) { return '<button class="tl-btn' + (cls ? ' ' + cls : '') + '" data-ln="' + act + '"' + (id ? ' id="' + id + '"' : '') + '>' + html + '</button>'; }
   function lnHl(ex, term) { var i = ex.indexOf(term); return i < 0 ? esc(ex) : esc(ex.slice(0, i)) + '<u>' + esc(term) + '</u>' + esc(ex.slice(i + term.length)); }
   function lnStopAuto() { LN.auto = false; clearTimeout(LN.timer); LN.timer = null; }
-  // 화면 그리기. focus: 그린 뒤 리모컨 선택을 둘 버튼 id
-  function lnRender(focus) {
+  /* ── 학습 화면 그리기 · 리모컨 버튼으로 바로 조작 (화살표로 칸을 옮겨 다니지 않음) ──
+     메뉴: ◀▶ 범위 · 1 카드 · 2 퀴즈 · 3 헷갈리는 성어
+     카드: 가운데 = 뜻 보기 → 다음 · ◀▶ 이전/다음 · ▶ 자동 · ❚❚ 멈춤 · 0 섞기
+     퀴즈: 1~4 답 · 가운데(또는 ▶▶) 다음 문제     비교: 가운데 = 차이 보기 → 다음 · ◀▶ 이전/다음 */
+  var LK = {   // 화면에 그리는 리모컨 버튼 모양
+    ok: '<svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="1.5"/><path d="M16 9v4H8M10.5 10.5 8 13l2.5 2.5"/></svg>',
+    l: '<svg viewBox="0 0 24 24" class="f"><path d="M7 12l10-7v14z"/></svg>', r: '<svg viewBox="0 0 24 24" class="f"><path d="M17 12L7 5v14z"/></svg>',
+    play: '<svg viewBox="0 0 24 24" class="f"><path d="M8 5l11 7-11 7z"/></svg>', pause: '<svg viewBox="0 0 24 24" class="f"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg>',
+    ff: '<svg viewBox="0 0 24 24" class="f"><path d="M3 6l9 6-9 6zM12 6l9 6-9 6z"/></svg>'
+  };
+  function lk(k, txt) { return '<span class="lk' + (k === 'play' || k === 'pause' || k === 'ff' ? ' rd' : '') + '">' + (LK[k] || esc(k)) + '</span>' + (txt ? '<em>' + txt + '</em>' : ''); }
+  function lnHint(items) {         // 아래쪽 버튼 안내 (눌러도 됨)
+    var h = '<div class="ln-hint">';
+    for (var i = 0; i < items.length; i++) h += '<button class="ln-h' + (items[i][2] ? ' ' + items[i][2] : '') + '" data-ln="' + items[i][0] + '">' + items[i][1] + '</button>';
+    return h + '</div>';
+  }
+  function lnRender(anim) {
     var box = $('lnBox'); if (!box) return;
     var h = '';
     if (LN.loading) h = '<div class="ln-msg">불러오는 중…</div>';
-    else if (LN.err) h = '<div class="ln-msg">' + esc(LN.err) + '</div><div class="ln-btns">' + lnBtn('retry', '다시 시도', 'main ln-main') + '</div>';
+    else if (LN.err) h = '<div class="ln-msg">' + esc(LN.err) + '</div>' + lnHint([['retry', lk('ok', '다시 시도')]]);
     else if (LN.sets && !lnSets().length) h = '<div class="ln-msg">지금 준비 중인 시험 자료가 없습니다</div>';
     else if (!LN.data) h = '';
-    else if (LN.view === 'card') h = lnCardHtml();
-    else if (LN.view === 'quiz') h = lnQuizHtml();
-    else if (LN.view === 'cmp') h = lnCmpHtml();
+    else if (LN.view === 'card') h = lnCardHtml(anim);
+    else if (LN.view === 'quiz') h = lnQuizHtml(anim);
+    else if (LN.view === 'cmp') h = lnCmpHtml(anim);
     else h = lnMenuHtml();
     box.innerHTML = h;
-    if (TOOL.open && TOOL.pane === 'learn') {
-      var f = focus && $(focus);
-      if (f || !(TOOL.kf && TOOL.kf.offsetWidth && box.contains(TOOL.kf)) && !(TOOL.kf && TOOL.kf.classList.contains('tl-tab'))) tlFocus(f || tlMainEl());
-    }
+    if (TOOL.open && TOOL.pane === 'learn' && TOOL.kf && !TOOL.kf.classList.contains('tl-tab')) tlFocus(null);
     tlHelpRender();
   }
+  function lnProg(i, n) { return '<div class="ln-prog"><i style="width:' + (n ? Math.round(i / n * 1000) / 10 : 0) + '%"></i></div>'; }
+  /* 메뉴 */
   function lnMenuHtml() {
-    var D = LN.data, dd = lnDday(), h = '<div class="ln-head"><b>' + esc(D.title) + '</b><span>' + esc(D.sub) + (dd ? ' · <em>' + dd + '</em>' : '') + '</span></div>';
-    h += '<div class="ln-lab">범위</div><div class="ln-rng">';
-    for (var r in LN_RNG) h += lnBtn('rng:' + r, LN_RNG[r] + (r === 'all' ? ' ' + D.items.length : ''), 'sm' + (LN.rng === r ? ' sel' : ''), 'lnR' + r);
-    h += lnBtn('shuf', LN.shuf ? '순서: 섞기' : '순서: 번호순', 'sm' + (LN.shuf ? ' sel' : ''), 'lnShuf') + '</div>';
-    h += '<div class="ln-lab">공부 방법</div><div class="ln-modes">' +
-      lnBtn('go:card', '<b>카드 넘기기</b><small>성어를 보고 뜻을 먼저 떠올린 뒤 확인</small>', 'main ln-main', 'lnMcard') +
-      lnBtn('go:quiz', '<b>퀴즈 10문제</b><small>뜻·용례 빈칸·한자 읽기 4지선다</small>', '', 'lnMquiz') +
-      lnBtn('go:cmp', '<b>헷갈리는 성어</b><small>비슷한 것끼리 나란히 놓고 차이 말하기</small>', '', 'lnMcmp') + '</div>';
-    h += '<div class="ln-tip"><b>먼저 떠올리고, 그다음 확인.</b> 정답을 바로 보기보다 몇 초라도 떠올려 본 뒤 보는 쪽이 더 오래 남습니다. 자동 넘김은 8초 동안 생각할 시간을 줍니다.</div>';
-    return h;
+    var D = LN.data, dd = lnDday(), h = '<div class="ln-menu"><div class="ln-head"><b>' + esc(D.title) + '</b><span>' + esc(D.sub) + (dd ? '<em>' + dd + '</em>' : '') + '</span></div>';
+    h += '<div class="ln-rng"><button class="ln-ra" data-ln="rstep:-1">' + LK.l + '</button><div class="ln-seg" id="lnSeg">';
+    for (var r in LN_RNG) h += '<button class="ln-sg' + (LN.rng === r ? ' on' : '') + '" data-ln="rng:' + r + '" data-r="' + r + '">' + LN_RNG[r] + '</button>';
+    h += '</div><button class="ln-ra" data-ln="rstep:1">' + LK.r + '</button></div>';
+    h += '<div class="ln-modes">' +
+      '<button class="ln-md" data-ln="go:card"><span class="lk n">1</span><b>카드</b><small>보고 뜻 떠올리기</small></button>' +
+      '<button class="ln-md" data-ln="go:quiz"><span class="lk n">2</span><b>퀴즈</b><small>10문제 · 4지선다</small></button>' +
+      '<button class="ln-md" data-ln="go:cmp"><span class="lk n">3</span><b>헷갈리는 성어</b><small>나란히 놓고 차이 보기</small></button></div></div>';
+    return h + lnHint([['rstep:1', lk('l') + lk('r', '범위')], ['go:card', lk('1') + lk('2') + lk('3', '시작')]]);
   }
-  function lnTop(left, right) { return '<div class="ln-top">' + left + '<span class="r">' + (right || '') + '</span></div>'; }
-  /* 카드 넘기기 */
-  function lnCardHtml() {
+  function lnSetRng(r) {
+    LN.rng = r;
+    var b = document.querySelectorAll('#lnSeg .ln-sg');
+    for (var i = 0; i < b.length; i++) b[i].classList.toggle('on', b[i].getAttribute('data-r') === r);
+  }
+  function lnStepRng(d) { var k = []; for (var r in LN_RNG) k.push(r); lnSetRng(k[(k.indexOf(LN.rng) + d + k.length) % k.length]); }
+  /* 카드 */
+  function lnCardHtml(anim) {
     var d = LN.list[LN.i]; if (!d) return '';
-    var h = lnTop('<span class="chip">' + (LN.i + 1) + ' / ' + LN.list.length + '</span>' + LN_RNG[LN.rng] + ' · ' + d.n + '번', LN.auto ? '<span class="chip">자동 넘김</span>' : '');
-    h += '<div class="ln-card"><div class="ln-term">' + esc(d.t) + '</div><div class="ln-hz">' + esc(d.h) + '</div>';
-    h += '<div class="ln-ans">';
-    if (LN.show) {
-      h += '<div class="ln-chars">' + esc(d.c.join(' · ')) + '</div><div class="ln-mean" style="margin-top:18px">' + esc(d.m) + '</div>';
-      if (d.l) h += '<div class="ln-lit">직역 · ' + esc(d.l) + '</div>';
-      if (!d.eb) h += '<div class="ln-ex">' + lnHl(d.e, d.t) + '</div>';
-    } else h += '<div class="ln-wait">뜻을 먼저 떠올려 보세요</div>' + (LN.auto ? '<div class="ln-think"><i id="lnThink"></i></div>' : '');
-    h += '</div></div><div class="ln-btns">' + lnBtn('prev', '◀ 이전', '', 'lnPrev') + lnBtn('flip', LN.show ? '가리기' : '뜻 보기', 'main ln-main', 'lnFlip') +
-      lnBtn('next', '다음 ▶', '', 'lnNext') + lnBtn('auto', LN.auto ? '자동 멈춤' : '자동 넘김', LN.auto ? 'sel' : '', 'lnAuto') + lnBtn('menu', '메뉴', '', 'lnMenu') + '</div>';
-    return h;
+    var h = '<div class="ln-bar">' + lnProg(LN.i + 1, LN.list.length) + '<span>' + (LN.i + 1) + ' / ' + LN.list.length + (LN.shuf ? ' · 섞음' : '') + '</span></div>';
+    h += '<div class="ln-card ' + (anim || 'in') + (LN.show ? ' show' : '') + '" id="lnCard"><div class="ln-term">' + esc(d.t) + '</div>';
+    h += '<div class="ln-sub"><div class="ln-back"><div class="ln-mean">' + esc(d.m) + '</div>' + (d.l ? '<div class="ln-lit">' + esc(d.l) + '</div>' : '') +
+      (!d.eb ? '<div class="ln-ex">' + lnHl(d.e, d.t) + '</div>' : '') + '</div>';
+    h += '<div class="ln-front">' + (LN.auto ? '<div class="ln-think"><i id="lnThink"></i></div>' : '뜻을 떠올려 보세요') + '</div></div></div>';
+    return h + lnHint([['next', lk('l') + lk('r', '이전 · 다음')], ['flip', lk('ok', LN.show ? '다음 카드' : '뜻 보기'), 'pri'],
+      ['auto', lk(LN.auto ? 'pause' : 'play', LN.auto ? '멈춤' : '자동'), LN.auto ? 'on' : ''], ['shuf', lk('0', LN.shuf ? '번호순' : '섞기')]]);
   }
-  function lnCardGo(d, focus) {
-    var n = LN.list.length; LN.i = (LN.i + d + n) % n; LN.show = false; lnRender(focus || 'lnFlip');
+  function lnFlip() {
+    var c = $('lnCard'); if (!c) return;
+    if (!LN.show) { LN.show = true; c.classList.add('show'); var p = document.querySelector('.ln-h.pri em'); if (p) p.innerHTML = '다음 카드'; }
+    else lnCardGo(1);
+  }
+  function lnCardGo(d) {
+    var n = LN.list.length; LN.i = (LN.i + d + n) % n; LN.show = false;
+    lnRender(d < 0 ? 'in-l' : 'in-r');
     if (LN.auto) lnAutoStep();
   }
   function lnAutoStep() {          // 8초 생각 → 뜻 7초 → 다음
@@ -2061,15 +2128,15 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     TOOL.lastAct = new Date().getTime();
     if (!LN.show) {
       if ($('lnThink')) runBar($('lnThink'), 8);
-      LN.timer = setTimeout(function () { LN.show = true; lnRender(); lnAutoStep(); }, 8000);
+      LN.timer = setTimeout(function () { lnFlip(); lnAutoStep(); }, 8000);
     } else LN.timer = setTimeout(function () { lnCardGo(1); }, 7000);
   }
-  /* 퀴즈 */
-  var LN_QT = { m2t: '이 뜻의 한자성어는?', ex: '빈칸에 들어갈 한자성어는?', t2m: '이 성어의 뜻은?', h2t: '이 한자는 어떻게 읽을까요?' };
+  /* 퀴즈 (뜻 → 성어 · 용례 빈칸 · 성어 → 뜻) */
+  var LN_QT = { m2t: '뜻에 맞는 성어는?', ex: '빈칸에 들어갈 성어는?', t2m: '이 성어의 뜻은?' };
   function lnPartners(n) { var o = [], P = LN.data.pairs || []; for (var i = 0; i < P.length; i++) if (P[i].n.indexOf(n) >= 0) o = o.concat(P[i].n); return o; }
   function lnMeanX(a, b) { var X = LN.data.meanx || []; for (var i = 0; i < X.length; i++) if (X[i].indexOf(a) >= 0 && X[i].indexOf(b) >= 0) return true; return false; }
   function lnMakeQ(d) {
-    var types = ['m2t', 'm2t', 't2m', 'h2t'];
+    var types = ['m2t', 'm2t', 't2m', 't2m'];
     if (!d.eb) types.push('ex', 'ex');
     var t = types[Math.floor(Math.random() * types.length)], all = LN.data.items, part = lnPartners(d.n), pick = [], used = {};
     used[d.n] = 1;
@@ -2083,90 +2150,136 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
   function lnQuizStart(pool) {
     var src = lnShuffle(pool || lnItems(LN.rng)).slice(0, 10);
     LN.qz = { items: src.map(lnMakeQ), i: 0, right: 0, wrong: [] };
-    LN.view = 'quiz'; lnRender('lnO0');
+    LN.view = 'quiz'; lnRender('in');
   }
-  function lnQuizHtml() {
+  function lnDots() {
+    var Z = LN.qz, h = '<div class="ln-dots">';
+    for (var i = 0; i < Z.items.length; i++) { var q = Z.items[i]; h += '<i class="' + (q.pick < 0 ? (i === Z.i ? 'cur' : '') : q.pick === q.ans ? 'ok' : 'no') + '"></i>'; }
+    return h + '</div>';
+  }
+  function lnQuizHtml(anim) {
     var Z = LN.qz;
     if (Z.i >= Z.items.length) {
       var w = '';
-      for (var k = 0; k < Z.wrong.length; k++) w += '<span>' + esc(Z.wrong[k].t) + '</span>';
-      return lnTop('<span class="chip">퀴즈 결과</span>' + LN_RNG[LN.rng]) + '<div class="ln-card"><div class="ln-score">' + Z.right + '<small> / ' + Z.items.length + '</small></div>' +
-        '<div class="ln-lit" style="font-size:28px">' + (Z.wrong.length ? '틀린 성어' : '모두 맞혔습니다') + '</div><div class="ln-wrong">' + w + '</div></div>' +
-        '<div class="ln-btns">' + lnBtn('qagain', '새로 10문제', 'main ln-main', 'lnQa') + (Z.wrong.length ? lnBtn('qwrong', '틀린 것만 다시', '', 'lnQw') : '') + lnBtn('menu', '메뉴', '', 'lnMenu') + '</div>';
+      for (var k = 0; k < Z.wrong.length; k++) w += '<span style="-webkit-animation-delay:' + (0.6 + k * 0.08) + 's;animation-delay:' + (0.6 + k * 0.08) + 's">' + esc(Z.wrong[k].t) + '</span>';
+      return '<div class="ln-bar">' + lnDots() + '</div><div class="ln-res in"><div class="ln-score"><b id="lnScore">0</b><small>/ ' + Z.items.length + '</small></div>' +
+        '<div class="ln-rt">' + (Z.wrong.length ? '다시 볼 성어' : '모두 맞혔습니다') + '</div><div class="ln-wrong">' + w + '</div></div>' +
+        lnHint([['qagain', lk('ok', '새로 10문제'), 'pri']].concat(Z.wrong.length ? [['qwrong', lk('0', '틀린 것만')]] : []));
     }
-    var q = Z.items[Z.i], d = q.d, done = q.pick >= 0, h = lnTop('<span class="chip">' + (Z.i + 1) + ' / ' + Z.items.length + '</span>' + LN_QT[q.t].replace('?', ''), '맞힌 수 ' + Z.right);
-    h += '<div class="ln-q"><div class="ln-ask">' + LN_QT[q.t] + '</div>';
+    var q = Z.items[Z.i], d = q.d, h = '<div class="ln-bar">' + lnDots() + '<span>' + (Z.i + 1) + ' / ' + Z.items.length + '</span></div>';
+    h += '<div class="ln-q ' + (anim || 'in') + '"><div class="ln-ask">' + LN_QT[q.t] + '</div>';
     if (q.t === 'm2t') h += '<div class="ln-pr">' + esc(d.m) + '</div>';
     else if (q.t === 'ex') h += '<div class="ln-pr ex">' + esc(d.e).replace(esc(d.t), '<u>' + esc(d.t) + '</u>') + '</div>';
-    else if (q.t === 't2m') h += '<div class="ln-pr big">' + esc(d.t) + '<small>' + esc(d.h) + '</small></div>';
-    else h += '<div class="ln-pr hz">' + esc(d.h) + '</div>';
-    h += '<div class="ln-opts">';
-    for (var i = 0; i < q.opts.length; i++) {
-      var o = q.opts[i], txt = q.t === 't2m' ? esc(o.m) : esc(o.t) + (done ? ' <span style="font-size:24px;color:var(--sub);margin-left:10px">' + esc(o.h) + '</span>' : '');
-      var st = !done ? 'tl-btn' : i === q.ans ? 'ok' : i === q.pick ? 'no' : 'dim';
-      h += '<button class="ln-opt ' + st + (q.t === 't2m' ? ' sm' : '') + '" data-ln="ans:' + i + '" id="lnO' + i + '"><i>' + (i + 1) + '</i><span>' + txt + '</span></button>';
-    }
-    h += '</div><div class="ln-fb">';
-    if (done) h += (q.pick === q.ans ? '<b>정답!</b> ' : '<b class="no">아쉬워요.</b> ') + esc(d.t) + '(' + esc(d.h) + ')' + (q.t === 't2m' ? '' : ' — ' + esc(d.m));
-    h += '</div></div>';
-    if (done) h += '<div class="ln-btns">' + lnBtn('qnext', Z.i + 1 < Z.items.length ? '다음 문제 ▶' : '결과 보기', 'main ln-main', 'lnQn') + lnBtn('menu', '메뉴', '', 'lnMenu') + '</div>';
-    return h;
+    else h += '<div class="ln-pr big">' + esc(d.t) + '</div>';
+    h += '<div class="ln-opts' + (q.t === 't2m' ? ' one' : '') + '" id="lnOpts">';
+    for (var i = 0; i < q.opts.length; i++)
+      h += '<button class="ln-opt" data-ln="ans:' + i + '" style="-webkit-animation-delay:' + (0.08 + i * 0.06) + 's;animation-delay:' + (0.08 + i * 0.06) + 's"><span class="lk n">' + (i + 1) + '</span><span class="t">' + esc(q.t === 't2m' ? q.opts[i].m : q.opts[i].t) + '</span></button>';
+    h += '</div><div class="ln-fb" id="lnFb"></div></div>';
+    return h + lnHint([['ans:0', lk('1') + lk('2') + lk('3') + lk('4', '답 고르기')], ['qnext', lk('ok', '다음 문제'), 'pri off']]);
   }
   function lnAnswer(i) {
     var Z = LN.qz, q = Z && Z.items[Z.i];
     if (!q || q.pick >= 0 || i < 0 || i >= q.opts.length) return;
     q.pick = i;
-    if (i === q.ans) Z.right++; else Z.wrong.push(q.d);
-    lnRender('lnQn');
+    var good = i === q.ans;
+    if (good) Z.right++; else Z.wrong.push(q.d);
+    var o = document.querySelectorAll('#lnOpts .ln-opt');           // 다시 그리지 않고 표시만 바꿈 (움직임이 끊기지 않게)
+    for (var k = 0; k < o.length; k++) o[k].className = 'ln-opt done ' + (k === q.ans ? 'ok' : k === i ? 'no' : 'dim');
+    var fb = $('lnFb');
+    if (fb) fb.innerHTML = '<b class="' + (good ? 'g' : 'w') + '">' + (good ? '정답' : '오답') + '</b>' + (q.t === 't2m' ? (good ? esc(q.d.t) : '정답은 ' + (q.ans + 1) + '번') : esc(q.d.t) + ' · ' + esc(q.d.m));
+    if (fb) fb.className = 'ln-fb on';
+    var dots = document.querySelectorAll('.ln-dots i'); if (dots[Z.i]) dots[Z.i].className = good ? 'ok' : 'no';
+    var nx = document.querySelector('.ln-h.pri'); if (nx) nx.className = 'ln-h pri pulse';
+    var a = document.querySelector('.ln-hint .ln-h'); if (a) a.className = 'ln-h off';
   }
-  /* 헷갈리는 성어 비교 */
-  function lnCmpHtml() {
-    var P = LN.data.pairs, p = P[LN.ci], h = lnTop('<span class="chip">' + (LN.ci + 1) + ' / ' + P.length + '</span>헷갈리는 성어', '');
-    h += '<div class="ln-cmp"><div class="ln-cg">';
-    for (var i = 0; i < p.n.length; i++) { var d = lnBy(p.n[i]); if (d) h += '<div><b>' + esc(d.t) + '</b><em>' + esc(d.h) + '</em><p>' + esc(d.m) + '</p></div>'; }
-    h += '</div><div class="ln-diff' + (LN.cshow ? '' : ' hid') + '">' + (LN.cshow ? esc(p.d) : '무엇이 다른지 먼저 말해 보세요') + '</div></div>';
-    h += '<div class="ln-btns">' + lnBtn('cprev', '◀ 이전', '', 'lnCp') + lnBtn('cflip', LN.cshow ? '가리기' : '차이 보기', 'main ln-main', 'lnCf') + lnBtn('cnext', '다음 ▶', '', 'lnCn') + lnBtn('menu', '메뉴', '', 'lnMenu') + '</div>';
-    return h;
+  function lnScoreUp() {
+    var el = $('lnScore'), Z = LN.qz; if (!el) return;
+    var n = 0, go = function () { if (!$('lnScore')) return; el.innerHTML = n; if (n < Z.right) { n++; setTimeout(go, 90); } };
+    setTimeout(go, 250);
   }
+  /* 헷갈리는 성어 */
+  function lnCmpHtml(anim) {
+    var P = LN.data.pairs, p = P[LN.ci], h = '<div class="ln-bar">' + lnProg(LN.ci + 1, P.length) + '<span>' + (LN.ci + 1) + ' / ' + P.length + '</span></div>';
+    h += '<div class="ln-cmp ' + (anim || 'in') + (LN.cshow ? ' show' : '') + '" id="lnCmp"><div class="ln-cg">';
+    for (var i = 0; i < p.n.length; i++) { var d = lnBy(p.n[i]); if (d) h += '<div><b>' + esc(d.t) + '</b><p>' + esc(d.m) + '</p></div>'; }
+    h += '</div><div class="ln-diff"><div class="q">무엇이 다를까요?</div><div class="a">' + esc(p.d) + '</div></div></div>';
+    return h + lnHint([['cnext', lk('l') + lk('r', '이전 · 다음')], ['cflip', lk('ok', LN.cshow ? '다음 짝' : '차이 보기'), 'pri']]);
+  }
+  function lnCmpFlip() {
+    var c = $('lnCmp'); if (!c) return;
+    if (!LN.cshow) { LN.cshow = true; c.classList.add('show'); var p = document.querySelector('.ln-h.pri em'); if (p) p.innerHTML = '다음 짝'; }
+    else lnCmpGo(1);
+  }
+  function lnCmpGo(d) { var n = LN.data.pairs.length; LN.ci = (LN.ci + d + n) % n; LN.cshow = false; lnRender(d < 0 ? 'in-l' : 'in-r'); }
   function lnGo(v) {
     lnStopAuto();
     if (v === 'card') { LN.list = LN.shuf ? lnShuffle(lnItems(LN.rng)) : lnItems(LN.rng); LN.i = 0; LN.show = false; }
     if (v === 'cmp') { LN.ci = 0; LN.cshow = false; }
     if (v === 'quiz') { lnQuizStart(); return; }
-    LN.view = v; lnRender(v === 'menu' ? 'lnM' + (LN.lastMode || 'card') : null);
+    LN.view = v; lnRender('in');
   }
   function lnAct(a) {
     var p = a.split(':'), c = p[0], v = p[1];
+    TOOL.lastAct = new Date().getTime();
     if (c === 'retry') { LN.err = ''; lnEnter(); }
-    else if (c === 'rng') { LN.rng = v; lnRender('lnR' + v); }
-    else if (c === 'shuf') { LN.shuf = !LN.shuf; lnRender('lnShuf'); }
-    else if (c === 'go') { LN.lastMode = v; lnGo(v); }
+    else if (c === 'rng') lnSetRng(v);
+    else if (c === 'rstep') lnStepRng(+v);
+    else if (c === 'go') lnGo(v);
     else if (c === 'menu') lnGo('menu');
-    else if (c === 'flip') { LN.show = !LN.show; lnRender(LN.show ? 'lnNext' : 'lnFlip'); if (LN.auto) lnAutoStep(); }   // 뜻을 보면 선택이 '다음'으로 → 가운데 버튼만 계속 눌러도 진행
-    else if (c === 'prev') lnCardGo(-1, 'lnPrev');
-    else if (c === 'next') lnCardGo(1, 'lnFlip');
-    else if (c === 'auto') { LN.auto = !LN.auto; if (LN.auto) { lnRender('lnAuto'); lnAutoStep(); } else { lnStopAuto(); lnRender('lnAuto'); } }
+    else if (c === 'flip') { lnFlip(); if (LN.auto) lnAutoStep(); }
+    else if (c === 'prev') lnCardGo(-1);
+    else if (c === 'next') lnCardGo(1);
+    else if (c === 'auto') { LN.auto = !LN.auto; if (!LN.auto) lnStopAuto(); lnRender('still'); if (LN.auto) lnAutoStep(); }
+    else if (c === 'shuf') { LN.shuf = !LN.shuf; lnStopAuto(); lnGo('card'); }
     else if (c === 'ans') lnAnswer(+v);
-    else if (c === 'qnext') { LN.qz.i++; lnRender('lnO0'); }
+    else if (c === 'qnext') { var q = LN.qz.items[LN.qz.i]; if (q && q.pick >= 0) { LN.qz.i++; lnRender('in-r'); if (LN.qz.i >= LN.qz.items.length) lnScoreUp(); } }
     else if (c === 'qagain') lnQuizStart();
     else if (c === 'qwrong') lnQuizStart(LN.qz.wrong);
-    else if (c === 'cflip') { LN.cshow = !LN.cshow; lnRender(LN.cshow ? 'lnCn' : 'lnCf'); }
-    else if (c === 'cprev' || c === 'cnext') { var n = LN.data.pairs.length; LN.ci = (LN.ci + (c === 'cprev' ? -1 : 1) + n) % n; LN.cshow = false; lnRender(c === 'cprev' ? 'lnCp' : 'lnCf'); }
+    else if (c === 'cflip') lnCmpFlip();
+    else if (c === 'cprev') lnCmpGo(-1);
+    else if (c === 'cnext') lnCmpGo(1);
   }
-  function lnDigit(n) {
-    if (LN.view === 'quiz' && n >= 1 && n <= 4) lnAnswer(n - 1);
+  // 리모컨 키 → 학습 동작. 처리했으면 true
+  function lnKey(k) {
+    if (!LN.data) { if (k === RK.OK && LN.err) { lnAct('retry'); return true; } return k === RK.OK || (k >= 37 && k <= 40); }
+    var v = LN.view, L = k === RK.L, R = k === RK.R;
+    if (v === 'menu') {
+      if (L || R) lnStepRng(L ? -1 : 1);
+      else if (k === 49) lnGo('card'); else if (k === 50) lnGo('quiz'); else if (k === 51) lnGo('cmp');
+      else if (k === RK.OK) lnGo('card');
+      else return k === RK.U || k === RK.D;
+      return true;
+    }
+    if (v === 'card') {
+      if (k === RK.OK) lnAct('flip');
+      else if (L || k === RK.REW) lnAct('prev');
+      else if (R || k === RK.FF) lnAct('next');
+      else if (k === RK.PLAY || (k === RK.PP && !LN.auto)) { if (!LN.auto) lnAct('auto'); }
+      else if (k === RK.PAUSE || k === RK.PP) { if (LN.auto) lnAct('auto'); }
+      else if (k === 48) lnAct('shuf');
+      else if (k === RK.STOP) { lnStopAuto(); LN.i = 0; LN.show = false; lnRender('in-l'); }
+      else return k === RK.U || k === RK.D;
+      return true;
+    }
+    if (v === 'quiz') {
+      var Z = LN.qz, q = Z.items[Z.i];
+      if (!q) { if (k === RK.OK) lnAct('qagain'); else if (k === 48 && Z.wrong.length) lnAct('qwrong'); else return k >= 37 && k <= 40; return true; }
+      if (k >= 49 && k <= 52) lnAnswer(k - 49);
+      else if (k === RK.OK || k === RK.FF || R || k === RK.PLAY) lnAct('qnext');
+      else return k === RK.L || k === RK.U || k === RK.D;
+      return true;
+    }
+    if (v === 'cmp') {
+      if (k === RK.OK) lnAct('cflip');
+      else if (L || k === RK.REW) lnAct('cprev');
+      else if (R || k === RK.FF) lnAct('cnext');
+      else return k === RK.U || k === RK.D;
+      return true;
+    }
+    return false;
   }
-  function lnMedia(m) {
-    if (!LN.data) return;
-    if (LN.view === 'card') {
-      if (m === 'prev') lnCardGo(-1, 'lnPrev');
-      else if (m === 'next') lnCardGo(1, 'lnFlip');
-      else if (m === 'stop') { lnStopAuto(); LN.i = 0; LN.show = false; lnRender('lnFlip'); }
-      else if (m === 'play' || (m === 'pp' && !LN.auto)) { if (!LN.auto) { LN.auto = true; lnRender(); lnAutoStep(); } }
-      else { lnStopAuto(); lnRender(); }
-    } else if (LN.view === 'quiz') { var q = LN.qz.items[LN.qz.i]; if (m === 'next' && q && q.pick >= 0) lnAct('qnext'); }
-    else if (LN.view === 'cmp') { if (m === 'prev') lnAct('cprev'); else if (m === 'next') lnAct('cnext'); }
-  }
+  function lnDigit(n) { lnKey(48 + n); }
+  function lnMedia(m) { lnKey(m === 'prev' ? RK.REW : m === 'next' ? RK.FF : m === 'stop' ? RK.STOP : m === 'play' ? RK.PLAY : m === 'pause' ? RK.PAUSE : RK.PP); }
   var toolSeq = null;
   function toolsOn() { return CONFIG.tools !== false; }
   function classSize() { var t = ADMIN && ADMIN.tools; return Math.max(2, Math.min(60, +(t && t.classSize) || 30)); }
@@ -2186,6 +2299,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     setView('tool');
     $('toolv').classList.toggle('mlearn', TOOL.pane === 'learn');   // setView가 class를 새로 쓰므로 다시
     $('toolv').classList.toggle('nohelp', !TOOL.help);
+    $('toolv').classList.toggle('lnhelp', !!LN.help);
     if (!TOOL.pushed && window.history && history.pushState) { try { history.pushState({ tvtool: 1 }, ''); TOOL.pushed = true; } catch (e) {} }
     toolTick();
     if (document.activeElement && document.activeElement.blur) try { document.activeElement.blur(); } catch (e) {}
@@ -2500,9 +2614,11 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     // 맨 아래 재생 버튼 줄은 버튼 바로 밑에 글자로 (선이 엉키지 않게)
     var under = function (m) { var c = { lit: [], under: m, pts: null }; for (var q in m) c.lit.push(q); return c; };
     if (p === 'learn') {
-      if (LN.view === 'card') L.push(stop('처음 카드'), under({ rew: '이전', play: '자동', pause: '멈춤', ff: '다음' }));
-      else if (LN.view === 'quiz') { L.push({ lit: ['n1', 'n2', 'n3', 'n4'], pts: [[343, 167], [418, 167]], y: 167, t: '숫자: 보기 고르기', s: '1 ~ 4' }); L.push(under({ ff: '다음' })); }
-      else if (LN.view === 'cmp') L.push(under({ rew: '이전', ff: '다음' }));
+      var dp = L[2];                     // 방향 버튼 설명을 학습 화면용으로
+      if (LN.view === 'menu') { dp.t = '좌우: 범위 바꾸기'; dp.s = ''; L.push({ lit: ['n1', 'n2', 'n3'], pts: [[343, 167], [418, 167]], y: 167, t: '1 카드 · 2 퀴즈', s: '3 헷갈리는 성어' }); }
+      else if (LN.view === 'card') { dp.t = '가운데: 뜻 보기 → 다음'; dp.s = '좌우: 이전 · 다음'; L.push({ lit: ['n0'], pts: [[233, 405], [418, 405]], y: 405, t: '0: 섞기' }, under({ play: '자동', pause: '멈춤' })); }
+      else if (LN.view === 'quiz') { dp.t = '가운데: 다음 문제'; dp.s = ''; L.push({ lit: ['n1', 'n2', 'n3', 'n4'], pts: [[343, 167], [418, 167]], y: 167, t: '숫자: 답 고르기', s: '1 ~ 4' }); }
+      else if (LN.view === 'cmp') { dp.t = '가운데: 차이 보기 → 다음'; dp.s = '좌우: 이전 · 다음'; }
     }
     else if (p === 'timer') { L.push({ lit: dig, pts: [[343, 245], [418, 245]], y: 245, t: '숫자: 분 맞추기', s: '1·5 → 15분 / 0 → 10분' }); L.push(stop('처음으로'), under({ rew: '−1분', play: '시작', pause: '멈춤', ff: '+1분' })); }
     else if (p === 'watch') L.push(stop('0으로'), under({ play: '시작', pause: '멈춤' }));
@@ -2549,6 +2665,8 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     } else {
       TOOL.lastAct = new Date().getTime();
       if (k === 405) { if (TOOL.pane !== 'learn') openLearn(); }
+      else if (TOOL.pane === 'learn' && k === RK.INFO) { LN.help = !LN.help; $('toolv').classList.toggle('lnhelp', LN.help); }
+      else if (TOOL.pane === 'learn' && k !== RK.BACK && k !== RK.ESC && k !== RK.CHU && k !== RK.CHD && lnKey(k)) { /* 학습 화면이 직접 처리 */ }
       else if (k === RK.ESC || k === RK.BACK) { if (TOOL.pane === 'learn' && LN.view !== 'menu') lnGo('menu'); else closeTools(); }
       else if (k >= 37 && k <= 40) tlMove(k);
       else if (k === RK.OK) { if (TOOL.kf && TOOL.kf.offsetWidth) TOOL.kf.click(); else tlFocusMain(); }
