@@ -493,6 +493,20 @@ html.tvapp .tool-entry .kc{display:inline-block;}
 .gm-end .gm-win.sc{font-size:44px;}
 .gm-end .gm-fs.one b{font-size:130px;}
 .gm-bi.ok b{color:#2fd0b4;}
+/* 학번 로그인 */
+.lg{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.lg-t{font-size:30px;font-weight:800;color:var(--sub);letter-spacing:2px;}
+.lg-n{display:flex;align-items:center;margin-top:34px;}
+.lg-p{font-size:120px;font-weight:800;letter-spacing:-2px;color:var(--dim);margin-right:16px;}
+.lg-c{display:inline-block;width:110px;height:150px;line-height:150px;margin:0 8px;border-radius:24px;background:var(--surface2);font-size:120px;font-weight:800;text-align:center;color:var(--text);-webkit-transition:background-color .2s,-webkit-transform .2s;transition:background-color .2s,transform .2s;}
+.lg-c.on{-webkit-animation:gmPop .3s cubic-bezier(.2,1.3,.4,1) both;animation:gmPop .3s cubic-bezier(.2,1.3,.4,1) both;}
+.lg-c.cur{box-shadow:inset 0 0 0 4px #2fd0b4;}
+.lg-sub{margin-top:40px;font-size:28px;font-weight:600;color:var(--dim);}
+.lg-sub.bad{color:var(--red);}
+.lg-name{margin-top:34px;font-size:64px;font-weight:800;color:#2fd0b4;-webkit-animation:lnIn .4s both;animation:lnIn .4s both;}
+.ln-u{display:inline-block;margin-bottom:18px;padding:8px 20px;border-radius:12px;background:var(--accentbg);color:var(--accent);font-size:26px;font-weight:800;}
+.ln-u.g{background:var(--surface2);color:var(--dim);}
+.gm-user{margin-bottom:18px;font-size:30px;font-weight:800;color:#2fd0b4;}
 /* 공지 자리의 신기능 소개 카드 */
 .n-promo{position:relative;padding-left:26px;}
 .n-promo:before{content:"";position:absolute;left:0;top:4px;bottom:4px;width:8px;border-radius:4px;background:var(--accent);}
@@ -1229,7 +1243,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     s.src = url.replace('{cb}', name);
     (document.head || document.getElementsByTagName('head')[0]).appendChild(s);
   }
-  var BUILD = '11.7.0';   // 화면 파일 버전 (관리자 앱에서 확인)
+  var BUILD = '11.8.0';   // 화면 파일 버전 (관리자 앱에서 확인)
   function tvMode() {
     if ($('alertv') && $('alertv').className.indexOf('on') >= 0) return 'alert';
     if (SEAT.open) return 'seat';
@@ -1658,9 +1672,9 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
   // steps: 쓰는 법 (글자 안의 [C] [OK] [복귀] [채널] 은 리모컨 버튼 그림으로 바뀜)
   var PROMOS = [
     { id: 'game', from: '2026-11-09', to: '2026-11-26', title: '성어 도전 — 혼자 하는 한자성어 게임',
-      steps: ['[C] 노란 버튼 → 학습 → 숫자 4', '먼저 떠올리고 1~4로 골라 [OK] · 연속 정답이면 점수 업', '틀린 성어는 다음 판에 다시 · 79칸 지도를 채워 보세요'], act: 'learn' },
+      steps: ['[C] 노란 버튼 → 학번 뒤 두 자리 → 숫자 4', '먼저 떠올리고 1~4로 골라 [OK] · 연속 정답이면 점수 업', '틀린 성어는 다음 판에 다시 · 79칸 지도를 채워 보세요'], act: 'learn' },
     { id: 'learn', from: '2026-11-08', to: '2026-11-26', title: '한자성어 2차, TV로 같이 공부해요',
-      steps: ['리모컨 [C] 노란 버튼 → 학습 화면', '카드 넘기기 · 퀴즈 · 헷갈리는 성어 중 골라 [OK]', '[OK]만 계속 누르면 뜻 보기 → 다음 카드'], act: 'learn' },
+      steps: ['리모컨 [C] 노란 버튼 → 학번 뒤 두 자리 입력 (내 진도 따로 저장)', '카드 넘기기 · 퀴즈 · 헷갈리는 성어 중 골라 [OK]', '[OK]만 계속 누르면 뜻 보기 → 다음 카드'], act: 'learn' },
     { id: 'remote', from: '2026-11-05', to: '2026-11-22', title: '수업 도구를 리모컨으로',
       steps: ['[OK] 가운데 버튼 → 수업 도구', '방향 버튼으로 고르고 [OK] (숫자 1·5 → 15분 타이머)', '[채널] 도구 바꾸기 · [복귀] 닫기'], act: 'tools' }
   ];
@@ -2287,7 +2301,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     for (var i = 0; i < S.length; i++) if (S[i].id === id) it = S[i];
     if (!it) return;
     lnStopAuto();
-    if (LN.set !== id) { LN.set = id; LN.view = 'menu'; LN.rng = 'all'; }
+    if (LN.set !== id) { LN.set = id; if (LN.view !== 'login') LN.view = 'menu'; LN.rng = 'all'; }
     lnTabs();
     if (LN.cache[id]) { LN.data = LN.cache[id]; LN_RNG = lnRanges(); lnRender(); return; }
     LN.data = null;
@@ -2300,7 +2314,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     lnSel(S[(i + d + S.length) % S.length].id); tlFocusMain();
   }
   // 학습 화면 열기 (대시보드 '학습' 버튼 · 노란 C 버튼 · 소개 카드)
-  function openLearn() { openTools('learn'); }
+  function openLearn() { if (!LN.user && !LN.guest) { LN.view = 'login'; LN.pin = ''; } openTools('learn'); }
   function lnDday() {
     if (!LN.data || !LN.data.test) return '';
     var a = LN.data.test.split('-'), t = new Date(+a[0], +a[1] - 1, +a[2]), d = Math.round((t - today0()) / 86400000);
@@ -2317,9 +2331,10 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     l: '<svg viewBox="0 0 24 24" class="f"><path d="M7 12l10-7v14z"/></svg>', r: '<svg viewBox="0 0 24 24" class="f"><path d="M17 12L7 5v14z"/></svg>',
     play: '<svg viewBox="0 0 24 24" class="f"><path d="M8 5l11 7-11 7z"/></svg>', pause: '<svg viewBox="0 0 24 24" class="f"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg>',
     ff: '<svg viewBox="0 0 24 24" class="f"><path d="M3 6l9 6-9 6zM12 6l9 6-9 6z"/></svg>',
-    rew: '<svg viewBox="0 0 24 24" class="f"><path d="M12 6v12L3 12zM21 6v12l-9-6z"/></svg>'
+    rew: '<svg viewBox="0 0 24 24" class="f"><path d="M12 6v12L3 12zM21 6v12l-9-6z"/></svg>',
+    stop: '<svg viewBox="0 0 24 24" class="f"><path d="M6 6h12v12H6z"/></svg>'
   };
-  function lk(k, txt) { return '<span class="lk' + (k === 'play' || k === 'pause' || k === 'ff' || k === 'rew' ? ' rd' : '') + '">' + (LK[k] || esc(k)) + '</span>' + (txt ? '<em>' + txt + '</em>' : ''); }
+  function lk(k, txt) { return '<span class="lk' + (k === 'play' || k === 'pause' || k === 'ff' || k === 'rew' || k === 'stop' ? ' rd' : '') + '">' + (LK[k] || esc(k)) + '</span>' + (txt ? '<em>' + txt + '</em>' : ''); }
   function lnHint(items) {         // 아래쪽 버튼 안내 (눌러도 됨)
     var h = '<div class="ln-hint">';
     for (var i = 0; i < items.length; i++) h += '<button class="ln-h' + (items[i][2] ? ' ' + items[i][2] : '') + '" data-ln="' + items[i][0] + '">' + items[i][1] + '</button>';
@@ -2328,7 +2343,8 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
   function lnRender(anim) {
     var box = $('lnBox'); if (!box) return;
     var h = '';
-    if (LN.loading) h = '<div class="ln-msg">불러오는 중…</div>';
+    if (LN.view === 'login') h = lnLoginHtml();
+    else if (LN.loading) h = '<div class="ln-msg">불러오는 중…</div>';
     else if (LN.err) h = '<div class="ln-msg">' + esc(LN.err) + '</div>' + lnHint([['retry', lk('ok', '다시 시도')]]);
     else if (LN.sets && !lnSets().length) h = '<div class="ln-msg">지금 준비 중인 시험 자료가 없습니다</div>';
     else if (!LN.data) h = '';
@@ -2340,10 +2356,49 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     if (TOOL.open && TOOL.pane === 'learn' && TOOL.kf && !TOOL.kf.classList.contains('tl-tab')) tlFocus(null);
     tlHelpRender();
   }
+  /* ── 학번 로그인 (학습 화면에 들어올 때) : 1학년 2반 명단을 가나다순으로 1~N번 → 학번 102OO.
+     명단은 관리자 앱의 자리 배치 명단(서버)에서 오고, TV에는 학번별 진도만 저장(이름은 저장하지 않음).
+     학습 화면을 닫거나 10분 동안 조작이 없으면 자동 로그아웃 */
+  LN.user = null; LN.guest = false; LN.pin = '';
+  function lnRoster() { var a = []; for (var n in SEAT.roster) a.push(n); a.sort(); return a; }   // 한글 음절 코드 순서 = 가나다순
+  function lnSuf() { return LN.user ? '_' + LN.user.sid : ''; }
+  function lnBoxes() { try { return JSON.parse(gmLS('hjBox_' + LN.set + lnSuf()) || '{}') || {}; } catch (e) { return {}; } }
+  function lnSaveBoxes(b) { gmLS('hjBox_' + LN.set + lnSuf(), JSON.stringify(b)); }
+  function lnLogout() { LN.user = null; LN.guest = false; LN.pin = ''; LN.view = 'login'; }
+  function lnLoginHtml() {
+    var R = lnRoster(), p = LN.pin, no = +p, name = p.length === 2 && no >= 1 && no <= (R.length || 40) ? (R[no - 1] || '') : null;
+    var cells = '';
+    for (var i = 0; i < 2; i++) cells += '<span class="lg-c' + (p[i] ? ' on' : i === p.length ? ' cur' : '') + '">' + (p[i] || '') + '</span>';
+    var who = p.length < 2 ? '<div class="lg-sub">학번 뒤 두 자리를 숫자 버튼으로 누르세요</div>'
+      : name === null ? '<div class="lg-sub bad">없는 번호입니다 · ' + lk('l', '지우기') + '</div>'
+      : '<div class="lg-name">' + (name ? esc(name) : (no + '번')) + '</div>';
+    return '<div class="lg in"><div class="lg-t">학번으로 시작</div><div class="lg-n"><span class="lg-p">102</span>' + cells + '</div>' + who + '</div>' +
+      lnHint([['login', lk('ok', '시작'), name !== null && p.length === 2 ? 'pri' : 'off'], ['lback', lk('l', '지우기')], ['guest', lk('ff', '로그인 없이')]]);
+  }
+  function lnLoginKey(k) {
+    if (k >= 48 && k <= 57) { if (LN.pin.length >= 2) LN.pin = ''; LN.pin += String(k - 48); lnRender('still'); }
+    else if (k === RK.L || k === RK.STOP) { LN.pin = LN.pin.slice(0, -1); lnRender('still'); }
+    else if (k === RK.OK) lnLogin();
+    else if (k === RK.FF) { LN.guest = true; LN.view = 'menu'; lnRender('in'); }
+    else return k >= 37 && k <= 40;
+    return true;
+  }
+  function lnLogin() {
+    var R = lnRoster(), no = +LN.pin;
+    if (LN.pin.length !== 2 || no < 1 || no > (R.length || 40)) return;
+    LN.user = { sid: '102' + LN.pin, no: no, name: R[no - 1] || '' };
+    LN.view = 'menu'; lnRender('in');
+    sndDo(function (t) { SX.gmBell(t, 587.33, 0.16, 1.2); SX.gmBell(t + 0.08, 880, 0.13, 1.4); });
+  }
+  function lnUserTag() {
+    if (LN.user) return '<span class="ln-u">' + LN.user.sid + (LN.user.name ? ' ' + esc(LN.user.name) : '') + '</span>';
+    return LN.guest ? '<span class="ln-u g">로그인 안 함</span>' : '';
+  }
+  function lnGot() { var B = lnBoxes(), g = 0; for (var n in B) if (B[n] >= 2) g++; return g; }
   function lnProg(i, n) { return '<div class="ln-prog"><i style="width:' + (n ? Math.round(i / n * 1000) / 10 : 0) + '%"></i></div>'; }
   /* 메뉴 */
   function lnMenuHtml() {
-    var D = LN.data, dd = lnDday(), h = '<div class="ln-menu"><div class="ln-head"><b>' + esc(D.title) + '</b><span>' + esc(D.sub) + (dd ? '<em>' + dd + '</em>' : '') + '</span></div>';
+    var D = LN.data, dd = lnDday(), h = '<div class="ln-menu"><div class="ln-head">' + lnUserTag() + '<b>' + esc(D.title) + '</b><span>' + esc(D.sub) + (dd ? '<em>' + dd + '</em>' : '') + (LN.user ? ' · 익힌 성어 ' + lnGot() + '/' + D.items.length : '') + '</span></div>';
     h += '<div class="ln-rng"><button class="ln-ra" data-ln="rstep:-1">' + LK.l + '</button><div class="ln-seg" id="lnSeg">';
     for (var r in LN_RNG) h += '<button class="ln-sg' + (LN.rng === r ? ' on' : '') + '" data-ln="rng:' + r + '" data-r="' + r + '">' + LN_RNG[r] + '</button>';
     h += '</div><button class="ln-ra" data-ln="rstep:1">' + LK.r + '</button></div>';
@@ -2352,7 +2407,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
       '<button class="ln-md" data-ln="go:quiz"><span class="lk n">2</span><b>퀴즈</b><small>10문제 · 4지선다</small></button>' +
       '<button class="ln-md" data-ln="go:cmp"><span class="lk n">3</span><b>헷갈리는 성어</b><small>나란히 놓고 차이 보기</small></button>' +
       '<button class="ln-md gmc" data-ln="go:game"><span class="lk n">4</span><b>성어 도전</b><small>혼자 하는 게임</small></button></div></div>';
-    return h + lnHint([['rstep:1', lk('l') + lk('r', '범위')], ['go:card', lk('1') + lk('2') + lk('3') + lk('4', '시작')]]);
+    return h + lnHint([['rstep:1', lk('l') + lk('r', '범위')], ['go:card', lk('1') + lk('2') + lk('3') + lk('4', '시작')], ['logout', lk('stop', LN.user ? '학번 바꾸기' : '로그인')]]);
   }
   function lnSetRng(r) {
     LN.rng = r;
@@ -2442,6 +2497,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     q.pick = i;
     var good = i === q.ans;
     if (good) Z.right++; else Z.wrong.push(q.d);
+    var B = lnBoxes(); B[q.d.n] = good ? Math.min(3, (B[q.d.n] || 0) + 1) : 0; lnSaveBoxes(B);   // 퀴즈도 개인 진도에 기록
     var o = document.querySelectorAll('#lnOpts .ln-opt');           // 다시 그리지 않고 표시만 바꿈 (움직임이 끊기지 않게)
     for (var k = 0; k < o.length; k++) o[k].className = 'ln-opt done ' + (k === q.ans ? 'ok' : k === i ? 'no' : 'dim');
     var fb = $('lnFb');
@@ -2481,6 +2537,10 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     var p = a.split(':'), c = p[0], v = p[1];
     TOOL.lastAct = new Date().getTime();
     if (c === 'retry') { LN.err = ''; lnEnter(); }
+    else if (c === 'login') lnLogin();
+    else if (c === 'lback') lnLoginKey(RK.L);
+    else if (c === 'guest') lnLoginKey(RK.FF);
+    else if (c === 'logout') { lnLogout(); lnRender('in'); }
     else if (c === 'rng') lnSetRng(v);
     else if (c === 'rstep') lnStepRng(+v);
     else if (c === 'go') { if (v === 'game') gmStart(); else lnGo(v); }
@@ -2500,12 +2560,14 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
   }
   // 리모컨 키 → 학습 동작. 처리했으면 true
   function lnKey(k) {
+    if (LN.view === 'login') return lnLoginKey(k);
     if (!LN.data) { if (k === RK.OK && LN.err) { lnAct('retry'); return true; } return k === RK.OK || (k >= 37 && k <= 40); }
     var v = LN.view, L = k === RK.L, R = k === RK.R;
     if (v === 'menu') {
       if (L || R) lnStepRng(L ? -1 : 1);
       else if (k === 49) lnGo('card'); else if (k === 50) lnGo('quiz'); else if (k === 51) lnGo('cmp'); else if (k === 52) gmStart();
       else if (k === RK.OK) lnGo('card');
+      else if (k === RK.STOP) { lnLogout(); lnRender('in'); }
       else return k === RK.U || k === RK.D;
       return true;
     }
@@ -2549,9 +2611,9 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     paused: false, tLeft: 0, tMax: 0, tTimer: null, lastTick: 0, gen: 0, quitAt: 0, ticked: -1, news: [], ni: 0, ins: 0, B0: {}, mk: [0, 0], ms: -1 };
   var GM_REG = 10, GM_FIN = 2, GM_TIME = 15, GM_STEAL = 9, GM_THINK = 2400;
   function gmLS(k, v) { try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch (e) {} return null; }
-  function gmBoxes() { try { return JSON.parse(gmLS('hjBox_' + LN.set) || '{}') || {}; } catch (e) { return {}; } }
-  function gmSaveBox(b) { gmLS('hjBox_' + LN.set, JSON.stringify(b)); }
-  function gmBest() { return +(gmLS('hjBest_' + LN.set) || 0) || 0; }
+  function gmBoxes() { return lnBoxes(); }
+  function gmSaveBox(b) { lnSaveBoxes(b); }
+  function gmBest() { return +(gmLS('hjBest_' + LN.set + lnSuf()) || 0) || 0; }
   // 예약 실행: 판이 바뀌면(gen) 취소, 멈춤 중이면 풀릴 때까지 기다림
   function gmLater(fn, ms) {
     var g = GM.gen;
@@ -2638,7 +2700,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     GM.ph = 'intro';
     var B = gmBoxes(), rv = 0, i;
     for (i = 0; i < GM.qs.length; i++) if (B[GM.qs[i].d.n] === 0) rv++;
-    var mode = '<div class="gm-mode"><span class="' + (GM.solo ? 'on' : '') + '">혼자 도전</span><span class="' + (GM.solo ? '' : 'on') + '">둘이 대결</span></div>';
+    var mode = (LN.user ? '<div class="gm-user">' + LN.user.sid + (LN.user.name ? ' ' + esc(LN.user.name) : '') + '</div>' : '') + '<div class="gm-mode"><span class="' + (GM.solo ? 'on' : '') + '">혼자 도전</span><span class="' + (GM.solo ? '' : 'on') + '">둘이 대결</span></div>';
     var rule = GM.solo
       ? '<div><b>1~4</b>(또는 방향 버튼)로 고르고 ' + lk('ok') + ' 로 확정</div><div>연속으로 맞히면 점수가 커지고, 결승 두 문제는 <b>떠올려서 맞히기 · 200점</b></div><div>목표: 최고 기록 <b>' + gmBest() + '</b>점 넘기</div>'
       : '<div>청팀·황팀이 번갈아 <b>1~4</b>로 고르고 ' + lk('ok') + ' 로 확정</div><div>틀리면 상대 팀이 <b>가로채기</b> (절반 점수)</div><div>결승 두 문제는 두 팀 모두 <b>공책에 적어서 · 200점</b></div>';
@@ -2939,7 +3001,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     GM.ph = 'end'; GM.endReady = false;
     $('gmv').className = 'gm on dark';
     var a = GM.sc[0], b = GM.sc[1], best = gmBest(), rec = GM.solo && a > best, B = gmBoxes(), i;
-    if (rec) gmLS('hjBest_' + LN.set, String(a));
+    if (rec) gmLS('hjBest_' + LN.set + lnSuf(), String(a));
     var m = '', more = GM.miss.length - 6;
     for (i = 0; i < GM.miss.length && i < 6; i++) m += '<div class="gm-mi" style="-webkit-animation-delay:' + (2.3 + i * 0.1) + 's;animation-delay:' + (2.3 + i * 0.1) + 's"><b>' + esc(GM.miss[i].t) + '</b><span>' + esc(GM.miss[i].m) + '</span></div>';
     var head;
@@ -3024,6 +3086,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     TOOL.open = false;
     if (TOOL.tm.done) { TOOL.tm.done = false; TOOL.tm.left = TOOL.tm.total; }   // 끝난 타이머는 닫으면서 정리
     lnStopAuto(); gmStop();
+    if (TOOL.pane === 'learn') lnLogout();                                      // 학습 화면을 닫으면 로그아웃
     if (TOOL.pushed && !fromBack) { TOOL.pushed = false; try { history.back(); } catch (e) {} }
     TOOL.pushed = false;
     if (document.activeElement && document.activeElement.blur) try { document.activeElement.blur(); } catch (e) {}
@@ -3382,7 +3445,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
       else if (k === 405) { if (TOOL.pane !== 'learn') openLearn(); }
       else if (TOOL.pane === 'learn' && k === RK.INFO) { LN.help = !LN.help; $('toolv').classList.toggle('lnhelp', LN.help); }
       else if (TOOL.pane === 'learn' && k !== RK.BACK && k !== RK.ESC && k !== RK.CHU && k !== RK.CHD && lnKey(k)) { /* 학습 화면이 직접 처리 */ }
-      else if (k === RK.ESC || k === RK.BACK) { if (TOOL.pane === 'learn' && LN.view !== 'menu') lnGo('menu'); else closeTools(); }
+      else if (k === RK.ESC || k === RK.BACK) { if (TOOL.pane === 'learn' && LN.view !== 'menu' && LN.view !== 'login') lnGo('menu'); else closeTools(); }
       else if (k >= 37 && k <= 40) tlMove(k);
       else if (k === RK.OK) { if (TOOL.kf && TOOL.kf.offsetWidth) TOOL.kf.click(); else tlFocusMain(); }
       else if (k === RK.CHU || k === RK.CHD) tlCycle(k === RK.CHU ? -1 : 1);
