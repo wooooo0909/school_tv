@@ -505,6 +505,52 @@ html.tvapp .tool-entry .kc{display:inline-block;}
 .gm-opts.syl .gm-o .lk{margin-right:20px;}
 .gm-opts.ox .gm-o{font-size:46px;justify-content:center;}
 .gm-hl{color:#2fd0b4;}
+/* ── 노래방 ── */
+.tv-toast{position:absolute;left:50%;top:26px;z-index:60;max-width:1200px;padding:18px 34px;border-radius:18px;background:rgba(9,12,17,.94);color:#f2f5f8;font-size:28px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:0;pointer-events:none;-webkit-transform:translate(-50%,-16px);transform:translate(-50%,-16px);-webkit-transition:opacity .25s,-webkit-transform .25s;transition:opacity .25s,transform .25s;box-shadow:0 20px 60px rgba(0,0,0,.5);}
+.tv-toast.on{opacity:1;-webkit-transform:translate(-50%,0);transform:translate(-50%,0);}
+.kc.kcb{background:#2450c4;color:#fff;box-shadow:inset 0 -3px 0 rgba(0,0,0,.25);}
+.tool-entry .kc.kcb{font-size:16px;font-weight:800;}
+.kr{position:absolute;left:0;top:0;width:1920px;height:1080px;z-index:35;display:none;background:#07090d;color:#f2f5f8;overflow:hidden;}
+.kr.on{display:block;}
+.kr .lk{background:#1d222b;}
+.kr-pl{position:absolute;left:40px;top:56px;width:1408px;height:792px;border-radius:20px;overflow:hidden;background:#0d1117;}
+.kr.srch .kr-pl{left:1240px;top:56px;width:640px;height:360px;}
+.kr-pl iframe{display:block;}
+.kr-idle{position:absolute;left:1240px;top:56px;width:640px;height:360px;display:none;align-items:center;justify-content:center;font-size:24px;font-weight:600;color:#3a414d;}
+.kr.srch:not(.playing) .kr-idle{display:flex;}
+.kr-side{position:absolute;left:1480px;top:56px;width:400px;bottom:120px;}
+.kr.srch .kr-side{left:1240px;top:446px;width:640px;}
+.kr-now small,.kr-ql small{display:block;font-size:20px;font-weight:800;letter-spacing:2px;color:#f4b740;}
+.kr-now b{display:block;margin-top:10px;font-size:34px;font-weight:800;line-height:1.3;word-break:keep-all;}
+.kr-ql{margin-top:40px;}
+.kr-ql small{color:#5b6573;}
+.kr-qi{display:flex;align-items:center;margin-top:14px;font-size:24px;font-weight:700;color:#b9c2ce;}
+.kr-qi i{flex:none;width:36px;height:36px;line-height:36px;margin-right:14px;border-radius:10px;background:#161b23;font-style:normal;font-size:18px;text-align:center;color:#8d97a6;}
+.kr-qi span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.kr-qm{margin-top:12px;font-size:20px;color:#5b6573;font-weight:700;}
+.kr-srch{position:absolute;left:56px;top:56px;width:1140px;bottom:110px;display:none;}
+.kr.srch .kr-srch{display:block;}
+.kr-in{height:92px;line-height:92px;padding:0 30px;border-radius:22px;background:#11161e;font-size:46px;font-weight:800;white-space:nowrap;overflow:hidden;}
+.kr-in.ph{color:#3a414d;}
+.kr-in i{display:inline-block;width:4px;height:48px;margin-left:8px;background:#2fd0b4;vertical-align:-8px;-webkit-animation:krBlink 1s steps(2) infinite;animation:krBlink 1s steps(2) infinite;}
+@-webkit-keyframes krBlink{50%{opacity:0}}
+@keyframes krBlink{50%{opacity:0}}
+.kr-kb{margin-top:22px;}
+.kr-kr{display:flex;margin:0 -5px;}
+.kr-k{flex:none;width:104px;height:72px;line-height:72px;margin:5px;border-radius:16px;background:#11161e;font-size:34px;font-weight:700;text-align:center;-webkit-transition:background-color .12s,-webkit-transform .12s;transition:background-color .12s,transform .12s;}
+.kr-k.fn{font-size:24px;color:#8d97a6;}
+.kr-k.w3{width:332px;} .kr-k.w4{width:446px;}
+.kr-k.go{color:#2fd0b4;}
+.kr-k.cur{background:#2fd0b4;color:#04201b;-webkit-transform:scale(1.07);transform:scale(1.07);}
+.kr-res{margin-top:26px;}
+.kr-ri{display:flex;align-items:center;margin-top:10px;padding:12px 20px;border-radius:16px;background:#0d1117;font-size:28px;font-weight:700;-webkit-animation:gmIn .35s both;animation:gmIn .35s both;}
+.kr-ri .lk{flex:none;width:44px;height:44px;line-height:44px;font-size:22px;margin-right:18px;}
+.kr-ri .t{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.kr-msg{padding:60px 0;text-align:center;font-size:28px;font-weight:600;color:#5b6573;}
+.kr-hint{position:absolute;left:0;right:0;bottom:40px;display:flex;justify-content:center;}
+.kr-h{display:flex;align-items:center;margin:0 18px;font-size:24px;font-weight:700;color:#8d97a6;}
+.kr-h em{font-style:normal;margin-left:8px;}
+.kr-h .lk+em{margin-right:0;}
 /* 학번 로그인 */
 .lg{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;}
 .lg-t{font-size:30px;font-weight:800;color:var(--sub);letter-spacing:2px;}
@@ -987,6 +1033,7 @@ html[data-theme=light]{--cl1:#14b8a6;--cl2:#0d9488;}
       <span id="updated"></span>
       <button class="tool-entry" id="toolBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>수업 도구<span class="kc"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="1.5"/><path d="M16 9v4H8M10.5 10.5 8 13l2.5 2.5"/></svg></span></button>
       <button class="tool-entry" id="learnBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5z"/><path d="M4 20.5A2.5 2.5 0 0 0 6.5 23H20v-5"/></svg>학습<span class="kc kcy">C</span></button>
+      <button class="tool-entry" id="krBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v4"/></svg>노래방<span class="kc kcb">D</span></button>
       <span class="music" id="music"><span class="eq"><i></i><i></i><i></i></span><span id="mName"></span></span>
     </footer>
   </div>
@@ -1049,6 +1096,8 @@ html[data-theme=light]{--cl1:#14b8a6;--cl2:#0d9488;}
     </div>
     <div class="tl-help" id="tlHelp"></div>
   </div><div id="gmv" class="gm"></div></div>
+  <div id="krv" class="kr"><div class="kr-pl" id="krPl"><div id="krPlayer"></div></div><div class="kr-idle">예약한 노래가 여기에서 나옵니다</div><div class="kr-side" id="krSide"></div><div class="kr-srch" id="krSrch"></div><div class="kr-hint" id="krHint"></div></div>
+  <div id="tvToast" class="tv-toast"></div>
 
   <div id="seatv" class="view"><div class="st-in">
     <div class="st-intro"><div class="tt">자리 배치</div><div class="ln"></div><div class="sb" id="stIntroSub"></div></div>
@@ -1255,12 +1304,13 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     s.src = url.replace('{cb}', name);
     (document.head || document.getElementsByTagName('head')[0]).appendChild(s);
   }
-  var BUILD = '11.9.0';   // 화면 파일 버전 (관리자 앱에서 확인)
+  var BUILD = '11.10.0';   // 화면 파일 버전 (관리자 앱에서 확인)
   function tvMode() {
     if ($('alertv') && $('alertv').className.indexOf('on') >= 0) return 'alert';
     if (SEAT.open) return 'seat';
     if (TVAPP.hdmi) return 'hdmi';
     if (typeof YT_ !== 'undefined' && YT_.want && YT_.want.size === 'full') return 'yt';
+    if (KR.on) return 'karaoke';
     if (TOOL.open) return 'tool';
     if (inClass) return 'class';
     if (cleaning) return 'clean';
@@ -1683,6 +1733,8 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
      새 기능을 만들면 아래 목록에 한 줄 추가 (from~to 날짜 동안만 나옴) */
   // steps: 쓰는 법 (글자 안의 [C] [OK] [복귀] [채널] 은 리모컨 버튼 그림으로 바뀜)
   var PROMOS = [
+    { id: 'karaoke', from: '2026-11-11', to: '2026-11-30', title: '쉬는 시간 노래방',
+      steps: ['리모컨 파란 D 버튼 → 노래방', '방향 버튼으로 제목을 쓰고 ▶ 로 검색', '숫자로 예약 · ▶▶ 다음 곡 · 수업 시간엔 자동으로 닫힘'], act: 'karaoke' },
     { id: 'game', from: '2026-11-09', to: '2026-11-26', title: '성어 도전 — 혼자 하는 한자성어 게임',
       steps: ['[C] 노란 버튼 → 학번 뒤 두 자리 → 숫자 4', '먼저 떠올리고 1~4로 골라 [OK] · 연속 정답이면 점수 업', '틀린 성어는 다음 판에 다시 · 79칸 지도를 채워 보세요'], act: 'learn' },
     { id: 'learn', from: '2026-11-08', to: '2026-11-26', title: '한자성어 2차, TV로 같이 공부해요',
@@ -3506,12 +3558,14 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
   function tlKey(e) {
     var k = e.keyCode;
     if (k >= 96 && k <= 105) k -= 48;                          // 키보드 숫자판
+    if (KR.on) { if (!SEAT.open) { krKey(k); if (e.preventDefault) e.preventDefault(); } return; }   // 노래방 중에는 노래방이 모든 키를 받음
     if (!toolsOn() || SEAT.open || TVAPP.hdmi) return;           // 자리 배치 중·노트북 화면일 때는 무시
     if ($('alertv') && $('alertv').className.indexOf('on') >= 0) return;
     var done = true;
     if (!TOOL.open) {                                            // 대시보드·수업 화면에서: OK·채널·숫자로 수업 도구 열기
       if (sleeping || tlYtFull()) return;
       if (k === 405) openLearn();                                                     // 노란 C = 학습
+      else if (k === 406) krOpen();                                                   // 파란 D = 노래방
       else if (k === RK.OK || k === RK.CHU || k === RK.CHD) openTools();
       else if (k >= 48 && k <= 57) { openTools('timer'); tlDigit(k - 48); }
       else done = false;
@@ -3535,10 +3589,11 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     if (done && e.preventDefault) e.preventDefault();               // OK가 버튼을 두 번 누르지 않도록
   }
   (function bindTools() {
-    if (!toolsOn()) { var e1 = $('toolBtn'), e2 = $('toolBtn2'), e3 = $('learnBtn'); if (e1) e1.style.display = 'none'; if (e2) e2.style.display = 'none'; if (e3) e3.style.display = 'none'; return; }
+    if (!toolsOn()) { var e1 = $('toolBtn'), e2 = $('toolBtn2'), e3 = $('learnBtn'), e4 = $('krBtn'); if (e1) e1.style.display = 'none'; if (e2) e2.style.display = 'none'; if (e3) e3.style.display = 'none'; if (e4) e4.style.display = 'none'; return; }
     $('toolBtn').onclick = function () { openTools(); };
     $('toolBtn2').onclick = function () { openTools(); };
     $('learnBtn').onclick = function () { openLearn(); };
+    $('krBtn').onclick = function () { krOpen(); };
     $('tlBadge').onclick = function () { openTools('timer'); };
     $('cvTool').onclick = function () { openTools(TOOL.tm.run || TOOL.tm.done ? 'timer' : 'watch'); };
     $('tlClose').onclick = function () { closeTools(); };
@@ -4083,6 +4138,173 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
   }
   setInterval(function () { if (YT_.want) ytApply(); }, 1000);
 
+  /* ── 노래방 (대시보드에서 파란 D 버튼) ──
+     리모컨으로 한글을 입력해 검색 → 서버가 YouTube 공식 검색 API로 '공식 노래방 채널' 안에서만 찾음 → 숫자로 예약 → 차례대로 재생.
+     화면은 노래방식(예약 목록·다음 곡·검색 자판). 영상 위에는 아무것도 덮지 않고, 광고는 건드리지 않음(YouTube 규정). 수업 시간에는 열리지 않음 */
+  var toastT = null;
+  function toast(m) { var el = $('tvToast'); if (!el) return; el.innerHTML = esc(m); el.className = 'tv-toast on'; clearTimeout(toastT); toastT = setTimeout(function () { el.className = 'tv-toast'; }, 2400); }
+  var KR = { on: false, mode: 'search', jamo: [], kx: 0, ky: 0, res: [], q: '', busy: false, msg: '', queue: [], cur: null, p: null, ready: false, st: '', quitAt: 0, endT: null, seq: 0 };
+  var KR_KEYS = [['ㅂ', 'ㅈ', 'ㄷ', 'ㄱ', 'ㅅ', 'ㅛ', 'ㅕ', 'ㅑ', 'ㅐ', 'ㅔ'], ['ㅁ', 'ㄴ', 'ㅇ', 'ㄹ', 'ㅎ', 'ㅗ', 'ㅓ', 'ㅏ', 'ㅣ', '지움'], ['ㅋ', 'ㅌ', 'ㅊ', 'ㅍ', 'ㅠ', 'ㅜ', 'ㅡ', 'ㄲ', 'ㄸ', 'ㅆ'], ['ㅃ', 'ㅉ', '띄움', '띄움', '띄움', '띄움', '검색', '검색', '검색', '검색']];
+  var H_CHO = 'ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ', H_JUNG = 'ㅏㅐㅑㅒㅓㅔㅕㅖㅗㅘㅙㅚㅛㅜㅝㅞㅟㅠㅡㅢㅣ';
+  var H_JONG = ['', 'ㄱ', 'ㄲ', 'ㄳ', 'ㄴ', 'ㄵ', 'ㄶ', 'ㄷ', 'ㄹ', 'ㄺ', 'ㄻ', 'ㄼ', 'ㄽ', 'ㄾ', 'ㄿ', 'ㅀ', 'ㅁ', 'ㅂ', 'ㅄ', 'ㅅ', 'ㅆ', 'ㅇ', 'ㅈ', 'ㅊ', 'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ'];
+  var H_VV = { 'ㅗㅏ': 'ㅘ', 'ㅗㅐ': 'ㅙ', 'ㅗㅣ': 'ㅚ', 'ㅜㅓ': 'ㅝ', 'ㅜㅔ': 'ㅞ', 'ㅜㅣ': 'ㅟ', 'ㅡㅣ': 'ㅢ', 'ㅑㅣ': 'ㅒ', 'ㅕㅣ': 'ㅖ' };
+  var H_CC = { 'ㄱㅅ': 'ㄳ', 'ㄴㅈ': 'ㄵ', 'ㄴㅎ': 'ㄶ', 'ㄹㄱ': 'ㄺ', 'ㄹㅁ': 'ㄻ', 'ㄹㅂ': 'ㄼ', 'ㄹㅅ': 'ㄽ', 'ㄹㅌ': 'ㄾ', 'ㄹㅍ': 'ㄿ', 'ㄹㅎ': 'ㅀ', 'ㅂㅅ': 'ㅄ' };
+  function hIsV(c) { return !!c && H_JUNG.indexOf(c) >= 0; }
+  function hIsC(c) { return !!c && H_CHO.indexOf(c) >= 0; }
+  // 자모 목록 → 글자 (두벌식 조합)
+  function hCompose(a) {
+    var out = '', i = 0, n = a.length;
+    while (i < n) {
+      var c = a[i];
+      if (hIsC(c) && hIsV(a[i + 1])) {
+        var v = a[i + 1], used = 2;
+        if (hIsV(a[i + 2]) && H_VV[v + a[i + 2]]) { v = H_VV[v + a[i + 2]]; used = 3; }
+        var jong = '', j1 = a[i + used], j2 = a[i + used + 1], j3 = a[i + used + 2];
+        if (hIsC(j1) && H_JONG.indexOf(j1) > 0 && !hIsV(j2)) {
+          jong = j1; used++;
+          if (hIsC(j2) && H_CC[j1 + j2] && !hIsV(j3)) { jong = H_CC[j1 + j2]; used++; }
+        }
+        out += String.fromCharCode(0xAC00 + (H_CHO.indexOf(c) * 21 + H_JUNG.indexOf(v)) * 28 + H_JONG.indexOf(jong));
+        i += used;
+      } else if (hIsV(c) && hIsV(a[i + 1]) && H_VV[c + a[i + 1]]) { out += H_VV[c + a[i + 1]]; i += 2; }
+      else { out += c; i++; }
+    }
+    return out;
+  }
+  function krText() { return hCompose(KR.jamo); }
+  function krUnesc(s) { return String(s).replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&lt;/g, '<').replace(/&gt;/g, '>'); }
+  function krTitle(t) { return krUnesc(t).replace(/^\s*\[[^\]]*\]\s*/, '').replace(/\s*\/\s*TJ\s*Karaoke\s*$/i, '').replace(/\s+/g, ' '); }
+  function krAllowed() { return toolsOn() && !inClass && !sleeping && !SEAT.open && !TVAPP.hdmi && !TOOL.open && !(typeof YT_ !== 'undefined' && YT_.want) && CONFIG.api && !DEMO; }
+  function krOpen() {
+    if (KR.on) return;
+    if (!krAllowed()) { if (inClass) toast('노래방은 쉬는 시간에만 열 수 있어요'); return; }
+    KR.on = true; KR.mode = 'search'; KR.jamo = []; KR.res = []; KR.q = ''; KR.msg = ''; KR.kx = 0; KR.ky = 0; KR.queue = []; KR.cur = null;
+    $('krv').className = 'kr on srch';
+    krDraw();
+    try { if (audio && !audio.paused) audio.pause(); } catch (e) {}
+  }
+  function krClose() {
+    if (!KR.on) return;
+    KR.on = false; KR.seq++; clearTimeout(KR.endT);
+    if (KR.p) { try { KR.p.destroy(); } catch (e) {} KR.p = null; }
+    KR.ready = false; KR.cur = null; KR.queue = [];
+    $('krv').className = 'kr'; setHTML('krPl', '<div id="krPlayer"></div>');
+  }
+  function krSetMode(m) {
+    KR.mode = m;
+    $('krv').className = 'kr on' + (m === 'search' ? ' srch' : '') + (KR.cur ? ' playing' : '');
+    krSize(); krDraw();
+  }
+  function krSize() { var s = KR.mode === 'search' ? [640, 360] : [1408, 792]; if (KR.p && KR.p.setSize) try { KR.p.setSize(s[0], s[1]); } catch (e) {} }
+  function krDraw() {
+    // 오른쪽: 지금 곡 + 예약 목록
+    var h = '<div class="kr-now">' + (KR.cur ? '<small>지금 부르는 곡</small><b>' + esc(KR.cur.t) + '</b>' : '<small>노래방</small><b>노래를 찾아 예약하세요</b>') + '</div><div class="kr-ql"><small>예약 ' + KR.queue.length + '곡</small>';
+    for (var i = 0; i < KR.queue.length && i < 7; i++) h += '<div class="kr-qi"><i>' + (i + 1) + '</i><span>' + esc(KR.queue[i].t) + '</span></div>';
+    if (KR.queue.length > 7) h += '<div class="kr-qm">외 ' + (KR.queue.length - 7) + '곡</div>';
+    setHTML('krSide', h + '</div>');
+    // 검색 화면
+    var s = '';
+    if (KR.mode === 'search') {
+      var txt = krText();
+      s += '<div class="kr-in' + (txt ? '' : ' ph') + '">' + (txt ? esc(txt) : '노래 제목이나 가수') + '<i></i></div><div class="kr-kb">';
+      for (var y = 0; y < KR_KEYS.length; y++) {
+        s += '<div class="kr-kr">';
+        for (var x = 0; x < 10; x++) { var k = KR_KEYS[y][x]; if (x > 0 && KR_KEYS[y][x - 1] === k && k.length > 1) continue; var w = 1; while (KR_KEYS[y][x + w] === k && k.length > 1) w++;
+          var cur = KR.ky === y && KR.kx >= x && KR.kx < x + w;
+          s += '<span class="kr-k w' + w + (k.length > 1 ? ' fn' : '') + (k === '검색' ? ' go' : '') + (cur ? ' cur' : '') + '">' + (k === '띄움' ? '띄어쓰기' : k === '지움' ? '지우기' : k) + '</span>'; }
+        s += '</div>';
+      }
+      s += '</div><div class="kr-res">';
+      if (KR.busy) s += '<div class="kr-msg">찾는 중…</div>';
+      else if (KR.msg) s += '<div class="kr-msg">' + esc(KR.msg) + '</div>';
+      else for (var r = 0; r < KR.res.length && r < 6; r++) s += '<div class="kr-ri" style="-webkit-animation-delay:' + r * 0.05 + 's;animation-delay:' + r * 0.05 + 's"><span class="lk">' + (r + 1) + '</span><span class="t">' + esc(KR.res[r].t) + '</span></div>';
+      s += '</div>';
+    }
+    setHTML('krSrch', s);
+    var H = KR.mode === 'search'
+      ? [lk('ok', '글자 넣기'), lk('rew', '지우기'), lk('play', '검색'), KR.res.length ? lk('1') + '<em>~</em>' + lk(String(Math.min(6, KR.res.length)), '예약') : '', lk('복귀', KR.cur ? '노래 화면' : '나가기')]
+      : [lk('ok', '노래 찾기'), lk('ff', '다음 곡'), lk('pause', '멈춤'), lk('복귀', '나가기')];
+    var hh = ''; for (var q = 0; q < H.length; q++) if (H[q]) hh += '<span class="kr-h">' + H[q] + '</span>';
+    setHTML('krHint', hh);
+  }
+  function krType(k) {
+    if (k === '지움') KR.jamo.pop();
+    else if (k === '띄움') { if (KR.jamo.length && KR.jamo[KR.jamo.length - 1] !== ' ') KR.jamo.push(' '); }
+    else if (k === '검색') { krSearch(); return; }
+    else if (KR.jamo.length < 40) KR.jamo.push(k);
+    krDraw();
+  }
+  function krSearch() {
+    var q = krText().replace(/\s+/g, ' ').replace(/^ | $/g, '');
+    if (q.length < 2) { KR.msg = '두 글자 이상 입력해 주세요'; KR.res = []; krDraw(); return; }
+    if (KR.busy) return;
+    KR.busy = true; KR.msg = ''; KR.q = q; krDraw();
+    var seq = KR.seq;
+    jsonp(apiUrl('&ksearch=' + encodeURIComponent(q)), 20000, function (d) {
+      if (seq !== KR.seq) return;
+      KR.busy = false; KR.res = [];
+      if (!d || !d.ok) KR.msg = d && d.error === 'nokey' ? '검색 준비가 아직 안 됐어요 (관리자: YouTube API 키 필요)' : d && d.error === 'quota' ? '오늘 검색 횟수를 다 썼어요 · 내일 다시 됩니다' : '검색하지 못했어요 · 잠시 뒤 다시 해 주세요';
+      else { for (var i = 0; i < d.items.length; i++) KR.res.push({ id: d.items[i].id, t: krTitle(d.items[i].t) }); if (!KR.res.length) KR.msg = '찾는 노래가 없어요 · 다른 말로 찾아 보세요'; }
+      krDraw();
+    }, function () { if (seq !== KR.seq) return; KR.busy = false; KR.msg = '인터넷 연결을 확인해 주세요'; krDraw(); });
+  }
+  function krReserve(i) {
+    var r = KR.res[i]; if (!r) return;
+    if (KR.queue.length >= 20) { toast('예약은 20곡까지'); return; }
+    KR.queue.push({ id: r.id, t: r.t });
+    toast('예약 · ' + r.t);
+    if (!KR.cur) krNext(); else krDraw();
+  }
+  function krNext() {
+    clearTimeout(KR.endT);
+    var s = KR.queue.shift();
+    if (!s) { KR.cur = null; if (KR.p) try { KR.p.stopVideo(); } catch (e) {} krSetMode('search'); return; }
+    KR.cur = s; KR.st = 'loading';
+    krSetMode('play');
+    var seq = KR.seq;
+    ytLoadApi(function () {
+      if (seq !== KR.seq || KR.cur !== s) return;
+      if (KR.p && KR.ready) { try { KR.p.loadVideoById(s.id); } catch (e) {} return; }
+      if (KR.p) return;
+      try {
+        KR.p = new YT.Player('krPlayer', { width: 1408, height: 792, videoId: s.id,
+          playerVars: { autoplay: 1, controls: 0, disablekb: 1, fs: 0, rel: 0, iv_load_policy: 3, playsinline: 1, modestbranding: 1 },
+          events: {
+            onReady: function () { KR.ready = true; krSize(); if (KR.cur && KR.cur !== s) try { KR.p.loadVideoById(KR.cur.id); } catch (e) {} },
+            onStateChange: function (e) { KR.st = String(e.data); if (e.data === 0 && KR.on) { clearTimeout(KR.endT); KR.endT = setTimeout(krNext, 1500); } },
+            onError: function () { if (!KR.on) return; toast('재생할 수 없는 곡이라 넘어갑니다'); clearTimeout(KR.endT); KR.endT = setTimeout(krNext, 1200); }
+          } });
+      } catch (e) { toast('플레이어를 만들지 못했습니다'); }
+    });
+  }
+  function krKey(k) {
+    if (k === RK.BACK || k === RK.ESC) {
+      if (KR.mode === 'search' && KR.cur) { krSetMode('play'); return; }
+      if (!KR.cur && !KR.queue.length) { krClose(); return; }
+      var n = new Date().getTime();
+      if (n - KR.quitAt < 2500) { krClose(); return; }
+      KR.quitAt = n; toast('한 번 더 누르면 노래방을 끝냅니다'); return;
+    }
+    if (KR.mode === 'play') {
+      if (k === RK.OK) krSetMode('search');
+      else if (k === RK.FF) krNext();
+      else if (k === RK.PAUSE || (k === RK.PP && KR.st === '1')) { if (KR.p) try { KR.p.pauseVideo(); } catch (e) {} }
+      else if (k === RK.PLAY || k === RK.PP) { if (KR.p) try { KR.p.playVideo(); } catch (e) {} }
+      return;
+    }
+    if (k >= 49 && k <= 54) { krReserve(k - 49); return; }
+    if (k === RK.REW) { krType('지움'); return; }
+    if (k === RK.PLAY) { krSearch(); return; }
+    if (k === RK.FF && KR.cur) { krNext(); return; }
+    if (k >= 37 && k <= 40) {
+      var key = KR_KEYS[KR.ky][KR.kx];
+      if (k === RK.U) KR.ky = (KR.ky + 3) % 4; else if (k === RK.D) KR.ky = (KR.ky + 1) % 4;
+      else { var d = k === RK.L ? -1 : 1, x = KR.kx; do { x = (x + d + 10) % 10; } while (KR_KEYS[KR.ky][x] === key && key.length > 1 && x !== KR.kx); KR.kx = x; }
+      krDraw(); return;
+    }
+    if (k === RK.OK) krType(KR_KEYS[KR.ky][KR.kx]);
+  }
+  setInterval(function () { if (KR.on && (inClass || SEAT.open || sleeping)) krClose(); }, 5000);   // 수업이 시작되면 노래방은 저절로 닫힘
   /* 대시보드 ↔ 포스터 순환 */
   var cycleTimer = null, posterPtr = 0;
   function setView(v) {
@@ -4095,7 +4317,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     if (v !== 'seat') $('seatv').className = 'view';
   }
   function showDash() {
-    if (inClass || sleeping || TOOL.open || SEAT.open) return;
+    if (inClass || sleeping || TOOL.open || SEAT.open || KR.on) return;
     setView('dash');
     clearTimeout(cycleTimer);
     if (cleaning) return;                 // 청소 시간에는 포스터로 넘어가지 않음
@@ -4108,7 +4330,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
   var IDIOMS = [["고식지계","姑息之計","잠시 고|쉴 식|갈 지|꾀 계","근본적인 해결책이 아니라 당장의 어려움만 피하려는 임시방편의 꾀","최근 발표한 정책은 국민의 성토를 잠시 피해 가고자 내놓은 고식지계로 보인다."],["결초보은","結草報恩","맺을 결|풀 초|갚을 보|은혜 은","풀을 묶어 은혜를 갚는다 → 죽어서라도 입은 은혜를 잊지 않고 갚음","위기에 처했을 때 손을 내밀어 준 친구에게 평생 결초보은하겠다고 다짐했다."],["각골지통","刻骨之痛","새길 각|뼈 골|갈 지|아플 통","뼈에 사무칠 만큼 몹시 크고 깊은 아픔이나 원한","자식을 먼저 보낸 부모의 심정은 각골지통의 슬픔과 다름없다."],["가렴주구","苛斂誅求","가혹할 가|거둘 렴|벨 주|구할 구","세금을 가혹하게 거두고 백성의 재물을 억지로 빼앗음","조선 후기 관리들의 가렴주구로 백성들의 삶은 날로 피폐해졌다."],["갑론을박","甲論乙駁","갑옷 갑|논할 론|새 을|논박할 박","여러 사람이 서로 자기 주장을 내세우며 상대를 반박함","경제 문제에 관한 토론에서 정치인들의 갑론을박이 이어졌다."],["고립무원","孤立無援","외로울 고|설 립|없을 무|도울 원","고립되어 구원을 받을 데가 없음","그녀는 가족과 연락을 끊은 지 오래되어 고립무원의 삶을 이어 가고 있다."],["견강부회","牽强附會","끌 견|강할 강|붙을 부|모일 회","이치에 맞지 않는 말을 억지로 끌어 붙여 자기 주장에 맞춤","실수를 인정하지 않고 견강부회로 핑계만 늘어놓는 사람과는 대화가 통하지 않는다."],["구우일모","九牛一毛","아홉 구|소 우|한 일|털 모","아홉 마리 소 가운데 털 하나 → 매우 많은 것 가운데 극히 적은 것","백과사전 한 권의 지식도 인류 전체의 지식에 비하면 구우일모일 뿐이다."],["고진감래","苦盡甘來","쓸 고|다할 진|달 감|올 래","쓴 것이 다하면 단 것이 온다 → 고생 끝에 즐거움이 옴","너는 올해 고생이 많았기에 내년에는 꼭 고진감래할 것이야."],["마이동풍","馬耳東風","말 마|귀 이|동녘 동|바람 풍","동풍이 말의 귀를 스쳐 감 → 남의 말을 귀담아듣지 않고 흘려버림","그에게는 나의 충고가 마이동풍이었다."],["막역지간","莫逆之間","없을 막|거스를 역|갈 지|사이 간","서로 거스르는 일이 없는, 허물없이 아주 친한 사이","그와 나는 막역지간이다."],["면종복배","面從腹背","낯 면|좇을 종|배 복|등 배","겉으로는 따르는 척하면서 속으로는 배반함","사람들 앞에서는 친한 척하고 뒤에서는 험담하는 그의 행동은 면종복배였다."],["백년하청","百年河淸","일백 백|해 년|물 하|맑을 청","늘 흐린 황허강이 맑아지기를 기다림 → 아무리 오래 기다려도 이루어지기 어려움","의지가 굳은 영지의 마음을 돌리는 것은 백년하청일 거야."],["부화뇌동","附和雷同","붙을 부|화할 화|우레 뢰|한가지 동","줏대 없이 남의 의견이나 분위기에 덩달아 따름","그는 뚜렷한 주관 없이 대세에 부화뇌동하다가 결국 책임을 지게 되었다."],["사필귀정","事必歸正","일 사|반드시 필|돌아갈 귀|바를 정","모든 일은 결국 반드시 바른 이치대로 돌아감","반칙으로 1등을 한 선수가 비디오 판독으로 실격되었으니 사필귀정이다."],["안빈낙도","安貧樂道","편안할 안|가난할 빈|즐길 락|길 도","가난한 생활을 편안히 여기며 도를 즐김","그는 퇴직 후 안빈낙도의 삶을 살아가고 있다."],["설상가상","雪上加霜","눈 설|윗 상|더할 가|서리 상","눈 위에 서리가 덮임 → 어려운 일에 또 어려운 일이 겹침","밀린 과제로 잠을 설치는데, 설상가상으로 시험까지 얼마 남지 않았다."],["연목구어","緣木求魚","인연 연|나무 목|구할 구|물고기 어","나무에 올라가 물고기를 구함 → 도저히 불가능한 일을 굳이 하려 함","노력도 하지 않고 좋은 결과를 기대하는 것은 연목구어와 같다."],["새옹지마","塞翁之馬","변방 새|늙은이 옹|갈 지|말 마","인생의 길흉화복은 변화가 많아 예측하기 어려움","인생은 새옹지마다."],["상전벽해","桑田碧海","뽕나무 상|밭 전|푸를 벽|바다 해","뽕나무밭이 푸른 바다가 됨 → 세상일이 몰라볼 만큼 크게 바뀜","논밭이던 곳에 아파트가 가득 들어선 모습을 보니 상전벽해라는 말이 실감 났다."],["온고지신","溫故知新","익힐 온|옛 고|알 지|새 신","옛것을 익히고 그것을 미루어 새것을 앎","판소리 리듬을 힙합과 융합해 인기를 얻은 것은 온고지신의 태도에서 비롯되었다."],["우왕좌왕","右往左往","오른 우|갈 왕|왼 좌|갈 왕","이리저리 왔다 갔다 하며 갈피를 잡지 못함","충격적인 소식을 듣고 정신이 없어 우왕좌왕했다."],["왕후장상","王侯將相","임금 왕|제후 후|장수 장|서로 상","제왕·제후·장수·재상 → 높은 지위의 사람들을 통틀어 이르는 말","옛날에는 왕후장상의 신분이 대부분 세습되었다."],["오매불망","寤寐不忘","깰 오|잘 매|아닐 불|잊을 망","자나 깨나 잊지 못하고 그리워함","그녀는 그를 오매불망 기다린다."],["유유상종","類類相從","무리 류|무리 류|서로 상|좇을 종","같은 무리끼리 서로 사귐","미국에 한인 마을이 있는 걸 보니 정말 유유상종이다."],["일장춘몽","一場春夢","한 일|마당 장|봄 춘|꿈 몽","한바탕의 봄꿈 → 부귀영화가 덧없이 사라짐","눈부시던 영화도 일장춘몽처럼 스쳐 지나갈 뿐이었다."],["입신양명","立身揚名","설 립|몸 신|날릴 양|이름 명","출세하여 이름을 세상에 떨침","그는 치열하게 노력해 입신양명하겠다는 꿈을 품었다."],["자중지란","自中之亂","스스로 자|가운데 중|갈 지|어지러울 란","같은 편끼리 일어나는 싸움이나 혼란","우승 후보였던 우리 팀은 선수들 간의 불화로 자중지란이 일어나 예선에서 탈락했다."],["자승자박","自繩自縛","스스로 자|노끈 승|스스로 자|묶을 박","자기 줄로 자기를 묶음 → 자기 말과 행동 때문에 스스로 곤란해짐","그는 남을 속이려고 꾸민 거짓말 때문에 자승자박의 신세가 되었다."],["좌고우시","左顧右視","왼 좌|돌아볼 고|오른 우|볼 시","왼쪽을 돌아보고 오른쪽을 봄 → 이리저리 망설이며 결단하지 못함","계속 좌고우시하지 말고, 기회가 왔을 때 빨리 결단을 내려라."],["조변석개","朝變夕改","아침 조|변할 변|저녁 석|고칠 개","계획이나 결정을 일관성 없이 자주 고침","철수는 그때그때의 이익에 따라 조변석개를 일삼는다."],["점입가경","漸入佳境","점점 점|들 입|아름다울 가|지경 경","갈수록 더욱 좋거나 흥미로운 경지로 들어감","그 배우의 연기는 갈수록 점입가경이다."],["천재일우","千載一遇","일천 천|해 재|한 일|만날 우","천 년에 한 번 만날 만한 좋은 기회","이번 경기는 천재일우의 기회라 생각하고 꼭 승리하자."],["침소봉대","針小棒大","바늘 침|작을 소|몽둥이 봉|클 대","바늘만 한 일을 몽둥이만 하게 말함 → 작은 일을 크게 부풀림","사소한 오해를 침소봉대하지 말고 대화로 풀자."],["청출어람","靑出於藍","푸를 청|날 출|어조사 어|쪽 람","쪽에서 뽑은 푸른 물감이 쪽보다 푸름 → 제자가 스승보다 나음","그는 마침내 스승을 제치고 우승하며 청출어람의 전형을 보여 주었다."],["탁상공론","卓上空論","높을 탁|윗 상|빌 공|논할 론","현실성이 없는 허황한 이론이나 논의","현장을 모르는 임원진의 탁상공론 때문에 실무자들만 고생하고 있다."],["초록동색","草綠同色","풀 초|푸를 록|한가지 동|빛 색","풀빛과 녹색은 같음 → 같은 처지의 사람끼리 어울림","초록동색이라더니, 저 둘이 한 패가 되었다."],["천양지차","天壤之差","하늘 천|흙덩이 양|갈 지|다를 차","하늘과 땅 사이처럼 엄청난 차이","작년 성적과 올해 성적은 천양지차였다."],["태평성대","太平聖代","클 태|평평할 평|성인 성|시대 대","어진 임금이 다스리는 태평한 시대","백성들이 걱정 없이 농사지으며 노래하니 그야말로 태평성대였다."],["허장성세","虛張聲勢","빌 허|베풀 장|소리 성|기세 세","실속 없이 허세를 부리고 큰소리침","그의 발언은 실속 없는 허장성세에 불과했다."],["호가호위","狐假虎威","여우 호|빌릴 가|범 호|위엄 위","여우가 범의 위엄을 빌림 → 남의 권세를 빌려 위세를 부림","그는 친구의 힘을 믿고 호가호위하며 남을 괴롭혔다."],["회자정리","會者定離","모일 회|놈 자|정할 정|떠날 리","만난 사람은 반드시 헤어지게 됨","함께 일한 동료를 보내려니 섭섭하지만, 회자정리라 했다."],["함구무언","緘口無言","봉할 함|입 구|없을 무|말씀 언","입을 꼭 다물고 아무 말도 하지 않음","평소 같으면 항변했을 그가 이번에는 이상하리만치 함구무언이다."],["흥진비래","興盡悲來","일 흥|다할 진|슬플 비|올 래","즐거운 일이 다하면 슬픈 일이 옴","일이 술술 풀릴 때 자만하지 마라. 흥진비래라 했다."],["환골탈태","換骨奪胎","바꿀 환|뼈 골|빼앗을 탈|아이 밸 태","뼈를 바꾸고 태를 빼앗음 → 근본적으로 완전히 새롭게 바뀜","오랫동안 공터였던 이곳이 멋진 녹색 쉼터로 환골탈태했다."],["해의추식","解衣推食","풀 해|옷 의|밀 추|밥 식","옷을 벗어 주고 밥을 나누어 줌 → 남을 지극한 정성으로 보살핌","주민들은 피난민들을 해의추식하며 맞아 주었다."],["동분서주","東奔西走","동녘 동|달릴 분|서녘 서|달릴 주","동쪽으로 뛰고 서쪽으로 뜀 → 사방으로 몹시 바쁘게 돌아다님","하루 종일 일이 많아 동분서주했다."],["오월동주","吳越同舟","나라 이름 오|넘을 월|한가지 동|배 주","원수인 오나라와 월나라 사람이 한 배를 탐 → 사이가 나빠도 같은 위기에서는 협력함","서로 믿지 못해도 당장의 위기를 넘기려면 오월동주처럼 협력해야 한다."],["유유자적","悠悠自適","멀 유|멀 유|스스로 자|맞을 적","남의 눈치 없이 한가롭고 편안하게 지냄","주말만큼은 공원을 산책하며 유유자적하게 보내고 싶다."],["교언영색","巧言令色","교묘할 교|말씀 언|하여금 령|빛 색","교묘한 말과 꾸민 얼굴빛 → 아첨하는 말과 태도","전하, 저런 교언영색의 간신에게 넘어가시면 아니 되옵니다."],["애이불비","哀而不悲","슬플 애|말 이을 이|아닐 불|슬플 비","속으로는 슬프지만 겉으로는 슬픔을 드러내지 않음","애이불비, 여기서 울면 안 돼. 참고 넘어가는 거야."],["권토중래","捲土重來","말 권|흙 토|거듭 중|올 래","흙먼지를 날리며 다시 옴 → 실패한 뒤 힘을 길러 다시 도전함","부상으로 쉬던 국가대표 선수가 권토중래를 노리며 다시 훈련을 시작했다."],["당랑거철","螳螂拒轍","사마귀 당|사마귀 랑|막을 거|바퀴 자국 철","사마귀가 수레를 막아섬 → 제 힘을 헤아리지 않고 강한 상대에게 덤빔","혼자서 수십 명과 맞서 토론하는 것은 당랑거철이지만, 그의 용기는 존경할 만하다."],["비분강개","悲憤慷慨","슬플 비|성낼 분|강개할 강|분개할 개","슬프고 분하여 마음이 북받침","그는 불의를 보고 비분강개했다."],["수수방관","袖手傍觀","소매 수|손 수|곁 방|볼 관","팔짱 끼고 곁에서 보기만 함 → 나서야 할 일에 간섭하지 않고 내버려 둠","어려움을 당한 이웃을 보며 수수방관해서는 안 된다."],["호사다마","好事多魔","좋을 호|일 사|많을 다|마귀 마","좋은 일에는 방해되는 일이 많음","호사다마라고, 꿈꾸던 승진을 했는데 회의로 너무 바쁘다."],["금의환향","錦衣還鄕","비단 금|옷 의|돌아올 환|시골 향","비단옷 입고 고향에 돌아옴 → 성공하여 영광스럽게 돌아옴","국가대표 선수들이 금메달을 따고 금의환향했다."],["오비이락","烏飛梨落","까마귀 오|날 비|배 리|떨어질 락","까마귀 날자 배 떨어진다 → 공교롭게 때가 겹쳐 억울하게 의심받음","가게에 들어서자마자 경보음이 울려 오비이락으로 도둑 취급을 당할 뻔했다."],["폐포파립","弊袍破笠","해질 폐|도포 포|깨뜨릴 파|삿갓 립","해진 옷과 부서진 갓 → 초라한 차림새나 몹시 가난한 처지","집안이 기울어 폐포파립을 면하지 못하는 처지가 되었다."],["포복절도","抱腹絶倒","안을 포|배 복|끊을 절|넘어질 도","배를 그러안고 넘어질 정도로 몹시 웃음","시혁이의 말을 들은 우리는 포복절도할 수밖에 없었다."],["호구지책","糊口之策","풀칠할 호|입 구|갈 지|꾀 책","가난한 살림에서 겨우 먹고살아 갈 방법","그는 결국 호구지책으로 장사를 시작했다."],["교학상장","敎學相長","가르칠 교|배울 학|서로 상|길 장","가르치고 배우면서 서로 함께 성장함","스승과 제자가 서로를 이끌어 주는 교학상장의 자세가 필요하다."],["명경지수","明鏡止水","밝을 명|거울 경|그칠 지|물 수","맑은 거울과 고요한 물 → 잡념과 가식이 없는 깨끗한 마음","그의 눈빛은 욕심을 비운 명경지수처럼 맑고 깊었다."],["언중유골","言中有骨","말씀 언|가운데 중|있을 유|뼈 골","말 속에 뼈가 있음 → 예사로운 말 속에 단단한 속뜻이 있음","언중유골이라더니, 그냥 해 버리는 말만은 아닌 듯싶구나."],["지록위마","指鹿爲馬","가리킬 지|사슴 록|할 위|말 마","사슴을 가리켜 말이라 함 → 윗사람을 속이고 거짓을 참이라 억지 부림","명백한 실책조차 성공이라 우기는 지록위마의 상황이 벌어지고 있다."],["각골난망","刻骨難忘","새길 각|뼈 골|어려울 난|잊을 망","입은 은혜가 뼈에 새길 만큼 커서 잊히지 않음","이번에 받은 도움은 정말 각골난망이다."],["무위도식","無爲徒食","없을 무|할 위|다만 도|먹을 식","하는 일 없이 놀고먹음","그는 방학 동안 무위도식하다가 개학 후 크게 후회했다."],["문전성시","門前成市","문 문|앞 전|이룰 성|저자 시","찾아오는 사람이 많아 문 앞이 시장처럼 붐빔","추석을 맞아 시장과 마트가 문전성시를 이루었다."],["불치하문","不恥下問","아닐 불|부끄러울 치|아래 하|물을 문","아랫사람에게 묻는 것을 부끄러워하지 않음","제자에게 모르는 것을 묻는 스승의 모습은 불치하문이었다."],["결자해지","結者解之","맺을 결|놈 자|풀 해|갈 지","맺은 사람이 풀어야 함 → 일을 저지른 사람이 해결해야 함","우리가 시작한 일이니 결자해지의 자세로 끝까지 책임지자."],["순망치한","脣亡齒寒","입술 순|망할 망|이 치|찰 한","입술이 없으면 이가 시림 → 가까운 한쪽이 망하면 다른 쪽도 위태로움","가게와 단골손님은 순망치한이라, 손님이 끊기면 가게도 문을 닫아야 한다."],["조삼모사","朝三暮四","아침 조|석 삼|저물 모|넉 사","간사한 꾀로 남을 속여 희롱함","회사는 근본 대책 대신 조삼모사로 우리를 구슬릴 것이다."],["금의야행","錦衣夜行","비단 금|옷 의|밤 야|다닐 행","비단옷 입고 밤길을 다님 → 아무 보람 없는 일을 함","아무리 돈이 많아도 베풀지 않는다면 금의야행이다."],["용의주도","用意周到","쓸 용|뜻 의|두루 주|이를 도","마음의 준비가 두루 미쳐 빈틈이 없음","그는 여행 준비를 용의주도하게 마쳤다."],["주마간산","走馬看山","달릴 주|말 마|볼 간|메 산","말 타고 달리며 산을 봄 → 자세히 살피지 않고 대충 보고 지나감","일정이 짧아 여러 도시를 주마간산 격으로 둘러볼 수밖에 없었다."],["격세지감","隔世之感","사이 뜰 격|인간 세|갈 지|느낄 감","오래지 않은 사이에 몰라보게 변해 다른 세상이 된 듯한 느낌","몇 년 만에 동네에 가 보니 너무 많이 변해 격세지감을 느꼈다."],["명재경각","命在頃刻","목숨 명|있을 재|잠깐 경|새길 각","목숨이 경각에 달림 → 거의 죽게 되었거나 매우 위급한 처지","응급실로 온 환자의 상태가 명재경각이라 곧바로 수술에 들어갔다."],["일사불란","一絲不亂","한 일|실 사|아닐 불|어지러울 란","한 올의 실도 엉키지 않음 → 질서 정연하여 조금도 흐트러지지 않음","선수들이 감독의 지시에 따라 일사불란하게 움직였다."],["중과부적","衆寡不敵","무리 중|적을 과|아닐 부|대적할 적","적은 수로는 많은 수를 대적하지 못함","워낙 중과부적이라 몰려오는 적을 막아 내기에는 역부족이었다."]];
   var idPtr = +(load('idp') || 0) || 0;
   function showIdioms(shown) {
-    if (inClass || sleeping || TOOL.open || SEAT.open) return;
+    if (inClass || sleeping || TOOL.open || SEAT.open || KR.on) return;
     if (shown >= TIMING.idiom) { afterIdioms(); return; }
     var n = IDIOMS.length, k = (idPtr * 31) % n, it = IDIOMS[k], hun = it[2].split('|');   // 31칸씩 건너뛰며 79개를 고르게
     idPtr = (idPtr + 1) % n; save('idp', idPtr);
@@ -4128,7 +4350,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
   }
 
   function showPosters(shown) {
-    if (inClass || sleeping || TOOL.open || SEAT.open) return;
+    if (inClass || sleeping || TOOL.open || SEAT.open || KR.on) return;
     var ps = readyPosters();
     if (!ps.length || shown >= Math.min(TIMING.perCycle, ps.length)) { showDash(); return; }
     var p = ps[posterPtr % ps.length];
@@ -4154,7 +4376,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
   function trackAt(i) { var L = tracks(); return L.length ? L[((i % L.length) + L.length) % L.length] : null; }
   function musicWant() {
     var m = ADMIN && ADMIN.music;
-    return !!(m && (m.playing || (m.playing === undefined && m.enabled)) && tracks().length && !inClass && !sleeping && !TVAPP.hdmi && !(typeof YT_ !== 'undefined' && YT_.want && YT_.want.playing) && !DEMO && CONFIG.api);   // HDMI 화면일 때는 음악 멈춤
+    return !!(m && (m.playing || (m.playing === undefined && m.enabled)) && tracks().length && !inClass && !sleeping && !TVAPP.hdmi && !(typeof YT_ !== 'undefined' && YT_.want && YT_.want.playing) && !KR.on && !DEMO && CONFIG.api);   // HDMI 화면일 때는 음악 멈춤
   }
   function isSilent() { return String(audio.src).indexOf('data:audio/wav') === 0; }
 
