@@ -1,0 +1,594 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>html{color-scheme:dark}body{margin:0;font-size:14px}[hidden]{display:none!important}</style>
+<title>사라진 글자</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&family=Noto+Serif+KR:wght@400;700&display=swap">
+<style>
+:root{color-scheme:dark;--bg:#06080b;--panel:#0d1117;--edge:#283040;--fg:#d8dacd;--dim:#868e9b;--chalk:#eef0e2;--amber:#cfa95f;--red:#d0604e;--green:#86b592;--whisper:#9db0c8;--btn:#131922;--btn2:#1b212c;
+--serif:'Noto Serif KR','Nanum Myeongjo','AppleMyungjo','Batang',serif;--sans:'Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR','Noto Sans CJK KR',sans-serif}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--sans);font-size:16px;line-height:1.6}
+.wrap{max-width:900px;margin:0 auto;padding-block:8px 24px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.fit{margin:0 auto;max-width:max(288px,min(868px,calc((100vh - 270px)*1.818)))}
+.hud{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;font-size:13px;color:var(--dim);padding:4px 0 6px;min-height:34px}
+.hud b{color:var(--fg);font-family:var(--serif);font-weight:700;letter-spacing:.04em;margin-right:10px}
+.hud .rt{display:flex;align-items:center}
+.lead{display:inline-flex;align-items:center;margin-left:10px}
+.lead i{width:9px;height:13px;background:var(--amber);margin-left:5px;border-radius:50% 50% 50% 50%/68% 68% 32% 32%;box-shadow:0 0 6px rgba(207,169,95,.7)}
+.lead i.x{background:#2a2f38;box-shadow:none}
+.hb{background:none;border:1px solid var(--edge);color:var(--dim);font:inherit;font-size:12px;padding:3px 8px;margin-left:8px;cursor:pointer;border-radius:2px}
+.hb:hover{color:var(--amber);border-color:var(--amber)}
+.screen{position:relative;border:1px solid var(--edge);background:#000;overflow:hidden}
+canvas{display:block;width:100%;height:auto;image-rendering:pixelated;image-rendering:crisp-edges;background:#000}
+.panel{min-height:150px;background:var(--panel);border-top:1px solid var(--edge);padding:14px 16px;font-family:var(--serif);font-size:17px;line-height:1.7}
+.say{cursor:pointer;position:relative;min-height:120px}
+.say p{margin:0;white-space:pre-wrap;word-break:keep-all}
+.say.ch p{font-family:'Nanum Pen Script',var(--serif);font-size:30px;line-height:1.3;color:var(--chalk);letter-spacing:.06em;word-break:break-all}
+.say.wh p{color:var(--whisper);letter-spacing:.14em}
+.say.ok{border-left:3px solid var(--green);padding-left:12px}
+.say.ok p b{color:var(--chalk)}
+.nx{position:absolute;right:0;bottom:0;color:var(--amber);font-size:13px;animation:bl 1s steps(2) infinite}
+@keyframes bl{50%{opacity:.2}}
+.idle{font-family:var(--sans);font-size:14px;color:var(--dim)}
+.idle b{color:var(--amber);font-weight:400}
+.qq{margin:0 0 10px;word-break:keep-all}
+.qq em{font-style:normal;color:var(--chalk);font-weight:700}
+.hj{font-size:1.25em;letter-spacing:.12em;color:var(--chalk)}
+.qo{display:flex;flex-wrap:wrap;margin:-4px}
+.qb{flex:1 1 44%;margin:4px;min-width:0;text-align:left;background:var(--btn);color:var(--fg);border:1px solid var(--edge);padding:10px 12px;font:inherit;font-size:16px;line-height:1.4;border-radius:2px;cursor:pointer;word-break:keep-all}
+.qb i{font-style:normal;color:var(--dim);margin-right:8px;font-family:var(--sans);font-size:12px}
+.qb.sel{border-color:var(--amber);background:var(--btn2)}
+.qb.dead{opacity:.32;text-decoration:line-through;cursor:default}
+.qb.done{border-color:var(--green);color:var(--green)}
+.qm{margin:8px 0 0;color:var(--red);font-size:14px;min-height:1.5em;font-family:var(--sans)}
+.dial{display:flex;justify-content:center;align-items:center;margin:2px 0}
+.dg{width:48px;margin:0 5px;text-align:center}
+.dg button{display:block;width:100%;background:none;border:0;color:var(--dim);font-size:15px;padding:3px;cursor:pointer}
+.dg b{display:block;font:700 30px/1.35 var(--serif);border:1px solid var(--edge);background:var(--btn);color:var(--fg)}
+.dg.sel b{border-color:var(--amber);color:var(--amber)}
+.dok{margin-left:12px;background:var(--btn);border:1px solid var(--amber);color:var(--amber);font:inherit;font-size:15px;padding:10px 14px;cursor:pointer}
+.os{width:1.2em;height:1.2em;vertical-align:-.22em;fill:currentColor}
+.os text{font-family:var(--sans);font-weight:700}
+.big{font-size:1.5em;color:var(--chalk);margin:0 .15em}
+.big .os{width:1.45em;height:1.45em;vertical-align:-.3em}
+.ov{position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(5,7,10,.9);overflow-y:auto;padding:16px;text-align:center;z-index:5}
+.ov h1{font:700 clamp(32px,8vw,60px)/1.15 var(--serif);letter-spacing:.2em;margin:3% 0 2px;padding-left:.2em;color:var(--chalk)}
+.ov h2{font:700 24px/1.3 var(--serif);color:var(--chalk);margin:10px 0 12px;letter-spacing:.06em}
+.ov h3{font:700 15px/1.4 var(--serif);color:var(--amber);margin:18px 0 6px;letter-spacing:.06em}
+.lost{margin:0 0 4px;font-size:22px;color:var(--amber);letter-spacing:.9em;padding-left:.9em}
+.lost span{animation:fl 5s infinite}
+.lost span:nth-child(2){animation-delay:1.3s}.lost span:nth-child(3){animation-delay:2.9s}.lost span:nth-child(4){animation-delay:.6s}
+@keyframes fl{0%,62%,100%{opacity:1}66%{opacity:.08}70%{opacity:.8}74%{opacity:.05}82%{opacity:1}}
+.sub,.who,.fine{color:var(--dim);font-size:13px;margin:4px 0 12px;word-break:keep-all}
+.fine{margin-top:14px;font-size:12px}
+.mi{display:block;width:100%;max-width:300px;margin:5px auto;padding:9px 12px;background:transparent;border:1px solid transparent;color:var(--fg);font:400 17px/1.4 var(--serif);cursor:pointer;border-radius:2px}
+.mi small{display:block;font-size:12px;color:var(--dim);font-family:var(--sans)}
+.mi.sel{border-color:var(--amber);color:var(--amber)}
+.mi[disabled]{opacity:.3;cursor:default}
+.lg{font:700 30px/1.2 var(--serif);letter-spacing:.14em;margin:6px 0 8px;color:var(--chalk)}
+.lg span{color:var(--amber)}
+.kp{display:flex;flex-wrap:wrap;justify-content:center;width:204px;margin:0 auto 4px}
+.mi.kb{display:inline-block;width:60px;margin:4px;padding:7px 0;border-color:var(--edge);font-family:var(--sans);font-size:18px}
+.mi.kb.sel{border-color:var(--amber)}
+.lmsg{color:var(--red);font-size:13px;min-height:1.5em;margin:0}
+.list{text-align:left;max-width:640px;margin:0 auto;font-size:14.5px;line-height:1.65}
+.list p{margin:0 0 7px;padding-left:14px;text-indent:-14px;word-break:keep-all}
+.list p.no{color:#4c5462}
+.list b{color:var(--chalk)}
+.endk{color:var(--amber);font-size:12px;letter-spacing:.3em;margin:8% 0 0}
+.endt{max-width:520px;margin:0 auto 14px;font:400 17px/1.9 var(--serif)}
+.endt p{margin:0;opacity:0;animation:up .9s forwards;word-break:keep-all}
+@keyframes up{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.card{position:absolute;left:0;right:0;top:0;bottom:0;z-index:4;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(0,0,0,.82);pointer-events:none;transition:opacity .6s;text-align:center;padding:16px}
+.card b{font:700 clamp(22px,5vw,38px)/1.3 var(--serif);color:var(--chalk);letter-spacing:.1em}
+.card span{color:var(--amber);font-size:13px;letter-spacing:.3em;margin-top:8px}
+.card.out{opacity:0}
+.pad{display:none;justify-content:space-between;align-items:center;padding:10px 16px;background:var(--panel);border-top:1px solid var(--edge);-webkit-user-select:none;user-select:none;touch-action:none}
+.touch .pad{display:flex}
+.dp{position:relative;width:138px;height:138px;flex:none}
+.dp button,.ab{position:absolute;width:46px;height:46px;background:var(--btn);border:1px solid var(--edge);color:var(--dim);font-size:18px;border-radius:6px;touch-action:none}
+.dp button:active,.ab:active{border-color:var(--amber);color:var(--amber)}
+.ab{position:static;width:86px;height:86px;border-radius:50%;font:400 17px var(--serif);color:var(--fg)}
+.tvk{display:none}
+.tv body{overflow:hidden}
+.tv .wrap{max-width:none;margin:0;padding:112px 30px 0}
+.tv .fit{max-width:none}
+.tv .hud{font-size:24px;min-height:64px;padding:0 4px 12px}
+.tv .hud b{font-size:30px;margin-right:18px}
+.tv .hb{display:none}
+.tv .lead{margin-left:16px}
+.tv .lead i{width:16px;height:24px;margin-left:9px}
+.tv .screen{display:flex;height:706px}
+.tv canvas{width:1280px;height:704px;flex:none}
+.tv .panel{flex:1;min-width:0;min-height:0;border-top:0;border-left:1px solid var(--edge);padding:28px 26px;font-size:28px;line-height:1.6;overflow:hidden}
+.tv .say{min-height:640px}
+.tv .say.ch p{font-size:54px}
+.tv .idle{font-size:24px;line-height:1.8}
+.tv .qq{margin-bottom:16px}
+.tv .qb{flex:1 1 100%;font-size:25px;padding:13px 16px;margin:6px 4px}
+.tv .qb i{font-size:19px;margin-right:12px}
+.tv .qm{font-size:21px;margin-top:12px}
+.tv .dial{flex-wrap:wrap;margin-top:20px}
+.tv .dg{width:84px;margin:0 8px}
+.tv .dg b{font-size:56px}
+.tv .dg button{font-size:22px}
+.tv .dok{display:block;width:60%;margin:22px auto 0;font-size:24px}
+.tv .ov{padding:30px}
+.tv .ov h1{font:700 104px/1.15 var(--serif);letter-spacing:.2em;margin:26px 0 6px;padding-left:.2em}
+.tv .ov h2{font-size:44px;margin:16px 0}
+.tv .ov h3{font-size:26px;margin-top:26px}
+.tv .lost{font-size:40px}
+.tv .sub,.tv .who,.tv .fine{font-size:24px;margin-bottom:18px}
+.tv .mi{font-size:31px;max-width:640px;padding:11px 16px;margin:7px auto}
+.tv .mi small{font-size:20px}
+.tv .list{max-width:1320px;font-size:25px}
+.tv .list p{margin-bottom:10px;padding-left:22px;text-indent:-22px}
+.tv .endk{font-size:22px;margin-top:34px}
+.tv .endt{max-width:1150px;font-size:32px}
+.tv .card b{font:700 64px/1.3 var(--serif);letter-spacing:.1em}
+.tv .card span{font-size:26px;margin-top:14px}
+.tv .tvk{display:block;margin-top:22px;text-align:center;color:var(--dim);font-size:23px}
+.tv .tvk b{display:inline-block;min-width:44px;padding:2px 12px;margin:0 8px 0 26px;border:1px solid var(--edge);border-radius:6px;color:var(--fg);font-weight:400}
+@media(max-width:560px){.qb{flex-basis:100%}.panel{font-size:16px;padding:12px}.ov h1{margin-top:0}.say.ch p{font-size:26px}}
+@media(prefers-reduced-motion:reduce){.lost span,.nx{animation:none}}
+</style>
+
+<div class="wrap" id="app"><div class="fit">
+  <div class="hud"><div><b id="hudL">사라진 글자</b><span id="hudP"></span></div>
+    <div class="rt"><span id="hudN"></span><span class="lead" id="hudB"></span>
+      <button class="hb" data-a="mute" id="btM">소리 켬</button><button class="hb" data-a="pause">메뉴</button></div></div>
+  <div class="screen">
+    <canvas id="cv" width="320" height="176"></canvas>
+    <div class="pad" id="pad">
+      <div class="dp"><button data-d="0" style="left:46px;top:0" aria-label="위">▲</button><button data-d="3" style="left:0;top:46px" aria-label="왼쪽">◀</button><button data-d="1" style="left:92px;top:46px" aria-label="오른쪽">▶</button><button data-d="2" style="left:46px;top:92px" aria-label="아래">▼</button></div>
+      <button class="ab" id="btA">살피기</button>
+    </div>
+    <div class="panel" id="panel"></div>
+    <div class="card out" id="card" hidden></div>
+    <div class="ov" id="ov" hidden></div>
+  </div>
+  <div class="tvk"><b>방향</b>이동·고르기<b>가운데</b>살펴보기·정하기<b>1~4</b>바로 답하기<b>0</b>되찾은 글<b>복귀</b>메뉴</div>
+</div></div>
+
+<script>
+(function(){
+'use strict';
+var W=20,H=11,CLASS_MAX=20,MV=150;
+var DX=[0,1,0,-1],DY=[-1,0,1,0];
+function el(i){return document.getElementById(i)}
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t}return a}
+function hash(x,y){var n=(x*374761393+y*668265263)|0;n=Math.imul?Math.imul(n^(n>>>13),1274126177):((n^(n>>>13))*1274126177)|0;return((n^(n>>>16))>>>0)/4294967295}
+function cnt(o){var n=0,k;for(k in o)if(o[k])n++;return n}
+
+/* ───── 옛 글자 그리기(기기 글꼴과 무관하게 보이도록 낱자를 직접 모아 쓴다) ───── */
+function OS(i,v,f,side){
+  function g(c,x,y,w,h){return '<text x="50" y="84" font-size="96" text-anchor="middle" transform="translate('+x+','+y+') scale('+(w/100)+','+(h/100)+')">'+c+'</text>'}
+  var s='<svg class="os" viewBox="0 0 100 100" role="img" aria-label="'+i+'+'+v+(f?'+'+f:'')+'">';
+  if(side)s+=g(i,0,f?0:8,62,f?58:84)+g(v,52,f?0:6,50,f?58:88)+(f?g(f,18,56,64,44):'');
+  else if(f)s+=g(i,14,0,72,42)+g(v,10,33,80,28)+g(f,16,56,68,44);
+  else s+=g(i,12,2,76,56)+g(v,8,54,84,44);
+  return s+'</svg>'}
+var SSAL=OS('ㅄ','ㆍ','ㄹ'),KKUM=OS('ㅺ','ㅜ','ㅁ'),TTAE=OS('ㅴ','ㅐ','',1);
+
+/* ───── 문제 은행: 첫 번째 보기가 정답. 내용은 수업 필기 범위 안에서만 ───── */
+var EV=['고려 건국','훈민정음 창제','임진왜란','갑오개혁'];
+function ev(i){var a=EV.slice();a.unshift(a.splice(i,1)[0]);return a}
+var Q={
+P1:{t:'c',q:"<em>'훈민정음'은 무엇의 이름인가?</em>",o:["문자의 이름이자, 그 문자를 풀이한 책의 이름","문자의 이름일 뿐, 그런 책은 없다","책의 이름일 뿐, 문자는 처음부터 '한글'이라 불렸다","집현전 학자들의 모임 이름"],w:"훈민정음은 세종이 만든 <b>문자의 이름</b>이면서, 그 문자를 풀이한 <b>책 『훈민정음』(해례본)</b>의 이름이기도 하다."},
+P2:{t:'n',q:"문에 네 자리 번호 자물쇠가 걸려 있다. 손잡이에 먹글씨 — <em>'글자가 태어난 해'</em>",a:'1443',h:"멈춘 전광 시계를 떠올리자. 14:43.",w:"문자 훈민정음은 <b>1443년</b>에 세종이 창제했다. 책 『훈민정음』(해례본)은 3년 뒤인 <b>1446년</b>에 나왔다."},
+A1:{t:'c',q:"안내판 「고대 국어 │ 중세 국어」. 가운데 글씨가 바랬다. <em>두 시대를 가르는 사건은?</em>",o:ev(0),w:"<b>고려 건국(918년, 10세기)</b>부터를 중세 국어로 본다."},
+A2:{t:'c',q:"안내판 「전기 중세 국어 │ 후기 중세 국어」. <em>중세 국어를 전기와 후기로 가르는 사건은?</em>",o:ev(1),w:"<b>훈민정음 창제</b>를 경계로 전기 중세 국어와 후기 중세 국어를 나눈다."},
+A3:{t:'c',q:"안내판 「중세 국어 │ 근대 국어」. <em>두 시대를 가르는 사건은?</em>",o:ev(2),w:"<b>임진왜란(1592년)</b>이 중세 국어와 근대 국어의 경계다."},
+A4:{t:'c',q:"안내판 「근대 국어 │ 현대 국어」. <em>두 시대를 가르는 사건은?</em>",o:ev(3),w:"<b>갑오개혁(1894년)</b> 이후를 현대 국어로 본다. 고대 → 중세 → 근대 → 현대."},
+A5:{t:'c',q:"벽에 붙은 연표. 한 줄이 비어 있다. <em>중세 국어는 언제부터 언제까지인가?</em>",o:["10세기 ~ 16세기","삼국 시대 ~ 10세기","17세기 ~ 19세기","15세기 ~ 19세기"],w:"중세 국어는 <b>10세기(고려 건국)부터 16세기(임진왜란)</b>까지다."},
+A6:{t:'c',q:"진열장 안에 책 한 권. 표지에 『훈민정음』. <em>이 책(해례본)에 대한 설명으로 알맞은 것은?</em>",o:["1446년에 나왔고, 집현전 학자들이 풀이에 참여했다","1443년에 세종이 혼자 쓴 책이다","고려 시대에 향가를 모아 엮은 책이다","갑오개혁 때 펴낸 책이다"],w:"문자는 1443년에 세종이 만들었고, <b>책 『훈민정음』(해례본)은 1446년</b>에 집현전 학자들과 함께 펴냈다."},
+A7:{t:'c',q:"유리 아래 누런 신문 스크랩. <em>'한글'이라는 이름을 지어 쓴 사람으로 알려진 이는?</em>",o:["주시경","세종","집현전 학자들","향가를 지은 사람들"],w:"'한글'이라는 이름은 <b>1910년대에 주시경</b>이 지어 쓴 것으로 알려져 있다."},
+A8:{t:'c',q:"그 아래 달력 한 장. <em>1926년, 훈민정음 반포를 기념해 처음 정한 날의 이름은?</em>",o:["가갸날","한글날","훈민정음날","세종날"],w:"1926년에 <b>'가갸날'</b>이라는 이름으로 처음 기념했고, 이 이름이 뒤에 <b>'한글날'</b>로 바뀌었다."},
+B1:{t:'c',q:"안내 패널: <em>우리 글자가 없던 때, 한자의 음과 훈을 빌려 우리말을 적던 방식은?</em>",o:["차자 표기","이어적기","가획","종성부용초성"],w:"<b>차자 표기</b>: 한자의 음(소리)이나 훈(뜻)을 빌려 우리말을 적는 방식."},
+B2:{t:'c',q:"책등에 <span class='hj'>天</span> — 하늘(훈) 천(음). <em>뜻은 버리고 '천'이라는 소리만 빌려 적었다면?</em>",o:["음차","훈차","가획","상형"],w:"한자의 <b>소리(음)</b>를 빌리면 <b>음차</b>."},
+B3:{t:'c',q:"<em>반대로 '하늘'이라는 우리말을 적으려고 <span class='hj'>天</span>의 뜻을 빌렸다면?</em>",o:["훈차","음차","이체","합용"],w:"한자의 <b>뜻(훈)</b>을 빌리면 <b>훈차</b>."},
+B4:{t:'c',q:"얇은 책 한 권이 혼자 삐져나와 있다. <em>향가를 적는 데 쓰인, 차자 표기 가운데 가장 체계적인 표기는?</em>",o:["향찰","훈민정음","끊어적기","8종성법"],w:"<b>향찰</b>은 향가를 표기한 문자로, 차자 표기 가운데 가장 체계화된 방식이다."},
+B5:{t:'c',q:"향가 한 구절 <span class='hj'>去隱春</span> — '간 봄'. <em>'가-'(去), '봄'(春)처럼 뜻을 지닌 실질 형태소는 어떻게 적었는가?</em>",o:["한자의 뜻을 빌려(훈차)","한자의 소리를 빌려(음차)","소리 나는 대로 이어 적어","획을 더해 새 글자를 만들어"],w:"향찰에서 <b>실질 형태소는 훈차</b>. 去(갈 거)의 뜻 '가-', 春(봄 춘)의 뜻 '봄'을 빌렸다."},
+B6:{t:'c',q:"<em>그렇다면 '간'의 '-ㄴ'을 적은 <span class='hj'>隱</span>(숨을 은)처럼, 문법적 구실을 하는 형식 형태소는?</em>",o:["한자의 소리를 빌려(음차)","한자의 뜻을 빌려(훈차)","적지 않고 비워 두어","초성 글자를 다시 써서"],w:"<b>형식 형태소는 음차</b>. 隱은 '숨다'라는 뜻과 상관없이 '은'이라는 소리로 '-ㄴ'을 나타냈다."},
+C1:{t:'n',q:"나무 궤에 숫자 자물쇠. 뚜껑 위에 쪽지 — <em>'초성의 글자 수, 그리고 중성의 글자 수'</em>",a:'1711',h:"초성은 열일곱, 중성은 열하나. 이어서 맞춘다.",w:"훈민정음은 <b>초성 17자, 중성 11자</b>로 만들어졌다."},
+C2:{t:'c',q:"벽 패널: <em>초성의 기본자 ㄱ ㄴ ㅁ ㅅ ㅇ 은 어떤 원리로 만들었는가?</em>",o:["발음 기관의 모양을 본떴다(상형)","하늘·땅·사람의 모양을 본떴다","기본자에 획을 더했다(가획)","한자의 소리를 빌렸다(음차)"],w:"초성 기본자 다섯은 <b>발음 기관을 본뜬 상형</b>의 원리로 만들었다. 하늘·땅·사람은 중성 기본자다."},
+C3:{t:'s',q:"받침대 다섯 개에 글자가 하나씩. <em>아음 → 설음 → 순음 → 치음 → 후음 순서로 기본자를 고르자.</em>",o:["ㄱ","ㄴ","ㅁ","ㅅ","ㅇ"],h:"아(어금니)·설(혀)·순(입술)·치(이)·후(목구멍).",w:"초성 기본자: <b>ㄱ(아음) ㄴ(설음) ㅁ(순음) ㅅ(치음) ㅇ(후음)</b>."},
+C5a:{t:'c',q:"탁본대에 찍혀 나온 글자 <span class='big'>ㄴ → ㄷ → ?</span> <em>획을 한 번 더하면?</em>",o:["ㅌ","ㄹ","ㅋ","ㅍ"],w:"<b>가획</b>: 기본자에 획을 더해 만든다. ㄴ → ㄷ → ㅌ. (ㄹ은 가획자가 아니라 이체자다.)"},
+C5b:{t:'c',q:"옆 탁본대 <span class='big'>ㅇ → ? → ㅎ</span> <em>가운데 들어갈 글자는?</em>",o:["ㆆ","ㆁ","ㅿ","ㅈ"],w:"ㅇ → <b>ㆆ(여린히읗)</b> → ㅎ. ㆁ(옛이응)은 가획자가 아니라 이체자다."},
+C6:{t:'c',q:"금 간 액자. <em>가획의 원리를 따르지 않고 모양을 달리해 만든 '이체자' 셋은?</em>",o:["ㆁ ㄹ ㅿ","ㅋ ㅌ ㅍ","ㄱ ㄴ ㅁ","ㆆ ㅎ ㅊ"],w:"<b>이체자: ㆁ(옛이응) ㄹ ㅿ(반치음)</b>."},
+C7:{t:'c',q:"유리장 안에 둥근 점, 평평한 선, 곧게 선 선. <em>중성의 기본자 ㆍ ㅡ ㅣ 가 본뜬 것은 차례로?</em>",o:["하늘 · 땅 · 사람","해 · 달 · 별","혀 · 이 · 입술","목구멍 · 입 · 이"],w:"중성 기본자는 <b>ㆍ(하늘) ㅡ(땅) ㅣ(사람)</b>, 곧 천·지·인을 본뜬 상형이다."},
+C8:{t:'c',q:"<em>기본자를 합쳐 만든 글자 가운데 '재출자'만 모은 것은?</em>",o:["ㅛ ㅑ ㅠ ㅕ","ㅗ ㅏ ㅜ ㅓ","ㆍ ㅡ ㅣ","ㄱ ㄴ ㅁ ㅅ"],w:"<b>초출자 ㅗ ㅏ ㅜ ㅓ</b>, <b>재출자 ㅛ ㅑ ㅠ ㅕ</b>. 중성 11자는 상형과 합용의 원리로 만들었다."},
+C9:{t:'c',q:"해설 스피커의 잡음 사이로 낱말이 흘러나온다. <em>중세 국어에서 '나무'를 가리킨 말로, 모음 조화가 지켜진 꼴은?</em>",o:["나모","나무","너모","나므"],w:"ㅏ와 ㅗ는 둘 다 <b>양성 모음</b>. 양성은 양성끼리, 음성은 음성끼리 어울리는 <b>모음 조화</b>에 따라 '나모'였다."},
+C10:{t:'c',q:"서랍 안쪽에 적힌 여섯 자 <span class='hj'>終聲復用初聲</span>. <em>종성부용초성, 무슨 뜻인가?</em>",o:["종성 글자는 따로 만들지 않고 초성 글자를 다시 쓴다","종성에는 여덟 글자만 쓴다","종성은 소리 내지 않는다","종성을 뒷말의 초성으로 옮겨 적는다"],w:"<b>종성부용초성</b>: 종성은 초성을 다시 쓴다. 글자를 새로 만들지 않아도 되는 경제적인 원리다."},
+D1:{t:'c',q:"표본 상자에 글자 다섯이 핀으로 꽂혀 있다. <span class='big'>ㅿ</span> <em>이 글자의 이름은?</em>",o:["반치음","옛이응","여린히읗","아래아"],w:"ㅿ = <b>반치음</b>."},
+D2:{t:'c',q:"<span class='big'>ㆁ</span> <em>이 글자의 이름은?</em>",o:["옛이응","여린히읗","반치음","순경음 비읍"],w:"ㆁ = <b>옛이응</b>(꼭지 이응). ㆆ = 여린히읗, ㆍ = 아래아."},
+D3:{t:'c',q:"<span class='big'>ㅸ</span> <em>이 글자는?</em>",o:["순경음 비읍 — 가벼운 입술소리","반치음 — 이의 모양을 본뜬 글자","아래아 — 하늘을 본뜬 모음","옛이응 — 꼭지가 달린 이응"],w:"ㅸ = <b>순경음 비읍</b>. 가벼운 입술소리를 적었다."},
+D4:{t:'c',q:"감독대 위에 받아 적은 종이. <span class='big'>"+SSAL+"</span>(쌀) <em>이 낱말의 첫머리처럼 초성에 자음이 둘 이상 오는 것을 무엇이라 하는가?</em>",o:["어두 자음군","거듭적기","이체자","8종성법"],w:"<b>어두 자음군</b>: 단어 첫머리에 자음이 둘 이상 오는 것. "+SSAL+"(ㅂ계) · "+KKUM+"(ㅅ계) · "+TTAE+"(ㅄ계)."},
+D5:{t:'c',q:"<span class='big'>"+SSAL+"→쌀 &nbsp;"+KKUM+"→꿈 &nbsp;"+TTAE+"→때</span> <em>어두 자음군은 그 뒤 무엇으로 바뀌었는가?</em>",o:["된소리","거센소리","예사소리","소리 없는 글자"],w:"어두 자음군은 사라지면서 <b>된소리</b>로 바뀌었다. 쌀 · 꿈 · 때."},
+D6:{t:'c',q:"두루마리 가득, 소리 나는 대로 이어 적은 글씨. <em>'깊은'을 이어적기(연철)로 적으면?</em>",o:["기픈","깊은","깁픈","깊픈"],w:"<b>이어적기(연철)</b>: 앞말의 종성을 뒷말의 초성으로 옮겨 적는다. 깊+은 → 기픈, 믈+은 → 므른."},
+D8:{t:'c',q:"<em>두루마리 글씨가 숨 막히게 붙어 있는 까닭, 중세 국어 표기의 또 다른 특징은?</em>",o:["띄어쓰기를 하지 않았다","글자마다 마침표를 찍었다","받침을 적지 않았다","모음을 적지 않았다"],w:"중세 국어는 <b>띄어쓰기를 하지 않았다</b>."},
+D7a:{t:'c',q:"서안 귀퉁이의 낙서 <span class='big'>밥을 → 바블 → 밥블</span> <em>'밥블'처럼 받침을 한 번 더 적은 과도기의 표기는?</em>",o:["거듭적기(중철)","이어적기(연철)","끊어적기(분철)","어두 자음군"],w:"<b>거듭적기(중철)</b>: 이어적기에서 끊어적기로 넘어가던 때 잠깐 쓰인 표기. 밥블."},
+D7b:{t:'c',q:"<em>오늘날 우리가 '밥을', '사람이'라고 적는 방식은?</em>",o:["끊어적기(분철)","이어적기(연철)","거듭적기(중철)","차자 표기"],w:"<b>끊어적기(분철)</b>: 현대 국어의 표기 방식. 이어적기 → 거듭적기 → 끊어적기."},
+D9:{t:'c',q:"서랍 안 쪽지. <em>8종성법에서 받침으로 쓴 여덟 글자는?</em>",o:["ㄱ ㄴ ㄷ ㄹ ㅁ ㅂ ㅅ ㆁ","ㄱ ㄴ ㄹ ㅁ ㅂ ㅅ ㅇ ㅎ","ㄱ ㄴ ㅁ ㅅ ㅇ ㆁ ㄹ ㅿ","ㄱ ㅋ ㄷ ㅌ ㅂ ㅍ ㅈ ㅊ"],w:"<b>8종성법</b>: 종성에 ㄱ ㄴ ㄷ ㄹ ㅁ ㅂ ㅅ ㆁ 여덟 자만 썼다."},
+D10:{t:'c',q:"<em>근대 국어의 7종성법에서는 여덟 글자 가운데 무엇이 빠졌는가?</em>",o:["ㄷ","ㅅ","ㄹ","ㅂ"],w:"<b>7종성법</b>(근대 국어): ㅅ과 ㄷ이 헷갈리면서 받침 <b>ㄷ을 ㅅ으로</b> 적게 되었다."},
+D11:{t:'c',q:"서랍 바닥에 긁어 쓴 글씨. <em>중세 국어의 음운에 대한 설명으로 알맞은 것은?</em>",o:["된소리가 등장했고, 구개음화는 일어나지 않았다","된소리가 없었고, 구개음화가 활발했다","된소리도 구개음화도 없었다","구개음화가 일어나 된소리가 사라졌다"],w:"중세 국어에는 <b>된소리가 등장</b>했고, <b>구개음화는 아직 일어나지 않았다</b>."},
+E1:{t:'c',q:"첫 번째 빈칸. <em>하늘의 둥근 모양을 본뜬 중성 기본자, 아래아.</em>",o:["ㆍ","ㅿ","ㆁ","ㆆ"],w:"<b>ㆍ</b> 아래아. 빈칸에 점 하나가 돌아왔다."},
+E2:{t:'c',q:"두 번째 빈칸. <em>ㅇ에 획을 더해 만든 글자, 여린히읗.</em>",o:["ㆆ","ㆁ","ㅿ","ㆍ"],w:"<b>ㆆ</b> 여린히읗. ㅇ → ㆆ → ㅎ."},
+E3:{t:'c',q:"세 번째 빈칸. <em>꼭지가 달린 이응, 옛이응.</em>",o:["ㆁ","ㆆ","ㆍ","ㅿ"],w:"<b>ㆁ</b> 옛이응. 이체자이며, 8종성 가운데 하나."},
+E4:{t:'c',q:"마지막 빈칸. <em>이체자 가운데 하나, 반치음.</em>",o:["ㅿ","ㆁ","ㆆ","ㆍ"],w:"<b>ㅿ</b> 반치음. 네 글자가 모두 돌아왔다."}
+};
+var QN=cnt(Q);
+
+/* ───── 장(章) ───── */
+var BK=["한자로 된 책등뿐이다. 읽을 수 있는 한글이 한 글자도 없다."];
+var CH=[
+{name:'여는 글 · 폐관',place:'영상실',floor:'.',start:[9,7,0],
+ map:["####################","#WW#BBBBBB#C##WW##D#","#.......t..........#","#..................#","#..d..d..d..d..d...#","#..................#","#..d..d..x..d..d...#","#..................#","#..d..d..d..d..d...#","#..................#","####################"],
+ intro:["……","눈을 떴다. 안내 영상은 끝나 있고, 영상실에는 나 혼자다.","옛 글 전시관. 반 견학을 왔다가 깜빡 졸았던 모양이다.","폐관 시간이 지났다. 불이 모두 꺼져 있다.","손에 쥔 안내문을 편다. 훈민정음 스물여덟 자. …가운데 네 글자가 바래서 보이지 않는다.","체험 코너에 초롱 하나가 켜져 있다. 집어 든다."],
+ objs:[{x:4,x2:9,y:1,n:'스크린',q:['P1'],pre:["꺼진 스크린에 먹물 같은 글씨가 번져 나온다.","칠|이즌거슨사라진다","띄어 쓰지도 않고, 소리 나는 대로 이어 적은 글씨. …'잊은 것은 사라진다'.","그 아래로 물음이 하나 더 번진다."]},
+  {x:11,y:1,n:'전광 시계',flav:["전광 시계가 멈춰 있다. 14:43.","폐관은 여섯 시였는데. 고장인가.","…14, 43."]},
+  {x:9,y:6,n:'체험 코너',flav:["초롱이 놓여 있던 자리. '옛 글자 탁본 체험'.","탁본 종이의 글자들이 가장자리부터 하얗게 바래고 있다."]},
+  {x:8,y:2,n:'안내 데스크',flav:["방명록이 펼쳐져 있다. 오늘 날짜 아래 우리 반 이름들.","먹이 채 마르지 않았는데, 몇은 벌써 흐릿하다."]},
+  {x:18,y:1,n:'영상실 문',door:1,q:['P2']}],
+ outro:["철컥.","문이 열린다. 회랑은 영상실보다 어둡다."]},
+{name:'첫째 마당 · 연표 회랑',place:'국어의 시대',floor:',',start:[1,2,1],
+ map:["####################","#p##p##p##p##C##WW##","#,,,,,,,,,,,,,,,,,,#","#,,,,,,,,,,,,,,,,,,#","#################,,#","#NN##WW##p##WW###,,#","#,,,,,,,,,,,,,,,,,,#","#,,,,k,,,,,,,k,,,,,#","#,,,,,,,,,,,,,,,,,,#","#,,,,,,,,,,,,,,,,,,#","#D##################"],
+ intro:["긴 회랑. 벽을 따라 시대 안내판이 걸려 있다.","안내판마다 가운데 글씨가 바래 있다.","??|…채워… 줘…","바랜 자리를 채우지 않으면, 이 회랑은 끝나지 않을 것 같다."],
+ er:{pts:[[10,8],[17,2]],after:2,ms:560},
+ objs:[{x:1,y:1,n:'첫 번째 안내판',q:['A1']},{x:4,y:1,n:'두 번째 안내판',q:['A2']},{x:7,y:1,n:'세 번째 안내판',q:['A3']},{x:10,y:1,n:'네 번째 안내판',q:['A4']},
+  {x:13,y:1,n:'시계',flav:["이 시계도 멈춰 있다. 초침만 제자리에서 떤다."]},
+  {x:1,x2:2,y:5,n:'신문 스크랩',q:['A7','A8']},{x:9,y:5,n:'연표',q:['A5']},{x:5,y:7,n:'진열장',q:['A6']},
+  {x:13,y:7,n:'기증자 명패',flav:["기증자 명패들. 새겨진 이름이 전부 닳아 있다."]},
+  {x:1,y:10,n:'수장고로 가는 문',door:1}],
+ outro:["문틈에 종잇조각이 끼어 있다. 'ㆆ'.","??|…여린… 히읗…","첫 번째 글자를 되찾았다. 초롱 불이 조금 곧아진다."]},
+{name:'둘째 마당 · 빌린 글자의 서고',place:'수장고',floor:'.',start:[1,9,0],
+ map:["####################","#WW##BBBB##WW##p##D#","#..................#","#.SSSS.SSSS.SSSS...#","#..................#","#.SSSS.SSSS.SSSS.t.#","#..................#","#.SSSS.SSSS.SSSS...#","#..................#","#..................#","####################"],
+ intro:["수장고. 묵은 종이 냄새가 짙다.","서가의 책등마다 한자가 적혀 있다. 한글은 한 글자도 없다.","??|글자가 없던 때에는… 빌려서… 적었지…"],
+ er:{pts:[[18,9],[1,2]],after:2,ms:540},
+ objs:[{x:5,x2:8,y:1,n:'안내 패널',q:['B1']},{x:2,x2:5,y:3,n:'서가 「天」',q:['B2','B3']},{x:7,x2:10,y:5,n:'삐져나온 책',q:['B4']},{x:12,x2:15,y:7,n:'향가집',q:['B5','B6'],pre:["펼치자 한자만 빽빽하다. 그런데 소리 내어 읽으면 우리말이다."]},
+  {x:17,y:5,n:'열람 대장',flav:["열람 대장. 빌려 간 사람 칸마다 같은 글씨.","'빌린 것은 돌려주어야 한다.'"]},{x:15,y:1,n:'액자',flav:["'정숙'. 그 아래 누가 덧썼다. '잊지 말 것'."]},
+  {x:7,x2:10,y:3,flav:BK},{x:12,x2:15,y:3,flav:BK},{x:2,x2:5,y:5,flav:BK},{x:12,x2:15,y:5,flav:BK},{x:2,x2:5,y:7,flav:BK},{x:7,x2:10,y:7,flav:BK},
+  {x:18,y:1,n:'수장고 문',door:1}],
+ outro:["책갈피처럼 끼워진 종잇조각. 'ㆁ'.","??|…꼭지 달린… 이응…","두 번째 글자. 어디선가 낮은 소리가 길게 울린다."]},
+{name:'셋째 마당 · 소리를 본뜬 방',place:'창제 원리 전시실',floor:'.',start:[2,9,0],
+ map:["####################","#BBBB##p##WW##s##D##","#..................#","#..............PP..#","#.m.m.m.m.m........#","#..................#","#..................#","#.LL....k.....d.d..#","#..................#","#..................#","####################"],
+ intro:["전시실. 받침대 다섯이 일제히 이쪽을 향해 있다.","어디선가 한 음이 끊기지 않고 울린다.","??|소리를… 본떠서… 만들었어…"],
+ er:{pts:[[18,9],[1,2]],after:3,ms:520},
+ objs:[{x:1,x2:4,y:1,n:'벽 패널',q:['C2']},{x:2,y:4,n:'받침대',q:['C3']},{x:4,y:4,n:'받침대',q:['C3']},{x:6,y:4,n:'받침대',q:['C3']},{x:8,y:4,n:'받침대',q:['C3']},{x:10,y:4,n:'받침대',q:['C3']},
+  {x:15,x2:16,y:3,n:'잠긴 궤',q:['C1']},{x:7,y:1,n:'금 간 액자',q:['C6']},{x:14,y:1,n:'해설 스피커',q:['C9']},{x:2,x2:3,y:7,n:'서랍장',q:['C10']},{x:8,y:7,n:'유리장',q:['C7','C8']},{x:14,y:7,n:'탁본대',q:['C5a']},{x:16,y:7,n:'옆 탁본대',q:['C5b']},
+  {x:17,y:1,n:'전시실 문',door:1}],
+ outro:["탁본 종이 사이에서 조각이 떨어진다. 'ㆍ'.","??|…하늘을 닮은… 점 하나…","세 번째 글자. 울리던 소리가 멎었다."]},
+{name:'넷째 마당 · 붙여 쓴 방',place:'옛 글 필사실',floor:'.',start:[10,9,0],
+ map:["####################","#BBBBBB##N##WW##C#D#","#.......t..........#","#..................#","#.d.d.d.d..d.d.d.d.#","#..................#","#.d.d.d.d..d.d.d.d.#","#..................#","#.LLL..........SSS.#","#..................#","####################"],
+ intro:["필사실. 벽에 걸린 두루마리에 글씨가 빈틈없이 차 있다.","띄어 쓴 데가 없다. 숨 쉴 틈도 없다.","등 뒤에서 붓 스치는 소리가 난다. 돌아보지 않는다."],
+ er:{pts:[[18,9],[1,3]],after:2,ms:470},
+ objs:[{x:1,x2:6,y:1,n:'두루마리',q:['D6','D8'],pre:["칠|…기픈므른…아니그츨…","빈틈없이 이어진 글씨. 읽을 수 있는 데만 더듬는다. …기픈, 므른. '깊은', '물은'."]},
+  {x:9,y:1,n:'글자 표본',q:['D1','D2','D3']},{x:8,y:2,n:'감독대',q:['D4','D5']},{x:4,y:4,n:'낙서 서안',q:['D7a','D7b']},{x:13,y:6,n:'서랍 열린 서안',q:['D9','D10']},{x:2,x2:4,y:8,n:'서랍장',q:['D11']},
+  {x:15,x2:17,y:8,n:'책장',flav:["옛말 사전. 펼친 쪽마다 낱말 몇 개가 하얗게 비어 있다."]},{x:16,y:1,n:'전광 시계',flav:["14:46. 3분이 흘렀다. …아니, 3년인가."]},
+  {x:18,y:1,n:'필사실 문',door:1}],
+ outro:["두루마리 아래에 종잇조각. 'ㅿ'.","??|…세모난… 반치음…","네 글자를 모두 되찾았다. 로비로."]},
+{name:'닫는 글 · 스물여덟 자',place:'전시관 로비',floor:',',start:[9,9,0],final:1,
+ map:["####################","###WW###DDDD###WW###","#,,,,,,,,,,,,,,,,,,#","#,,,,,,,,,,,,,,,,,,#","#,,k,,,,,,,,,,,,k,,#","#,,,,,,,,,,,,,,,,,,#","#,,,,,,,,x,,,,,,,,,#","#,,,,,,,,,,,,,,,,,,#","#,,,,,,,,,,,,,,,,,,#","#,,,,,,,,,,,,,,,,,,#","####################"],
+ intro:["로비. 유리문 너머로 새벽빛이 푸르다.","문 앞에 그것이 서 있다. 이번에는 다가오지 않는다. 기다린다.","로비 한가운데 '스물여덟 자' 전시대. 네 칸이 비어 있다."],
+ objs:[{x:9,y:6,n:'스물여덟 자 전시대',opt:1,q:['E1','E2','E3','E4'],pre:["빈칸 네 개. 주머니 속 종잇조각 네 장.","어느 글자가 어느 자리였는지, 내가 기억해야 한다."],again:["ㆍ ㅿ ㆁ ㆆ. 네 글자가 또렷하다."]},
+  {x:3,y:4,n:'물품 보관함',flav:["보관함마다 이름표. 내 칸만 비어 있다."]},{x:16,y:4,n:'우산꽂이',flav:["주인 없는 우산들. 손잡이의 이름이 바래 있다."]},
+  {x:9,x2:10,y:2,n:'바랜 것',door:1},{x:8,x2:11,y:1,n:'정문',door:1}]}
+];
+function chQ(c){var a=[],i,j,o;for(i=0;i<c.objs.length;i++){o=c.objs[i];if(o.q)for(j=0;j<o.q.length;j++)if(a.indexOf(o.q[j])<0)a.push(o.q[j])}return a}
+
+var ENDS={T:{n:'스물여덟 자',t:["마지막 답을 말하자, 그것은 묵은 먼지처럼 흩어졌다.","전시대의 빈칸에는 네 글자가 또렷하다. ㆍ ㅿ ㆁ ㆆ.","이제는 쓰이지 않는 글자들이다. 하지만 사라진 것은 아니다.","기억하는 사람이 있는 한.","유리문이 열린다. 아침이다. 초롱을 제자리에 내려놓는다."]},
+N:{n:'개관 시간',t:["그것이 흩어진다. 문이 열린다.","전시대에는 네 글자가 돌아와 있다.","다만 몇 군데는 아직 흐릿하다.","한 번만 더 들여다보면, 또렷해질 것이다.","(되찾은 글을 모두 모으고, 닫는 글에서 한 번도 틀리지 않으면 다른 결말)"]},
+X:{n:'빈자리',t:["문이 열린다. 나는 전시대를 지나쳐 걸어 나왔다.","다음 날, 안내문을 다시 폈다. 스물여덟 자 가운데 네 칸이 하얗다.","무엇이 있었는지, 이제는 아무도 묻지 않는다.","(로비의 전시대를 먼저 살펴보면 다른 결말)"]},
+B:{n:'꺼진 초롱',t:["초롱이 꺼졌다.","어둠 속에서 하얀 손이 방명록 위를 천천히 쓸어 간다.","오늘 날짜 아래에서 이름 하나가 조용히 바랬다."]}};
+var EORD=['T','N','X','B'];
+
+/* ───── 저장(학번별, 이 기기) ───── */
+var mem={},SID=null,SV=null;
+function lsGet(k){try{var v=localStorage.getItem(k);return v?JSON.parse(v):(mem[k]||null)}catch(e){return mem[k]||null}}
+function lsSet(k,v){mem[k]=v;try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+function blank(){return{ch:0,cur:0,st:{},ok:{},ends:{}}}
+function load(sid){SID=sid;var s=sid?lsGet('sg_'+sid):null;SV=s&&s.ok?s:blank();if(!SV.st)SV.st={};if(!SV.ends)SV.ends={}}
+function save(){if(SID)lsSet('sg_'+SID,SV)}
+
+/* ───── 소리(첫 조작 뒤에만 시작) ───── */
+var AC=null,MG=null,NB=null,mute=false;
+function aInit(){
+  if(AC){if(AC.state=='suspended'&&AC.resume)AC.resume();return}
+  var A=window.AudioContext||window.webkitAudioContext;if(!A)return;
+  try{AC=new A()}catch(e){AC=null;return}
+  MG=AC.createGain();MG.gain.value=mute?0:.9;MG.connect(AC.destination);
+  NB=AC.createBuffer(1,AC.sampleRate,AC.sampleRate);var d=NB.getChannelData(0),i;for(i=0;i<d.length;i++)d[i]=Math.random()*2-1;
+  var g=AC.createGain();g.gain.value=.05;g.connect(MG);
+  [55,58.27,110.4].forEach(function(f,k){var o=AC.createOscillator(),gg=AC.createGain();o.type='sine';o.frequency.value=f;gg.gain.value=k==2?.2:1;o.connect(gg);gg.connect(g);o.start()});
+  var l=AC.createOscillator(),lg=AC.createGain();l.frequency.value=.11;lg.gain.value=.022;l.connect(lg);lg.connect(g.gain);l.start();
+  var n=AC.createBufferSource(),nf=AC.createBiquadFilter(),ng=AC.createGain();n.buffer=NB;n.loop=true;nf.type='lowpass';nf.frequency.value=260;ng.gain.value=.022;n.connect(nf);nf.connect(ng);ng.connect(MG);n.start()}
+function tone(f,d,ty,v,f2,dl){if(!AC)return;var t=AC.currentTime+(dl||0),o=AC.createOscillator(),g=AC.createGain();o.type=ty||'sine';o.frequency.setValueAtTime(f,t);if(f2)o.frequency.exponentialRampToValueAtTime(f2,t+d);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(v,t+.012);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g);g.connect(MG);o.start(t);o.stop(t+d+.05)}
+function nz(d,v,fq,ty,dl){if(!AC)return;var t=AC.currentTime+(dl||0),s=AC.createBufferSource(),f=AC.createBiquadFilter(),g=AC.createGain();s.buffer=NB;f.type=ty||'lowpass';f.frequency.value=fq;g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.0001,t+d);s.connect(f);f.connect(g);g.connect(MG);s.start(t,Math.random()*.4);s.stop(t+d+.05)}
+var sfx={step:function(){nz(.05,.045,480)},blip:function(){tone(500+Math.random()*70,.03,'square',.01)},tick:function(){tone(780,.12,'sine',.05)},
+ ok:function(){tone(660,.5,'sine',.07);tone(990,.8,'sine',.05,0,.1)},bad:function(){tone(110,.6,'sawtooth',.09,58);tone(117,.6,'sawtooth',.07,62);nz(.35,.12,900)},
+ door:function(){nz(.5,.08,240);tone(92,.45,'triangle',.05,50)},sting:function(){tone(220,1.4,'sawtooth',.045,233);tone(311,1.4,'sawtooth',.035,330);nz(1.2,.05,2600,'highpass')},
+ beat:function(v){tone(58,.16,'sine',v,40);tone(52,.2,'sine',v*.8,36,.18)},page:function(){nz(.16,.05,3200,'highpass')},end:function(){tone(196,2.4,'sine',.06);tone(293.7,2.4,'sine',.05,0,.3);tone(392,2.8,'sine',.04,0,.6)}};
+
+/* ───── 상태 ───── */
+var G=null,M='ov',SAY=null,QZ=null,OV={back:null,sel:0,kind:''},held=-1,tapd=-1,down={},LG='',T0=0,TOUCH=false;
+var TV=/[?&]tv=1/.test(location.search);if(TV)document.documentElement.className+=' tv';
+function mk(i){var c=CH[i];return{ci:i,c:c,map:c.map.slice(),px:c.start[0],py:c.start[1],fx:c.start[0],fy:c.start[1],dir:c.start[2],mt:0,moving:false,frame:0,lead:5,done:{},miss:0,er:null,erSeen:false,flash:0,shake:0,black:0,gate:0,gateOn:false,warn:0,beat:0,t:0}}
+function T(x,y){return(y<0||y>=H||x<0||x>=W)?'#':G.map[y].charAt(x)}
+function boss(){return G.c.final&&G.gate<5}
+function solid(x,y){var ch=T(x,y);if(ch!='.'&&ch!=',')return true;return boss()&&y==2&&(x==9||x==10)}
+function objAt(x,y){var a=G.c.objs,i,o;for(i=0;i<a.length;i++){o=a[i];if(o.y==y&&x>=o.x&&x<=(o.x2||o.x)){if(o.n=='바랜 것'&&!boss())continue;return o}}return null}
+function front(){return{x:G.px+DX[G.dir],y:G.py+DY[G.dir]}}
+function solved(q){for(var i=0;i<q.length;i++)if(!G.done[q[i]])return false;return true}
+function pend(q){var a=[],i;for(i=0;i<q.length;i++)if(!G.done[q[i]])a.push(q[i]);return a}
+function remain(){var s={},n=0,a=G.c.objs,i,o;for(i=0;i<a.length;i++){o=a[i];if(o.q&&!o.door&&!o.opt&&!solved(o.q)&&!s[o.q[0]]){s[o.q[0]]=1;n++}}return n}
+function doneObjs(){var s={},n=0,a=G.c.objs,i,o;for(i=0;i<a.length;i++){o=a[i];if(o.q&&!o.door&&solved(o.q)&&!s[o.q[0]]){s[o.q[0]]=1;n++}}return n}
+
+/* ───── 화면 아래 패널: 대사 / 문제 / 안내 ───── */
+function hud(){
+  var c=G.c,ids=chQ(c),n=0,i,h='';for(i=0;i<ids.length;i++)if(G.done[ids[i]])n++;
+  el('hudL').textContent=c.name;el('hudP').textContent=c.place+(SID?' · '+SID:'');
+  el('hudN').textContent='되찾은 글 '+n+'/'+ids.length;
+  for(i=0;i<5;i++)h+='<i'+(i<G.lead?'':' class="x"')+'></i>';el('hudB').innerHTML=h;el('hudB').title='초롱 불 '+G.lead+'/5'}
+function hudT(){el('hudL').textContent='사라진 글자';el('hudP').textContent=SID?SID:'';el('hudN').textContent='';el('hudB').innerHTML=''}
+function idle(){
+  if(M!='play')return;var f=front(),o=objAt(f.x,f.y),h;
+  if(o&&o.n)h='<b>▶ '+o.n+'</b> — '+(TV?'가운데 버튼':TOUCH?'살피기 버튼':'Space')+'으로 살펴본다';
+  else h=TV?'표시가 깜빡이는 곳으로 가서 살펴본다.<br>초롱 불이 다 사그라들면 끝이다.':TOUCH?'방향 버튼으로 움직이고, 표시가 깜빡이는 곳 앞에서 살피기 버튼을 누른다.':'방향키 이동 · Space 살피기 · N 되찾은 글 · Esc 메뉴';
+  el('panel').innerHTML='<div class="idle">'+h+'</div>'}
+var KIND={'칠':'ch','??':'wh','ok':'ok'};
+function say(lines,cb){if(!lines||!lines.length){M='play';idle();if(cb)cb();return}SAY={l:lines,i:0,n:0,t:0,cb:cb,s:'',full:false};M='say';held=-1;sayLine()}
+function sayLine(){var s=SAY.l[SAY.i],p=s.indexOf('|'),k='';if(p>0&&p<3&&KIND[s.slice(0,p)]){k=KIND[s.slice(0,p)];s=s.slice(p+1)}
+  SAY.s=s;SAY.n=0;SAY.t=0;SAY.full=s.indexOf('<')>=0;
+  el('panel').innerHTML='<div class="say '+k+'" id="sayB"><p id="sayT">'+(SAY.full?s:'')+'</p><span class="nx">▼</span></div>';
+  if(k=='ok')sfx.page()}
+function sayNext(){if(!SAY)return;if(!SAY.full){SAY.full=true;el('sayT').textContent=SAY.s;return}
+  if(++SAY.i<SAY.l.length){sayLine();return}var cb=SAY.cb;SAY=null;M='play';idle();if(cb)cb()}
+function sayTick(dt){if(!SAY||SAY.full)return;SAY.t+=dt;var n=Math.min(SAY.s.length,Math.floor(SAY.t/30));if(n!=SAY.n){SAY.n=n;el('sayT').textContent=SAY.s.slice(0,n);if(n%3==1)sfx.blip();if(n>=SAY.s.length)SAY.full=true}}
+
+function ask(id,cb){var q=Q[id];QZ={id:id,q:q,first:true,cb:cb,sel:0,msg:'',at:Date.now()};
+  if(q.t=='c')QZ.o=shuffle(q.o.map(function(t,i){return{t:t,ok:i==0}}));
+  else if(q.t=='s'){QZ.o=shuffle(q.o.map(function(t,i){return{t:t,ix:i}}));QZ.k=0}
+  else QZ.d=[0,0,0,0];
+  M='quiz';held=-1;qzDraw()}
+function askSeq(ids,cb,each){var i=0;(function nx(){if(i>=ids.length){cb();return}ask(ids[i++],function(){if(each)each();nx()})})()}
+function qzDraw(){var z=QZ,q=z.q,h='<p class="qq">'+q.q+'</p>',i,o;
+  if(q.t=='n'){h+='<div class="dial">';for(i=0;i<4;i++)h+='<div class="dg'+(i==z.sel?' sel':'')+'"><button data-a="dg" data-v="'+i+',1" aria-label="올리기">▲</button><b>'+z.d[i]+'</b><button data-a="dg" data-v="'+i+',-1" aria-label="내리기">▼</button></div>';
+    h+='<button class="dok" data-a="qok">맞춰 본다</button></div>'}
+  else{h+='<div class="qo">';for(i=0;i<z.o.length;i++){o=z.o[i];h+='<button class="qb'+(i==z.sel?' sel':'')+(o.dead?' dead':'')+(o.done?' done':'')+'" data-a="qp" data-v="'+i+'"><i>'+(o.done?o.done:i+1)+'</i>'+o.t+'</button>'}h+='</div>'}
+  el('panel').innerHTML='<div class="qz">'+h+'<p class="qm">'+z.msg+'</p></div>'}
+function qzMove(d){var z=QZ,n,i;if(z.q.t=='n'){if(d==1||d==3)z.sel=(z.sel+(d==1?1:3))%4;else z.d[z.sel]=(z.d[z.sel]+(d==0?1:9))%10;sfx.blip();qzDraw();return}
+  n=z.o.length;i=z.sel;var bs=el('panel').querySelectorAll('.qb'),wide=n==4&&bs.length>1&&bs[0].offsetTop==bs[1].offsetTop,stepv=(d==0||d==2)?(wide?2:1):1,sg=(d==0||d==3)?-1:1;
+  if(wide&&(d==1||d==3)){i=i^1}else i=(i+sg*stepv+n)%n;z.sel=i;sfx.blip();qzDraw()}
+function qzPick(i){var z=QZ,q=z.q,o;if(!z)return;
+  if(q.t=='n'){if(z.d.join('')==q.a)qzRight();else qzWrong();return}
+  o=z.o[i];if(!o||o.dead||o.done)return;z.sel=i;
+  if(q.t=='c'){if(o.ok)qzRight();else{o.dead=1;qzWrong()}return}
+  if(o.ix==z.k){o.done=++z.k;sfx.tick();if(z.k==q.o.length)qzRight();else{z.msg='';qzDraw()}}else qzWrong()}
+function stat(ok){var s=SV.st[QZ.id]||(SV.st[QZ.id]=[0,0]);if(QZ.first){s[0]++;if(ok)s[1]++}QZ.first=false}
+function qzRight(){stat(true);G.done[QZ.id]=1;SV.ok[QZ.id]=1;save();sfx.ok();hud();var cb=QZ.cb,w=QZ.q.w;QZ=null;say(['ok|'+w],cb)}
+function qzWrong(){stat(false);save();G.lead--;G.miss++;G.flash=1;G.shake=260;sfx.bad();hud();
+  if(G.lead<=0){QZ=null;endBad();return}
+  QZ.msg='틀렸다. 초롱 불이 한 칸 사그라든다.'+(QZ.q.h?' — '+QZ.q.h:'');qzDraw()}
+
+/* ───── 조사 ───── */
+function interact(){var f=front(),o=objAt(f.x,f.y);if(!o)return;sfx.page();use(o)}
+function use(o){
+  if(o.door){doDoor(o);return}
+  if(o.q&&!solved(o.q)){say(o.pre||[],function(){askSeq(pend(o.q),function(){afterObj()})});return}
+  say(o.q?(o.again||["이미 채운 자리다. 글씨가 또렷하다."]):o.flav)}
+function afterObj(){var c=G.c;drawRoom();
+  if(c.er&&!G.er&&doneObjs()>=c.er.after){spawnEr();return}
+  if(!c.final&&remain()==0)say(["어딘가에서 자물쇠 풀리는 소리가 났다. 문으로 가자."])}
+function doDoor(o){var left=remain();
+  if(left>0){say(["문이 열리지 않는다.","이곳에 아직 바랜 자리가 남아 있다. ("+left+"곳)"]);return}
+  if(G.c.final){finale();return}
+  if(o.q&&!solved(o.q)){say(o.pre||[],function(){askSeq(pend(o.q),function(){doDoor(o)})});return}
+  sfx.door();say(G.c.outro,function(){var n=G.ci+1;SV.ch=Math.max(SV.ch,n);SV.cur=n;save();startCh(n)})}
+function spawnEr(){var c=G.c,p=c.er.pts,b=p[0],i,d,bd=-1;
+  for(i=0;i<p.length;i++){d=Math.abs(p[i][0]-G.px)+Math.abs(p[i][1]-G.py);if(d>bd){bd=d;b=p[i]}}
+  G.er={x:b[0],y:b[1],fx:b[0],fy:b[1],hx:b[0],hy:b[1],mt:0,t:0,ms:c.er.ms,sleep:1500};G.black=500;sfx.sting();
+  say(G.ci==1?["…묵은 종이 냄새가 훅 끼친다.","어둠 속에서 하얀 것이 일어선다. 얼굴이 있어야 할 자리가 하얗게 바래 있다.","닿으면 안 된다. (닿으면 초롱 불이 한 칸 사그라든다)"]:["묵은 종이 냄새. 또 그것이다."])}
+function caught(){var e=G.er;G.lead--;G.flash=1;G.shake=380;sfx.bad();hud();e.x=e.fx=e.hx;e.y=e.fy=e.hy;e.sleep=2600;e.mt=0;
+  if(G.lead<=0){endBad();return}
+  if(!G.erSeen){G.erSeen=true;say(["차가운 것이 스쳤다. 불이 흔들리고, 방금까지 알던 것 하나가 하얗게 비었다."])}}
+function gatePool(){var a=[],k,s;for(k in Q)if(Q[k].t=='c'&&k.charAt(0)!='E'){s=SV.st[k]||[0,0];a.push({k:k,w:s[0]-s[1]+Math.random()*.9})}
+  a.sort(function(x,y){return y.w-x.w});return a.slice(0,5).map(function(x){return x.k})}
+function allNotes(){for(var k in Q)if(!SV.ok[k])return false;return true}
+function finale(){var rest=solved(['E1','E2','E3','E4']);
+  if(G.gate>=5)return;
+  if(!rest&&!G.warn){G.warn=1;say(["전시대의 빈칸이 마음에 걸린다.","(전시대를 먼저 살펴볼 수 있다. 그대로 문으로 가려면 한 번 더 살펴본다.)"]);return}
+  say(["그것이 손을 든다. 바랜 얼굴에서 물음이 흘러나온다.","??|…기억하고… 있니…"],function(){G.gateOn=true;
+    askSeq(gatePool(),function(){var id=!rest?'X':(G.miss==0&&allNotes()?'T':'N');SV.ch=5;SV.cur=0;showEnding(id)},function(){G.gate++;drawRoom()})})}
+function endBad(){SAY=null;QZ=null;showEnding('B')}
+
+/* ───── 장 시작 ───── */
+function prep(i){G=mk(i);drawRoom();hud()}
+function startCh(i){hideOv();prep(i);SV.cur=i;save();el('panel').innerHTML='';M='card';
+  var c=el('card');c.innerHTML='<b>'+G.c.name+'</b><span>'+G.c.place+'</span>';c.hidden=false;c.className='card';sfx.door();
+  setTimeout(function(){c.className='card out'},1500);
+  setTimeout(function(){c.hidden=true;if(M=='card')say(G.c.intro)},2100)}
+
+/* ───── 겹화면(로그인·메뉴·필기장·기록·결말) ───── */
+var LOST='<p class="lost"><span>ㆍ</span><span>ㅿ</span><span>ㆁ</span><span>ㆆ</span></p>';
+function mi(a,t,v,dis){return '<button class="mi" data-a="'+a+'"'+(v!==undefined?' data-v="'+v+'"':'')+(dis?' disabled':'')+'>'+t+'</button>'}
+function setOv(h,back,kind){var o=el('ov');o.innerHTML=h;o.hidden=false;M='ov';held=-1;tapd=-1;OV.back=back||null;OV.kind=kind||'';ovSel(0,kind=='list');o.scrollTop=0}
+function hideOv(){el('ov').hidden=true}
+function ovItems(){return el('ov').querySelectorAll('.mi:not([disabled])')}
+function ovSel(i,stay){var it=ovItems(),k;if(!it.length)return;OV.sel=(i+it.length)%it.length;for(k=0;k<it.length;k++){if(k==OV.sel)it[k].classList.add('sel');else it[k].classList.remove('sel')}
+  if(stay)return;var o=el('ov'),b=it[OV.sel];if(b.offsetTop+b.offsetHeight>o.scrollTop+o.clientHeight)o.scrollTop=b.offsetTop+b.offsetHeight-o.clientHeight+8;else if(b.offsetTop<o.scrollTop)o.scrollTop=Math.max(0,b.offsetTop-8)}
+function ovMove(d){var it=ovItems(),n=it.length,c,r,i,q,dx,dy,s,best=-1,bs=1e9;if(!n)return;if(OV.kind=='list'){el('ov').scrollTop+=(d==2?1:d==0?-1:0)*Math.round(el('ov').clientHeight*.6);return}if(OV.kind!='login'){if(d==0||d==2){ovSel(OV.sel+(d==0?-1:1));sfx.blip()}return}
+  r=it[OV.sel].getBoundingClientRect();c={x:r.left+r.width/2,y:r.top+r.height/2};
+  for(i=0;i<n;i++){if(i==OV.sel)continue;q=it[i].getBoundingClientRect();dx=q.left+q.width/2-c.x;dy=q.top+q.height/2-c.y;
+    if(d==0&&dy>-6||d==2&&dy<6||d==1&&dx<6||d==3&&dx>-6)continue;s=(d%2?Math.abs(dx)+Math.abs(dy)*3:Math.abs(dy)+Math.abs(dx)*3);if(s<bs){bs=s;best=i}}
+  if(best>=0){ovSel(best);sfx.blip()}}
+function showLogin(msg){var h='<h1>사라진 글자</h1>'+LOST+'<p class="sub">옛 글 전시관의 밤 · 중세 국어</p><p class="lg">102<span id="lgd"></span></p><p class="lmsg" id="lgm">'+(msg||'')+'</p><div class="kp">',i;
+  for(i=1;i<=9;i++)h+='<button class="mi kb" data-a="d" data-v="'+i+'">'+i+'</button>';
+  h+='<button class="mi kb" data-a="del" aria-label="지우기">←</button><button class="mi kb" data-a="d" data-v="0">0</button><button class="mi kb" data-a="go">확인</button></div>'+mi('guest','손님으로 시작<small>진도를 저장하지 않음</small>')+'<p class="fine">학번 뒤 두 자리(번호)를 넣으면 진도가 이 기기에 학번별로 저장됩니다</p>';
+  if(!G)prep(0);setOv(h,null,'login');hudT();lgDraw()}
+function lgDraw(){var e=el('lgd');if(e)e.textContent=(LG+'__').slice(0,2)}
+function showMenu(){prep(SV.cur<CH.length?SV.cur:0);var n=cnt(SV.ok),h='<h1>사라진 글자</h1>'+LOST+'<p class="who">'+(SID?SID+' 학번':'손님')+' · 되찾은 글 '+n+'/'+QN+' · 결말 '+cnt(SV.ends)+'/4</p>';
+  if(SV.cur>0)h+=mi('cont','이어하기<small>'+CH[SV.cur].name+'</small>');
+  h+=mi('new','처음부터')+mi('chs','마당 고르기')+mi('notes','되찾은 글')+mi('rec','기록')+(TV?mi('exit','나가기'):mi('relog','학번 바꾸기'));setOv(h,TV?ACT.exit:null,'menu');hudT()}
+function showChs(){var h='<h2>마당 고르기</h2>',i;for(i=0;i<CH.length;i++)h+=mi('ch',CH[i].name+'<small>'+CH[i].place+(i<SV.ch?' · 지나온 곳':'')+'</small>',i,i>SV.ch);h+=mi('menu','돌아가기');setOv(h,showMenu)}
+function showNotes(back){var h='<h2>되찾은 글</h2><div class="list">',i,j,ids;
+  for(i=0;i<CH.length;i++){ids=chQ(CH[i]);h+='<h3>'+CH[i].name+'</h3>';for(j=0;j<ids.length;j++)h+=SV.ok[ids[j]]?'<p>· '+Q[ids[j]].w+'</p>':'<p class="no">· 아직 바래 있다</p>'}
+  h+='</div>'+mi('back','돌아가기');setOv(h,back,'list')}
+function showRec(){var h='<h2>기록</h2><p class="who">'+(SID?SID+' 학번':'손님 (저장되지 않음)')+'</p><div class="list"><h3>진행</h3>',i,k,a=[],s;
+  for(i=0;i<CH.length;i++)h+='<p'+(i<SV.ch?'':' class="no"')+'>'+(i<SV.ch?'■ ':'□ ')+CH[i].name+'</p>';
+  h+='<h3>결말 '+cnt(SV.ends)+'/4</h3>';for(i=0;i<4;i++)h+=SV.ends[EORD[i]]?'<p>■ 「'+ENDS[EORD[i]].n+'」</p>':'<p class="no">□ ？？？</p>';
+  for(k in SV.st){s=SV.st[k];if(s[0]>s[1]&&Q[k])a.push({k:k,m:s[0]-s[1]})}a.sort(function(x,y){return y.m-x.m});
+  h+='<h3>다시 볼 개념</h3>';if(!a.length)h+='<p class="no">· 처음에 틀린 문제가 아직 없다</p>';
+  for(i=0;i<a.length&&i<6;i++)h+='<p>· '+Q[a[i].k].w+' <span style="color:var(--red)">(첫 시도 오답 '+a[i].m+'회)</span></p>';
+  h+='</div>'+mi('menu','돌아가기');setOv(h,showMenu,'list')}
+function showPause(){setOv('<h2>잠시 멈춤</h2>'+mi('resume','계속하기')+mi('notes','되찾은 글')+(TV?'':mi('mute2',mute?'소리 켜기':'소리 끄기'))+mi('menu','처음 화면으로<small>이 마당은 처음부터 다시 시작됩니다</small>'),resume,'pause')}
+function resume(){hideOv();M='play';idle()}
+function showEnding(id){var e=ENDS[id],h,i;SV.ends[id]=1;save();if(id=='B')sfx.sting();else sfx.end();
+  h='<p class="endk">ENDING · '+cnt(SV.ends)+'/4</p><h2>「'+e.n+'」</h2><div class="endt">';
+  for(i=0;i<e.t.length;i++)h+='<p style="animation-delay:'+(.5+i*1.1)+'s">'+e.t[i]+'</p>';h+='</div>';
+  h+=(id=='B'?mi('retry','이 마당을 다시 시작'):mi('rec','기록 보기'))+mi('menu','처음 화면으로');setOv(h,null,'end')}
+var ACT={
+ d:function(v){if(LG.length<2){LG+=v;lgDraw();sfx.blip()}},del:function(){LG=LG.slice(0,-1);lgDraw()},
+ go:function(){var n=parseInt(LG,10);if(LG.length!=2||!(n>=1&&n<=CLASS_MAX)){el('lgm').textContent='번호는 01부터 '+CLASS_MAX+'까지입니다.';LG='';lgDraw();return}load('102'+LG);lsSet('sg_last',LG);showMenu()},
+ guest:function(){load(null);showMenu()},relog:function(){LG='';showLogin()},exit:function(){try{if(window.parent&&window.parent!==window&&window.parent.sgClose)window.parent.sgClose()}catch(e){}},menu:function(){showMenu()},
+ cont:function(){startCh(SV.cur)},'new':function(){startCh(0)},chs:function(){showChs()},ch:function(v){startCh(+v)},
+ notes:function(){var k=OV.kind;showNotes(k=='pause'?showPause:showMenu)},back:function(){if(OV.back)OV.back()},rec:function(){showRec()},
+ retry:function(){startCh(G.ci)},resume:resume,pause:function(){if(M=='play')showPause()},
+ mute:function(){mute=!mute;if(MG)MG.gain.value=mute?0:.9;el('btM').textContent=mute?'소리 끔':'소리 켬'},mute2:function(){ACT.mute();showPause()},
+ qp:function(v){if(M=='quiz'&&Date.now()-QZ.at>450)qzPick(+v)},qok:function(){if(M=='quiz'&&Date.now()-QZ.at>450)qzPick(0)},dg:function(v){if(M!='quiz'||Date.now()-QZ.at<450)return;var p=v.split(',');QZ.sel=+p[0];QZ.d[QZ.sel]=(QZ.d[QZ.sel]+(+p[1])+10)%10;sfx.blip();qzDraw()}};
+
+/* ───── 입력 ───── */
+function action(){
+  if(M=='ov'){if(OV.kind=='login'&&LG.length==2){ACT.go();return}var it=ovItems();if(it.length)it[OV.sel].click();return}
+  if(M=='say'){sayNext();return}
+  if(M=='quiz'){if(Date.now()-QZ.at>450)qzPick(QZ.sel);return}
+  if(M=='play'&&!G.moving)interact()}
+function dirKey(d){if(M=='ov')ovMove(d);else if(M=='quiz')qzMove(d);else if(M=='play')held=d}
+var KD={38:0,39:1,40:2,37:3,87:0,68:1,83:2,65:3};
+function onKey(k,e,once){var d=KD[k],n;aInit();
+  if(d!==undefined&&!(M=='ov'&&k>60)){if(e)e.preventDefault();if(M=='play'){if(once)tapd=d;else{down[d]=1;held=d}}else dirKey(d);return}
+  if(k==32||k==13){if(e)e.preventDefault();if(!e||!e.repeat)action();return}
+  if(k>=96&&k<=105)k-=48;
+  if(k>=48&&k<=57){n=k-48;
+    if(M=='ov'&&OV.kind=='login')ACT.d(''+n);
+    else if(M=='quiz'){if(QZ.q.t=='n'){QZ.d[QZ.sel]=n;QZ.sel=Math.min(3,QZ.sel+1);sfx.blip();qzDraw()}else if(n>=1&&n<=QZ.o.length&&Date.now()-QZ.at>450)qzPick(n-1)}
+    else if(M=='play'&&n==0)showNotes(resume);return}
+  if(k==8||k==27||k==10009){if(e)e.preventDefault();if(M=='ov'){if(OV.kind=='login'&&k==8)ACT.del();else if(OV.back)OV.back()}else if(M=='play')showPause();return}
+  if(k==78&&M=='play'){showNotes(resume);return}
+  if(k==77&&!TV)ACT.mute()}
+document.addEventListener('keydown',function(e){if(e.target&&/INPUT|TEXTAREA/.test(e.target.tagName))return;onKey(e.keyCode,e,false)});
+document.addEventListener('keyup',function(e){var d=KD[e.keyCode],i;if(d===undefined)return;down[d]=0;if(held==d){held=-1;for(i=0;i<4;i++)if(down[i])held=i}});
+document.addEventListener('click',function(e){var t=e.target;aInit();while(t&&t!=document.body){if(t.getAttribute&&t.getAttribute('data-a')){var a=t.getAttribute('data-a');if(t.disabled)return;if(ACT[a])ACT[a](t.getAttribute('data-v'));if(t.blur)t.blur();return}if(t.id=='sayB'){sayNext();return}t=t.parentNode}});
+(function(){var p=el('pad'),bs=p.querySelectorAll('[data-d]'),i;
+  function dn(e){e.preventDefault();aInit();var d=+this.getAttribute('data-d');if(M=='play')held=d;else dirKey(d)}
+  function up(e){e.preventDefault();held=-1}
+  for(i=0;i<bs.length;i++){bs[i].addEventListener('pointerdown',dn);bs[i].addEventListener('pointerup',up);bs[i].addEventListener('pointerleave',up);bs[i].addEventListener('pointercancel',up)}
+  el('btA').addEventListener('pointerdown',function(e){e.preventDefault();aInit();if(M!='quiz')action()});
+  function touch(){if(!TOUCH){TOUCH=true;el('app').className+=' touch';idle()}}
+  if(window.matchMedia&&window.matchMedia('(pointer:coarse)').matches)touch();
+  window.addEventListener('touchstart',touch,{passive:true})})();
+
+/* ───── 그리기 ───── */
+var cv=el('cv'),cx=cv.getContext('2d'),bg=document.createElement('canvas'),bx,lc=document.createElement('canvas'),lx,OX=0,OY=0;
+bg.width=lc.width=320;bg.height=lc.height=176;bx=bg.getContext('2d');lx=lc.getContext('2d');
+function r(c,x,y,w,h){bx.fillStyle=c;bx.fillRect(OX+x,OY+y,w,h)}
+function p(c,x,y,w,h){cx.fillStyle=c;cx.fillRect(Math.round(x),Math.round(y),w,h)}
+var WALL='#WBCpNsD',BOOK=['#6e3b33','#35506b','#5b6b3a','#7a6436','#4a3a5e','#2f5a55'];
+function isW(c){return WALL.indexOf(c)>=0}
+function floor(f,tx,ty){var h=hash(tx,ty);
+  if(f=='.'){r('#33291f',0,0,16,16);r('#2a2118',0,7,16,1);r('#2a2118',0,15,16,1);r('#2a2118',h>.5?5:11,0,1,7);r('#2a2118',h>.3?13:3,8,1,7);if(h>.8)r('#3c3126',3,11,3,1)}
+  else{r('#252a30',0,0,16,16);r('#1d2227',15,0,1,16);r('#1d2227',0,15,16,1);if(h>.7)r('#2c3238',4,5,2,1);if(h<.15)r('#1f2429',9,10,3,1)}}
+function wall(){r('#181c26',0,0,16,16);r('#10131b',0,5,16,1);r('#10131b',0,11,16,1);r('#10131b',4,0,1,5);r('#10131b',12,6,1,5);r('#10131b',7,12,1,4);r('#0a0c11',0,14,16,2)}
+function desk(){r('#1c1611',2,12,2,3);r('#1c1611',12,12,2,3);r('#5a442f',1,3,14,9);r('#70583d',1,3,14,2);r('#3f3021',1,11,14,1)}
+function tile(ch,tx,ty){OX=tx*16;OY=ty*16;var f=G.c.floor,h=hash(tx,ty),i,c;
+  if(isW(ch)){
+    if(ch=='#'&&(ty>=H-1||isW(T(tx,ty+1)))){r('#07090c',0,0,16,16);return}
+    wall();
+    if(ch=='W'){r('#0b0e14',1,2,14,11);r('#14284a',2,3,12,9);r('#1b3560',2,3,12,3);r('#0b0e14',7,3,1,9);r('#0b0e14',2,7,12,1);if(h>.5)r('#c9d3e0',10,4,1,1)}
+    else if(ch=='B'){r('#3a2c1c',0,2,16,11);r('#b3a988',T(tx-1,ty)=='B'?0:1,3,16-(T(tx-1,ty)=='B'?0:1)-(T(tx+1,ty)=='B'?0:1),9);
+      for(i=0;i<4;i++)r('rgba(36,32,28,'+(.3+hash(tx+i,ty+7)*.5)+')',1+Math.floor(hash(tx*3+i,ty)*8),4+i*2,3+Math.floor(hash(tx,ty*5+i)*6),1);if(h>.6)r('#d6cfb4',9,5,4,3)}
+    else if(ch=='C'){r('#c9c5b4',5,3,6,8);r('#c9c5b4',4,4,8,6);r('#15171c',8,5,1,3);r('#15171c',8,7,2,1)}
+    else if(ch=='p'){r('#6e5a2e',3,2,10,10);r('#c4bda2',4,3,8,8);r('#3b3a35',5,5,2,1);r('#3b3a35',9,5,2,1);r('#3b3a35',5,8,6,1);r('#e6e2d0',7,4,2,3)}
+    else if(ch=='N'){r('#6b4f33',0,2,16,11);r('#cfcab6',2,4,5,4);r('#bdb89f',9,3,5,6);r('#cfcab6',3,9,6,3);r('#a23b32',4,4,1,1);r('#a23b32',11,3,1,1)}
+    else if(ch=='s'){r('#20242c',4,2,8,11);r('#3a404c',6,4,4,4);r('#0c0e12',7,5,2,2);r('#3a404c',7,10,2,2)}
+    else if(ch=='D'){if(G.c.final){r('#0b0e14',0,0,16,16);r('#1c3857',1,1,14,9);r('#3a5f7c',1,10,14,5);r('#0b0e14',7,1,1,14);if(T(tx+1,ty)!='D'||T(tx-1,ty)!='D')r('#c9a45c',T(tx-1,ty)=='D'?1:13,8,2,2)}
+      else{r('#3a2a1d',1,0,14,16);r('#4b3727',3,2,10,5);r('#4b3727',3,9,10,5);r('#c9a45c',11,8,2,2)}}
+    return}
+  floor(f,tx,ty);
+  if(ch=='d')desk();
+  else if(ch=='x'){desk();r('#dedac8',4,4,8,6);r('#8d8a7c',5,6,1,1);r('#8d8a7c',7,6,1,1);r('#8d8a7c',9,6,1,1);r('#8d8a7c',6,8,1,1)}
+  else if(ch=='t'){r('#17120d',1,13,2,2);r('#17120d',13,13,2,2);r('#463221',0,2,16,11);r('#5b4330',0,2,16,2);r('#d0ccba',9,5,5,4)}
+  else if(ch=='S'){r('#2b2017',0,0,16,16);for(i=0;i<7;i++){c=BOOK[Math.floor(hash(tx*7+i,ty)*6)];r(c,1+i*2,2+(hash(i,tx+ty)>.7?1:0),2,5);c=BOOK[Math.floor(hash(tx*5+i,ty+9)*6)];r(c,1+i*2,9,2,5)}r('#1b140e',0,7,16,1);r('#1b140e',0,14,16,2)}
+  else if(ch=='L'){r('#4a3826',1,0,14,15);r('#5c4832',1,0,14,1);for(i=0;i<3;i++){r('#33261a',1,4+i*5,14,1);r('#c9a45c',4,2+i*5,2,1);r('#c9a45c',10,2+i*5,2,1)}r('#33261a',8,0,1,15)}
+  else if(ch=='P'){r('#3d2b1a',0,3,16,11);r('#553d26',0,3,16,3);r('#241810',0,6,16,1);r('#6e5a2e',0,3,1,11);r('#6e5a2e',15,3,1,11);if(T(tx+1,ty)=='P')r('#c9a45c',13,6,3,4);else r('#c9a45c',0,6,3,4)}
+  else if(ch=='m'){r('#4d4f55',3,13,10,2);r('#6a6d74',5,6,6,7);r('#7d8088',3,4,10,2);r('#d6cfb4',5,0,6,5);r('#2a2622',7,1,2,3)}
+  else if(ch=='k'){r('#252b33',1,2,14,13);r('#3b5560',2,3,12,7);r('#587682',3,4,2,5);r('#c9a45c',7,6,3,3)}}
+function drawRoom(){var x,y;for(y=0;y<H;y++)for(x=0;x<W;x++)tile(T(x,y),x,y)}
+function drawMe(x,y){var d=G.dir,f=G.moving?(G.mt<MV/2?1:0):0;y-=3;
+  p('rgba(0,0,0,.35)',x+3,y+16,10,2);
+  if(f){p('#11131a',x+5,y+13,2,2);p('#11131a',x+9,y+13,2,3)}else{p('#11131a',x+5,y+13,2,3);p('#11131a',x+9,y+13,2,3)}
+  p('#232d45',x+3,y+8,10,5);p('#232d45',x+2,y+9,1,3);p('#232d45',x+13,y+9,1,3);
+  if(d==3){p('#6e4a22',x,y+9,2,1);p('#f2bd66',x,y+10,2,3)}else{p('#6e4a22',x+14,y+9,2,1);p('#f2bd66',x+14,y+10,2,3)}
+  if(d==2){p('#dcb48c',x+4,y+3,8,5);p('#17120e',x+4,y,8,4);p('#17120e',x+3,y+2,1,4);p('#17120e',x+12,y+2,1,4);p('#17120e',x+5,y+5,1,2);p('#17120e',x+10,y+5,1,2);p('#d8d8d0',x+7,y+8,2,2)}
+  else if(d==0){p('#17120e',x+4,y,8,8);p('#17120e',x+3,y+2,1,5);p('#17120e',x+12,y+2,1,5)}
+  else if(d==3){p('#dcb48c',x+4,y+3,6,5);p('#17120e',x+4,y,8,3);p('#17120e',x+8,y+2,4,6);p('#17120e',x+5,y+5,1,2)}
+  else{p('#dcb48c',x+6,y+3,6,5);p('#17120e',x+4,y,8,3);p('#17120e',x+4,y+2,4,6);p('#17120e',x+10,y+5,1,2)}}
+function drawEr(x,y,a,big){var t=Math.floor(G.t/130),i,s=big?2:1;cx.globalAlpha=a;
+  y+=Math.sin(G.t/260)*1.5;
+  p('#e2e2d8',x+3*s-(big?8:0),y-7*s+(big?8:0),10*s,5*s);p('#e2e2d8',x+2*s-(big?8:0),y-3*s+(big?8:0),12*s,12*s);
+  for(i=0;i<6;i++)p('#e2e2d8',x+(2+i*2)*s-(big?8:0),y+9*s+(big?8:0),2*s,(1+Math.floor(hash(i,t)*4))*s);
+  p('#b3b3a8',x+4*s-(big?8:0),y-5*s+(big?8:0),8*s,2*s);p('#08090b',x+5*s-(big?8:0),y-5*s+(big?8:0),2*s,2*s);p('#08090b',x+9*s-(big?8:0),y-5*s+(big?8:0),2*s,2*s);
+  for(i=0;i<5;i++)p('#e2e2d8',x-3+hash(i,t)*22*s-(big?8:0),y-8*s+hash(t,i)*24*s,1,1);cx.globalAlpha=1}
+function hole(x,y,rad,a){var g=lx.createRadialGradient(x,y,rad*.12,x,y,rad);g.addColorStop(0,'rgba(0,0,0,'+a+')');g.addColorStop(1,'rgba(0,0,0,0)');lx.fillStyle=g;lx.fillRect(x-rad,y-rad,rad*2,rad*2)}
+function pos(o,k){var q=o.moving!==undefined?(o.moving?Math.min(1,o.mt/MV):1):Math.min(1,o.mt/180);return(o['f'+k]+(o['p'+k]!==undefined?o['p'+k]-o['f'+k]:o[k]-o['f'+k])*q)*16}
+function draw(){
+  var sx=0,sy=0,mx=pos(G,'x'),my=pos(G,'y'),e=G.er,ex,ey,a=G.c.objs,i,o,ox,oy,title=M=='ov'&&(OV.kind=='login'||OV.kind=='menu');
+  if(G.shake>0){sx=(Math.random()-.5)*5;sy=(Math.random()-.5)*4}
+  cx.setTransform(1,0,0,1,0,0);cx.fillStyle='#000';cx.fillRect(0,0,320,176);cx.translate(Math.round(sx),Math.round(sy));
+  cx.drawImage(bg,0,0);
+  if(boss()){drawEr(152,36,1-G.gate*.17,true)}
+  if(e){ex=pos(e,'x');ey=pos(e,'y');if(ey<=my)drawEr(ex,ey,e.sleep>0?.45:.92)}
+  if(!title)drawMe(mx,my);
+  if(e&&ey>my)drawEr(ex,ey,e.sleep>0?.45:.92);
+  lx.globalCompositeOperation='source-over';lx.clearRect(0,0,320,176);lx.fillStyle='rgba(3,5,9,.91)';lx.fillRect(0,0,320,176);lx.globalCompositeOperation='destination-out';
+  var fl=Math.sin(G.t/90)*1.5+(hash(Math.floor(G.t/70),3)>.93?-9:0),rad=G.black>0?22:32+G.lead*7+fl;
+  if(title)hole(152,104,150,.75);else hole(mx+8,my+6,rad,1);
+  for(i=0;i<a.length;i++){o=a[i];if(!mark(o))continue;hole(((o.x+(o.x2||o.x))/2)*16+8,o.y*16+8,15,.34)}
+  if(e)hole(ex+8,ey+4,17,.4);if(boss())hole(160,34,34,.5);
+  if(G.c.final)hole(160,12,70,.3+.2*G.gate/5);
+  cx.drawImage(lc,0,0);
+  if(!title){var wg=cx.createRadialGradient(mx+8,my+6,2,mx+8,my+6,rad*.8);wg.addColorStop(0,'rgba(255,170,84,.17)');wg.addColorStop(1,'rgba(255,170,84,0)');cx.fillStyle=wg;cx.fillRect(mx+8-rad,my+6-rad,rad*2,rad*2)}
+  if(!title)for(i=0;i<a.length;i++){o=a[i];if(!mark(o))continue;ox=((o.x+(o.x2||o.x))/2)*16+8;oy=o.y*16-3+Math.sin(G.t/300+i)*1.5;cx.globalAlpha=.55+.4*Math.sin(G.t/250+i);p('#cfa95f',ox-1,oy-2,2,6);p('#cfa95f',ox-3,oy,6,2);cx.globalAlpha=1}
+  if(G.flash>0){cx.fillStyle='rgba(190,40,30,'+(G.flash*.45)+')';cx.fillRect(-8,-8,336,192)}}
+function mark(o){if(o.n=='바랜 것')return false;if(o.door)return remain()==0&&!(G.c.final&&G.gate>=5);return o.q&&!solved(o.q)}
+
+/* ───── 진행 ───── */
+function stepTo(d){G.dir=d;var nx=G.px+DX[d],ny=G.py+DY[d];if(solid(nx,ny)){idle();return}G.fx=G.px;G.fy=G.py;G.px=nx;G.py=ny;G.mt=0;G.moving=true;sfx.step()}
+function erStep(){var e=G.er,dist=[],q=[[G.px,G.py]],i,c,x,y,k,best=-1,bd=1e9;
+  for(i=0;i<W*H;i++)dist[i]=-1;dist[G.py*W+G.px]=0;
+  while(q.length){c=q.shift();for(k=0;k<4;k++){x=c[0]+DX[k];y=c[1]+DY[k];if(x<0||y<0||x>=W||y>=H||dist[y*W+x]>=0||solid(x,y))continue;dist[y*W+x]=dist[c[1]*W+c[0]]+1;q.push([x,y])}}
+  for(k=0;k<4;k++){x=e.x+DX[k];y=e.y+DY[k];if(x<0||y<0||x>=W||y>=H)continue;i=dist[y*W+x];if(i>=0&&i<bd){bd=i;best=k}}
+  if(best>=0){e.fx=e.x;e.fy=e.y;e.x+=DX[best];e.y+=DY[best];e.mt=0}}
+function update(dt){var e;G.t+=dt;
+  if(G.flash>0)G.flash=Math.max(0,G.flash-dt/500);if(G.shake>0)G.shake-=dt;if(G.black>0)G.black-=dt;
+  if(M=='say')sayTick(dt);
+  if(G.moving){G.mt+=dt;if(G.mt>=MV){G.moving=false;G.fx=G.px;G.fy=G.py;idle()}}
+  if(M!='play')return;
+  if(!G.moving){if(held>=0)stepTo(held);else if(tapd>=0){stepTo(tapd);tapd=-1}}
+  e=G.er;if(!e)return;e.mt+=dt;
+  if(e.sleep>0){e.sleep-=dt;return}
+  e.t+=dt;if(e.t>=e.ms){e.t=0;erStep()}
+  if(e.x==G.px&&e.y==G.py){caught();return}
+  G.beat-=dt;if(G.beat<=0){var d=Math.abs(e.x-G.px)+Math.abs(e.y-G.py);G.beat=Math.max(330,220+d*85);if(d<9)sfx.beat(Math.max(.03,.2-d*.02))}}
+function loop(t){var dt=Math.min(60,t-T0||16);T0=t;if(G){update(dt);draw()}requestAnimationFrame(loop)}
+
+LG=lsGet('sg_last')||'';if(typeof LG!='string')LG='';
+if(TV){var hs=(location.hash||'').replace('#','');load(/^\d{5}$/.test(hs)?hs:null);showMenu()}else{load(null);showLogin()}
+requestAnimationFrame(loop);
+window.SGTV={key:function(k){onKey(k,null,true)}};
+window.SG={Q:Q,CH:CH,use:function(o){use(o)},st:function(){return{G:G,M:M,QZ:QZ,SAY:SAY,SV:SV,SID:SID}}};
+})();
+</script>
+
+</html>

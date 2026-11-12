@@ -510,6 +510,9 @@ html.tvapp .tool-entry .kc{display:inline-block;}
 .tv-toast.on{opacity:1;-webkit-transform:translate(-50%,0);transform:translate(-50%,0);}
 .kc.kcb{background:#2450c4;color:#fff;box-shadow:inset 0 -3px 0 rgba(0,0,0,.25);}
 .tool-entry .kc.kcb{font-size:16px;font-weight:800;}
+.sg{position:absolute;left:0;top:0;width:1920px;height:1080px;z-index:34;display:none;background:#06080b;}
+.sg.on{display:block;}
+.sg iframe{display:block;width:1920px;height:1080px;border:0;background:#06080b;}
 .kr{position:absolute;left:0;top:0;width:1920px;height:1080px;z-index:35;display:none;background:#07090d;color:#f2f5f8;overflow:hidden;}
 .kr.on{display:block;}
 .kr .lk{background:#1d222b;}
@@ -1096,6 +1099,7 @@ html[data-theme=light]{--cl1:#14b8a6;--cl2:#0d9488;}
     </div>
     <div class="tl-help" id="tlHelp"></div>
   </div><div id="gmv" class="gm"></div></div>
+  <div id="sgv" class="sg"></div>
   <div id="krv" class="kr"><div class="kr-pl" id="krPl"><div id="krPlayer"></div></div><div class="kr-idle">예약한 노래가 여기에서 나옵니다</div><div class="kr-side" id="krSide"></div><div class="kr-srch" id="krSrch"></div><div class="kr-hint" id="krHint"></div></div>
   <div id="tvToast" class="tv-toast"></div>
 
@@ -1304,7 +1308,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     s.src = url.replace('{cb}', name);
     (document.head || document.getElementsByTagName('head')[0]).appendChild(s);
   }
-  var BUILD = '11.10.0';   // 화면 파일 버전 (관리자 앱에서 확인)
+  var BUILD = '11.11.0';   // 화면 파일 버전 (관리자 앱에서 확인)
   function tvMode() {
     if ($('alertv') && $('alertv').className.indexOf('on') >= 0) return 'alert';
     if (SEAT.open) return 'seat';
@@ -1733,6 +1737,8 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
      새 기능을 만들면 아래 목록에 한 줄 추가 (from~to 날짜 동안만 나옴) */
   // steps: 쓰는 법 (글자 안의 [C] [OK] [복귀] [채널] 은 리모컨 버튼 그림으로 바뀜)
   var PROMOS = [
+    { id: 'mkor', from: '2026-11-12', to: '2026-12-11', title: '사라진 글자 — 중세 국어 공포 학습 게임',
+      steps: ['[C] 노란 버튼 → 학번 뒤 두 자리 → [채널]로 중세 국어 탭 → [OK]', '방향 버튼으로 걷고 [OK]로 살펴보기 · 문제는 숫자 1~4', '틀리거나 하얀 것에 닿으면 초롱 불이 사그라들어요'], act: 'learn' },
     { id: 'karaoke', from: '2026-11-11', to: '2026-11-30', title: '쉬는 시간 노래방',
       steps: ['리모컨 파란 D 버튼 → 노래방', '방향 버튼으로 제목을 쓰고 ▶ 로 검색', '숫자로 예약 · ▶▶ 다음 곡 · 수업 시간엔 자동으로 닫힘'], act: 'karaoke' },
     { id: 'game', from: '2026-11-09', to: '2026-11-26', title: '성어 도전 — 혼자 하는 한자성어 게임',
@@ -2412,6 +2418,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     else if (LN.err) h = '<div class="ln-msg">' + esc(LN.err) + '</div>' + lnHint([['retry', lk('ok', '다시 시도')]]);
     else if (LN.sets && !lnSets().length) h = '<div class="ln-msg">지금 준비 중인 시험 자료가 없습니다</div>';
     else if (!LN.data) h = '';
+    else if (LN.data.type === 'game') h = lnGameHtml();
     else if (LN.view === 'card') h = lnCardHtml(anim);
     else if (LN.view === 'quiz') h = lnQuizHtml(anim);
     else if (LN.view === 'cmp') h = lnCmpHtml(anim);
@@ -2460,6 +2467,37 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
   }
   function lnGot() { var B = lnBoxes(), g = 0; for (var n in B) if (B[n] >= 2) g++; return g; }
   function lnProg(i, n) { return '<div class="ln-prog"><i style="width:' + (n ? Math.round(i / n * 1000) / 10 : 0) + '%"></i></div>'; }
+  /* ── 게임형 학습 탭 (learn/sets.json 자료의 type이 'game') ──
+     게임은 별도 페이지(learn/○○.html)로 두고 화면 전체에 띄운 뒤 리모컨 키를 그대로 넘겨 준다.
+     학번은 주소의 # 뒤(서버로 전송되지 않음)로 건네고, 진도는 게임이 TV에 학번별로 저장한다(이름은 건네지 않음). */
+  var SGV = { on: false };
+  function sgSave() { if (!LN.user || !LN.data || !LN.data.save) return null; try { return JSON.parse(gmLS(LN.data.save + LN.user.sid) || 'null'); } catch (e) { return null; } }
+  function lnGameHtml() {
+    var D = LN.data, s = sgSave(), n = 0, e = 0, k;
+    if (s) { for (k in (s.ok || {})) if (s.ok[k]) n++; for (k in (s.ends || {})) if (s.ends[k]) e++; }
+    var h = '<div class="ln-menu"><div class="ln-head">' + lnUserTag() + '<b>' + esc(D.title) + '</b><span>' + esc(D.sub || '') + (LN.user ? ' · 되찾은 글 ' + n + '/' + (D.total || 0) + ' · 결말 ' + e + '/' + (D.ends || 0) : '') + '</span></div>';
+    h += '<div class="ln-modes"><button class="ln-md gmc ln-main" data-ln="sg"><span class="lk">' + LK.ok + '</span><b>' + (s && s.cur > 0 ? '이어서 하기' : '시작하기') + '</b><small>' + esc(D.how || '') + '</small></button></div></div>';
+    return h + lnHint([['sg', lk('ok', '시작')], ['logout', lk('stop', LN.user ? '학번 바꾸기' : '로그인')]]);
+  }
+  function sgOpen() {
+    var v = $('sgv'); if (SGV.on || !v || !LN.data || !LN.data.page) return;
+    SGV.on = true; lnStopAuto();
+    v.innerHTML = '<iframe id="sgF" src="' + LN_DIR + esc(LN.data.page) + '?v=' + BUILD + '&tv=1' + (LN.user ? '#' + LN.user.sid : '') + '"></iframe>';
+    v.className = 'sg on';
+  }
+  function sgClose() {
+    if (!SGV.on) return;
+    SGV.on = false; var v = $('sgv'); if (v) { v.className = 'sg'; v.innerHTML = ''; }
+    try { window.focus(); } catch (e) {}
+    if (TOOL.open && TOOL.pane === 'learn') lnRender('in');
+  }
+  function sgKey(k) {
+    var f = $('sgF'), w = null;
+    try { w = f && f.contentWindow && f.contentWindow.SGTV; } catch (e) {}
+    if (w) { try { w.key(k); } catch (e2) {} }
+    else if (k === RK.BACK || k === RK.ESC) sgClose();           // 페이지를 못 불러왔을 때도 복귀 버튼으로 닫힘
+  }
+  window.sgClose = sgClose;
   /* 메뉴 */
   function lnMenuHtml() {
     var D = LN.data, dd = lnDday(), h = '<div class="ln-menu"><div class="ln-head">' + lnUserTag() + '<b>' + esc(D.title) + '</b><span>' + esc(D.sub) + (dd ? '<em>' + dd + '</em>' : '') + (LN.user ? ' · 익힌 성어 ' + lnGot() + '/' + D.items.length : '') + '</span></div>';
@@ -2601,6 +2639,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     var p = a.split(':'), c = p[0], v = p[1];
     TOOL.lastAct = new Date().getTime();
     if (c === 'retry') { LN.err = ''; lnEnter(); }
+    else if (c === 'sg') sgOpen();
     else if (c === 'login') lnLogin();
     else if (c === 'lback') lnLoginKey(RK.L);
     else if (c === 'guest') lnLoginKey(RK.FF);
@@ -2626,6 +2665,12 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
   function lnKey(k) {
     if (LN.view === 'login') return lnLoginKey(k);
     if (!LN.data) { if (k === RK.OK && LN.err) { lnAct('retry'); return true; } return k === RK.OK || (k >= 37 && k <= 40); }
+    if (LN.data.type === 'game') {
+      if (k === RK.OK || k === 49) sgOpen();
+      else if (k === RK.STOP) { lnLogout(); lnRender('in'); }
+      else return k >= 37 && k <= 40;
+      return true;
+    }
     var v = LN.view, L = k === RK.L, R = k === RK.R;
     if (v === 'menu') {
       if (L || R) lnStepRng(L ? -1 : 1);
@@ -3213,7 +3258,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     if (!TOOL.open) return;
     TOOL.open = false;
     if (TOOL.tm.done) { TOOL.tm.done = false; TOOL.tm.left = TOOL.tm.total; }   // 끝난 타이머는 닫으면서 정리
-    lnStopAuto(); gmStop();
+    lnStopAuto(); gmStop(); sgClose();
     if (TOOL.pane === 'learn') lnLogout();                                      // 학습 화면을 닫으면 로그아웃
     if (TOOL.pushed && !fromBack) { TOOL.pushed = false; try { history.back(); } catch (e) {} }
     TOOL.pushed = false;
@@ -3559,6 +3604,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     var k = e.keyCode;
     if (k >= 96 && k <= 105) k -= 48;                          // 키보드 숫자판
     if (KR.on) { if (!SEAT.open) { krKey(k); if (e.preventDefault) e.preventDefault(); } return; }   // 노래방 중에는 노래방이 모든 키를 받음
+    if (SGV.on) { if (!SEAT.open && !TVAPP.hdmi) { TOOL.lastAct = new Date().getTime(); sgKey(k); if (e.preventDefault) e.preventDefault(); } return; }   // 게임 페이지가 떠 있으면 키를 넘겨 줌
     if (!toolsOn() || SEAT.open || TVAPP.hdmi) return;           // 자리 배치 중·노트북 화면일 때는 무시
     if ($('alertv') && $('alertv').className.indexOf('on') >= 0) return;
     var done = true;
