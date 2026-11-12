@@ -1308,7 +1308,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     s.src = url.replace('{cb}', name);
     (document.head || document.getElementsByTagName('head')[0]).appendChild(s);
   }
-  var BUILD = '11.11.0';   // 화면 파일 버전 (관리자 앱에서 확인)
+  var BUILD = '11.12.0';   // 화면 파일 버전 (관리자 앱에서 확인)
   function tvMode() {
     if ($('alertv') && $('alertv').className.indexOf('on') >= 0) return 'alert';
     if (SEAT.open) return 'seat';
@@ -1737,7 +1737,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
      새 기능을 만들면 아래 목록에 한 줄 추가 (from~to 날짜 동안만 나옴) */
   // steps: 쓰는 법 (글자 안의 [C] [OK] [복귀] [채널] 은 리모컨 버튼 그림으로 바뀜)
   var PROMOS = [
-    { id: 'mkor', from: '2026-11-12', to: '2026-12-11', title: '사라진 글자 — 중세 국어 공포 학습 게임',
+    { id: 'mkor', from: '2026-11-12', to: '2026-12-11', title: '사라진 글자 — 중세 국어 공포 학습 게임 (문제 111개)',
       steps: ['[C] 노란 버튼 → 학번 뒤 두 자리 → [채널]로 중세 국어 탭 → [OK]', '방향 버튼으로 걷고 [OK]로 살펴보기 · 문제는 숫자 1~4', '틀리거나 하얀 것에 닿으면 초롱 불이 사그라들어요'], act: 'learn' },
     { id: 'karaoke', from: '2026-11-11', to: '2026-11-30', title: '쉬는 시간 노래방',
       steps: ['리모컨 파란 D 버튼 → 노래방', '방향 버튼으로 제목을 쓰고 ▶ 로 검색', '숫자로 예약 · ▶▶ 다음 곡 · 수업 시간엔 자동으로 닫힘'], act: 'karaoke' },
@@ -2431,7 +2431,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
      명단은 관리자 앱의 자리 배치 명단(서버)에서 오고, TV에는 학번별 진도만 저장(이름은 저장하지 않음).
      학습 화면을 닫거나 10분 동안 조작이 없으면 자동 로그아웃 */
   LN.user = null; LN.guest = false; LN.pin = '';
-  function lnRoster() { var a = []; for (var n in SEAT.roster) a.push(n); a.sort(); return a; }   // 한글 음절 코드 순서 = 가나다순
+  function lnRoster() { var a = []; for (var n in (SEAT.names || SEAT.roster)) a.push(n); a.sort(); return a; }   // 한글 음절 코드 순서 = 가나다순 (번호 = 가나다 순서)
   function lnSuf() { return LN.user ? '_' + LN.user.sid : ''; }
   function lnBoxes() { try { return JSON.parse(gmLS('hjBox_' + LN.set + lnSuf()) || '{}') || {}; } catch (e) { return {}; } }
   function lnSaveBoxes(b) { gmLS('hjBox_' + LN.set + lnSuf(), JSON.stringify(b)); }
@@ -4096,6 +4096,11 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     SEAT.roster = {};
     var r = seat.roster || [];
     for (var i = 0; i < r.length; i++) SEAT.roster[r[i].n] = r[i].g;
+    /* 학습 로그인용 이름 목록: 명단이 저장돼 있지 않으면 현재 자리 배치에 적힌 이름으로 대신한다 (이름은 서버에서만 받아 오고 이 파일·TV에는 저장하지 않음) */
+    var nm = {}, lay = seat.layout || {}, k;
+    for (i = 0; i < r.length; i++) if (r[i] && r[i].n) nm[r[i].n] = 1;
+    if (!r.length) for (k in lay) if (typeof lay[k] === 'string' && lay[k]) nm[lay[k]] = 1;
+    SEAT.names = nm;
     var firstSeen = SEAT.rev === null;
     var fresh = seat.onAt && now().getTime() - seat.onAt < 40 * 60000;   // 켜 두고 잊어도 40분 뒤엔 원래 화면
     if (seat.on && fresh && !SEAT.open) openSeat(seat, !firstSeen || now().getTime() - seat.onAt < 60000);
