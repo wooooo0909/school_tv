@@ -815,6 +815,14 @@ main{-webkit-flex:1;flex:1;display:flex;margin-top:24px;min-height:0;}
 #ytMsg{position:absolute;left:0;top:0;right:0;bottom:0;display:none;flex-direction:column;align-items:center;justify-content:center;background:#111;color:#fff;font-size:30px;text-align:center;}
 #ytMsg.on{display:flex;}
 #ytMsg small{display:block;margin-top:10px;font-size:20px;color:#aaa;}
+#pairv{position:absolute;left:0;top:0;width:1920px;height:1080px;display:none;z-index:60;background:rgba(8,12,20,.94);color:#fff;font-family:inherit;}
+#pairv.on{display:block;}
+#pairv .pv-in{position:absolute;left:0;right:0;top:250px;text-align:center;}
+#pairv .pv-k{font-size:40px;font-weight:700;letter-spacing:-1px;opacity:.9;}
+#pairv .pv-code{font-size:200px;font-weight:800;letter-spacing:28px;margin:30px 0 10px;padding-left:28px;font-variant-numeric:tabular-nums;}
+#pairv .pv-s{font-size:34px;line-height:1.6;opacity:.75;}
+#pairv .pv-s b{color:#5eead4;opacity:1;}
+#pairv .pv-t{position:absolute;left:0;right:0;bottom:70px;text-align:center;font-size:28px;opacity:.5;}
 #alertv{position:absolute;left:0;top:0;width:1920px;height:1080px;display:none;z-index:50;color:#fff;background:#c81e1e;background-image:linear-gradient(160deg,#ef4444,#b91c1c);}
 #alertv.blue{background:#1d4ed8;background-image:linear-gradient(160deg,#3b82f6,#1e3a8a);}
 #alertv.on{display:flex;align-items:center;justify-content:center;}
@@ -1120,6 +1128,9 @@ html[data-theme=light]{--cl1:#14b8a6;--cl2:#0d9488;}
   <button id="tlBadge"></button>
 
   <div id="ytBox"></div>
+  <div id="pairv"><div class="pv-in"><div class="pv-k">이 TV를 등록해 주세요</div><div class="pv-code" id="pvCode">······</div>
+    <div class="pv-s">휴대폰 <b>TV 관리자</b> 앱 → <b>TV</b> 탭에서 위 숫자를 넣고 반을 고르면 그 반 화면이 뜹니다.</div></div>
+    <div class="pv-t" id="pvTime"></div></div>
   <div id="alertv"><div class="al-in">
     <div class="al-k"><i></i><span id="alK">긴급 공지</span></div>
     <div class="al-t" id="alT"></div>
@@ -1184,7 +1195,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     rainPop        : 60, // 이 확률(%) 이상이면 우산 알림
     busExam        : '12:00',  // 시험 날 하교 버스 표시 시작
     busFrom        : { 1: '17:30', 2: '17:30', 3: '13:30', 4: '17:30', 5: '17:30' },  // 하교 버스 표시 시작 (요일: 1=월 … 5=금)
-    apiSeconds     : 2,  // 관리자 앱 변경 확인 간격(초) — 가벼운 '버전 확인'만 하므로 짧아도 부담 없음
+    apiSeconds     : 3,  // 관리자 앱 변경 확인 간격(초) — 학교 TV 여러 대가 함께 쓰므로 3초
     reloadHours    : 6
   };
 
@@ -1308,7 +1319,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     s.src = url.replace('{cb}', name);
     (document.head || document.getElementsByTagName('head')[0]).appendChild(s);
   }
-  var BUILD = '11.12.0';   // 화면 파일 버전 (관리자 앱에서 확인)
+  var BUILD = '12.0.0';   // 화면 파일 버전 (관리자 앱에서 확인)
   function tvMode() {
     if ($('alertv') && $('alertv').className.indexOf('on') >= 0) return 'alert';
     if (SEAT.open) return 'seat';
@@ -1337,6 +1348,8 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
       var d = e.data;
       if (e.source !== window.parent || !d || typeof d !== 'object' || !d.tvapp) return;
       var was = TVAPP.hdmi; TVAPP.on = true; TVAPP.hdmi = !!d.hdmi;
+      if (d.ver) TVAPP.ver = String(d.ver).slice(0, 20);
+      if (d.dg !== undefined) TVAPP.dg = d.dg;
       tvAppFront(true);
       if (d.key) {                                   // 앱이 받은 리모컨 키 → 이 화면에서 직접 누른 것처럼
         TVAPP.keyName = d.name || '';
@@ -1350,9 +1363,49 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     tvAppPost({ hello: 1 });
     setInterval(function () { tvAppPost({ hello: 1 }); tvAppFront(false); }, 1000);
   }
-  function hb() { return '&tv=' + tvMode() + '&b=' + BUILD + (document.hidden ? '&hid=1' : '') + (typeof YT_ !== 'undefined' && YT_.want ? '&ys=' + encodeURIComponent(YT_.st || '') : ''); }
+  function hb() { return '&tv=' + tvMode() + '&b=' + BUILD + (document.hidden ? '&hid=1' : '') + (TVAPP.ver ? '&app=' + encodeURIComponent(TVAPP.ver) : '') + (TVAPP.dg ? '&dg=' + encodeURIComponent(String(TVAPP.dg).slice(0, 280)) : '') + (typeof YT_ !== 'undefined' && YT_.want ? '&ys=' + encodeURIComponent(YT_.st || '') : ''); }
   function apiUrl(extra) {
-    return CONFIG.api + (CONFIG.api.indexOf('?') < 0 ? '?' : '&') + 'callback={cb}' + (extra || '') + '&_=' + new Date().getTime();
+    return CONFIG.api + (CONFIG.api.indexOf('?') < 0 ? '?' : '&') + 'callback={cb}' + (extra || '') + (PAIR && PAIR.ds ? '&ds=' + encodeURIComponent(PAIR.ds) : '') + '&_=' + new Date().getTime();
+  }
+
+  /* ───────────── TV 등록 (학교 전체용 서버) ─────────────
+     서버가 '등록 안 된 TV'라고 하면 숫자 6자리를 띄우고, 관리자 앱에서 그 숫자를 넣을 때까지 기다림.
+     예전(한 반용) 서버는 이 요청을 모르므로 그냥 예전처럼 동작 */
+  var PAIR = { ds: load('ds') || '', on: false, code: '', exp: 0, tmp: '', timer: null };
+  function pairShow(on) { var v = $('pairv'); if (v) v.className = on ? 'on' : ''; }
+  function pairStart() {
+    if (PAIR.on || DEMO) return;
+    PAIR.on = true; PAIR.ds = ''; save('ds', '');
+    pairShow(true);
+    var ask = function () {
+      jsonp(apiUrl('&pair=start'), 20000, function (d) {
+        if (!PAIR.on) return;
+        if (d && d.ok && d.code) {
+          PAIR.code = d.code; PAIR.tmp = d.ds; PAIR.exp = new Date().getTime() + Math.max(60000, (d.exp || 0) - (d.now || 0) || 900000);
+          $('pvCode').innerHTML = d.code.slice(0, 3) + ' ' + d.code.slice(3);
+          pairPoll();
+        } else if (d && d.state) { PAIR.on = false; pairShow(false); useState(d.state, function () {}); }   // 예전 서버
+        else PAIR.timer = setTimeout(ask, 15000);
+      }, function () { PAIR.timer = setTimeout(ask, 15000); });
+    };
+    ask();
+  }
+  function pairPoll() {
+    clearTimeout(PAIR.timer);
+    if (!PAIR.on) return;
+    var left = PAIR.exp - new Date().getTime();
+    $('pvTime').innerHTML = left > 0 ? '숫자는 ' + Math.ceil(left / 60000) + '분 동안 쓸 수 있습니다 · 지나면 새 숫자가 나옵니다' : '';
+    if (left <= 0) { PAIR.on = false; pairStart(); return; }
+    var url = CONFIG.api + (CONFIG.api.indexOf('?') < 0 ? '?' : '&') + 'callback={cb}&pair=poll&ds=' + encodeURIComponent(PAIR.tmp) + '&_=' + new Date().getTime();
+    jsonp(url, 10000, function (d) {
+      if (d && d.ok && d.paired) {
+        PAIR.ds = PAIR.tmp; save('ds', PAIR.ds); PAIR.on = false; pairShow(false);
+        save('admin', null); ADMIN = null; gotServer = false; reloadToken = null; lastFull = 0;
+        loadAdmin(function () {});
+        return;
+      }
+      PAIR.timer = setTimeout(pairPoll, 3000);
+    }, function () { PAIR.timer = setTimeout(pairPoll, 5000); });
   }
 
   /* ───────────── 상태 ───────────── */
@@ -1543,7 +1596,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
   /* ───────────── 관리자 앱 연결 ───────────── */
   var reloadToken = null, pinging = false, lastFull = 0;
   function pingAdmin() {
-    if (!CONFIG.api || DEMO || pinging) return;
+    if (!CONFIG.api || DEMO || pinging || PAIR.on) return;
     var nowMs = new Date().getTime();
     if (sleeping && nowMs - lastFull < 30000) return;           // 화면이 꺼져 있을 땐 30초마다
     if (nowMs - lastFull > 60000) { pinging = true; loadAdmin(function () { pinging = false; }); return; }
@@ -1554,6 +1607,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
       pinging = false;
       if (!d || !d.ok) return;
       syncClock(d.now, sent);
+      if (d.pair) { pairStart(); return; }
       if (d.state) { pinging = true; useState(d.state, function () { pinging = false; }); return; }   // 한 번에 받음
       if (reloadToken !== null && d.r && d.r !== reloadToken) { reloadToken = d.r; pinging = true; loadAdmin(function () { pinging = false; safeReload(true); }); return; }
       if (!ADMIN || d.v !== ADMIN.version) { pinging = true; loadAdmin(function () { pinging = false; }); }
@@ -1565,6 +1619,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     var sent = new Date().getTime();
     jsonp(apiUrl(hb()), 20000, function (d) {
       if (d) syncClock(d.now, sent);
+      if (d && d.ok && d.pair) { lastFull = new Date().getTime(); pairStart(); cb(); return; }
       if (!d || !d.ok || !d.state) { lastFull = new Date().getTime(); setStatus('admin', false); cb(); return; }
       useState(d.state, cb);
     }, function () {
@@ -1577,6 +1632,8 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
   function useState(s, cb) {
     lastFull = new Date().getTime();
     // 서버가 잠깐 이상한(예전·빈) 내용을 주면 무시하고, 저장해 둔 공지·숙제·D-day를 그대로 유지
+    var moved = !!(ADMIN && ADMIN.cls && s.cls && ADMIN.cls.id !== s.cls.id);
+    if (moved) { reloadToken = null; ADMIN = null; }
     if (gotServer && ADMIN && ADMIN.version && (!s.version || s.version < ADMIN.version)) { setStatus('admin', false); cb(); return; }
     gotServer = true;
     if (reloadToken !== null && s.reloadToken && s.reloadToken !== reloadToken) { save('admin', s); reloadToken = s.reloadToken; safeReload(true); return; }
@@ -1944,7 +2001,12 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
       ['체육(조)', '체육(조)', '통합과학(진)', '통합과학(진)', '통합사회(정)', '통합사회(정)', '동아리', '동아리']
     ]
   };
-  function TT() { var t = ADMIN && ADMIN.timetable; return (t && t.periods && t.days) ? t : DEFAULT_TT; }
+  function TT() {
+    var t = ADMIN && ADMIN.timetable, c = ADMIN && ADMIN.cls;
+    if (t && t.periods && t.days) return t.className || !c ? t : { enabled: t.enabled, className: c.id, periods: t.periods, days: t.days };
+    if (c && c.id !== '1-2') return { enabled: true, className: c.id, periods: DEFAULT_TT.periods, days: [[], [], [], [], []] };
+    return DEFAULT_TT;
+  }
   // 그날의 과목 목록: 관리자 앱에서 '하루만 변경'한 날이면 그것을, 아니면 요일별 기본 시간표
   function ttOverride(date) { var o = date && ADMIN && ADMIN.ttOverrides; return (o && o[iso(date)]) || null; }
   function dayRow(dow, date) { return ttOverride(date) || TT().days[dow - 1] || []; }
@@ -2352,7 +2414,12 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
   // 학습 탭 목록(learn/sets.json) → 시험별 탭. 시험일(until)이 지나면 탭이 사라짐
   function lnSets() {
     var t = iso(today0()), o = [], S = LN.sets || [];
-    for (var i = 0; i < S.length; i++) if (!S[i].until || S[i].until >= t) o.push(S[i]);
+    var g = ADMIN && ADMIN.cls ? ADMIN.cls.grade : 0;
+    for (var i = 0; i < S.length; i++) {
+      if (S[i].until && S[i].until < t) continue;
+      if (g && S[i].grades && S[i].grades.length && S[i].grades.indexOf(g) < 0) continue;
+      o.push(S[i]);
+    }
     return o;
   }
   function lnTabs() {
