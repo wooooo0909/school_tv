@@ -815,7 +815,7 @@ main{-webkit-flex:1;flex:1;display:flex;margin-top:24px;min-height:0;}
 #ytMsg{position:absolute;left:0;top:0;right:0;bottom:0;display:none;flex-direction:column;align-items:center;justify-content:center;background:#111;color:#fff;font-size:30px;text-align:center;}
 #ytMsg.on{display:flex;}
 #ytMsg small{display:block;margin-top:10px;font-size:20px;color:#aaa;}
-#testBadge{position:absolute;left:50%;top:22px;-webkit-transform:translateX(-50%);transform:translateX(-50%);z-index:70;display:none;padding:8px 20px;border-radius:999px;background:#f4b740;color:#2a1d00;font-size:24px;white-space:nowrap;font-weight:800;letter-spacing:-.5px;box-shadow:0 6px 20px rgba(0,0,0,.25);}
+#testBadge{position:absolute;left:14px;top:8px;z-index:70;display:none;font-size:16px;font-weight:600;letter-spacing:.5px;color:inherit;opacity:.4;white-space:nowrap;pointer-events:none;}
 #testBadge.on{display:block;}
 #pairv{position:absolute;left:0;top:0;width:1920px;height:1080px;display:none;z-index:60;background:rgba(8,12,20,.94);color:#fff;font-family:inherit;}
 #pairv.on{display:block;}
@@ -1130,7 +1130,7 @@ html[data-theme=light]{--cl1:#14b8a6;--cl2:#0d9488;}
   <button id="tlBadge"></button>
 
   <div id="ytBox"></div>
-  <div id="testBadge">테스트 TV · 교실 TV와 따로</div>
+  <div id="testBadge">테스트 TV</div>
   <div id="pairv"><div class="pv-in"><div class="pv-k">이 TV를 등록해 주세요</div><div class="pv-code" id="pvCode">······</div>
     <div class="pv-s">휴대폰 <b>TV 관리자</b> 앱 → <b>TV</b> 탭에서 위 숫자를 넣고 반을 고르면 그 반 화면이 뜹니다.</div></div>
     <div class="pv-t" id="pvTime"></div></div>
@@ -1322,7 +1322,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     s.src = url.replace('{cb}', name);
     (document.head || document.getElementsByTagName('head')[0]).appendChild(s);
   }
-  var BUILD = '12.1.0';   // 화면 파일 버전 (관리자 앱에서 확인)
+  var BUILD = '12.1.1';   // 화면 파일 버전 (관리자 앱에서 확인)
   function tvMode() {
     if ($('alertv') && $('alertv').className.indexOf('on') >= 0) return 'alert';
     if (SEAT.open) return 'seat';
