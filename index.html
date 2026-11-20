@@ -815,6 +815,8 @@ main{-webkit-flex:1;flex:1;display:flex;margin-top:24px;min-height:0;}
 #ytMsg{position:absolute;left:0;top:0;right:0;bottom:0;display:none;flex-direction:column;align-items:center;justify-content:center;background:#111;color:#fff;font-size:30px;text-align:center;}
 #ytMsg.on{display:flex;}
 #ytMsg small{display:block;margin-top:10px;font-size:20px;color:#aaa;}
+#testBadge{position:absolute;left:50%;top:22px;-webkit-transform:translateX(-50%);transform:translateX(-50%);z-index:70;display:none;padding:8px 20px;border-radius:999px;background:#f4b740;color:#2a1d00;font-size:24px;white-space:nowrap;font-weight:800;letter-spacing:-.5px;box-shadow:0 6px 20px rgba(0,0,0,.25);}
+#testBadge.on{display:block;}
 #pairv{position:absolute;left:0;top:0;width:1920px;height:1080px;display:none;z-index:60;background:rgba(8,12,20,.94);color:#fff;font-family:inherit;}
 #pairv.on{display:block;}
 #pairv .pv-in{position:absolute;left:0;right:0;top:250px;text-align:center;}
@@ -1128,6 +1130,7 @@ html[data-theme=light]{--cl1:#14b8a6;--cl2:#0d9488;}
   <button id="tlBadge"></button>
 
   <div id="ytBox"></div>
+  <div id="testBadge">테스트 TV · 교실 TV와 따로</div>
   <div id="pairv"><div class="pv-in"><div class="pv-k">이 TV를 등록해 주세요</div><div class="pv-code" id="pvCode">······</div>
     <div class="pv-s">휴대폰 <b>TV 관리자</b> 앱 → <b>TV</b> 탭에서 위 숫자를 넣고 반을 고르면 그 반 화면이 뜹니다.</div></div>
     <div class="pv-t" id="pvTime"></div></div>
@@ -1319,7 +1322,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     s.src = url.replace('{cb}', name);
     (document.head || document.getElementsByTagName('head')[0]).appendChild(s);
   }
-  var BUILD = '12.0.1';   // 화면 파일 버전 (관리자 앱에서 확인)
+  var BUILD = '12.1.0';   // 화면 파일 버전 (관리자 앱에서 확인)
   function tvMode() {
     if ($('alertv') && $('alertv').className.indexOf('on') >= 0) return 'alert';
     if (SEAT.open) return 'seat';
@@ -1371,6 +1374,12 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
   /* ───────────── TV 등록 (학교 전체용 서버) ─────────────
      서버가 '등록 안 된 TV'라고 하면 숫자 6자리를 띄우고, 관리자 앱에서 그 숫자를 넣을 때까지 기다림.
      예전(한 반용) 서버는 이 요청을 모르므로 그냥 예전처럼 동작 */
+  (function () {
+    var q = qs('ds');
+    if (!q || !/^[A-Za-z0-9_-]{20,80}$/.test(q)) return;
+    save('ds', q);
+    try { history.replaceState(null, '', location.href.replace(/([?&])ds=[^&#]*(&?)/, function (m, a, b) { return b ? a : ''; })); } catch (e) {}
+  })();
   var PAIR = { ds: load('ds') || '', on: false, code: '', exp: 0, tmp: '', timer: null };
   function pairShow(on) { var v = $('pairv'); if (v) v.className = on ? 'on' : ''; }
   function pairStart() {
@@ -1603,16 +1612,33 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     pinging = true;
     var have = ADMIN ? ADMIN.version : '';
     var sent = new Date().getTime();
-    jsonp(apiUrl(hb() + '&v=1&have=' + encodeURIComponent(have == null ? '' : have) + '&hr=' + encodeURIComponent(reloadToken || '')), 8000, function (d) {
+    jsonp(apiUrl(hb() + '&v=1&have=' + encodeURIComponent(have == null ? '' : have) + '&hr=' + encodeURIComponent(reloadToken || '') + '&ki=' + RKI), 8000, function (d) {
       pinging = false;
       if (!d || !d.ok) return;
       syncClock(d.now, sent);
       if (d.pair) { pairStart(); return; }
+      if (d.kn !== undefined) rkRun(d);
+      if (d.fast) setTimeout(pingAdmin, 600);
       if (d.state) { pinging = true; useState(d.state, function () { pinging = false; }); return; }   // 한 번에 받음
       if (reloadToken !== null && d.r && d.r !== reloadToken) { reloadToken = d.r; pinging = true; loadAdmin(function () { pinging = false; safeReload(true); }); return; }
       if (!ADMIN || d.v !== ADMIN.version) { pinging = true; loadAdmin(function () { pinging = false; }); }
     }, function () { pinging = false; });
   }
+  /* 관리자 앱 리모컨 (테스트 TV): 받은 키를 이 화면에서 누른 것처럼. 처음 받은 번호까지는 실행하지 않음 */
+  var RKI = -1;
+  function tvKeyIn(k) { try { var ke = document.createEvent('Event'); ke.initEvent('keydown', true, true); ke.keyCode = ke.which = +k; ke.tvapp = 1; ke.remote = 1; document.dispatchEvent(ke); } catch (e) {} }
+  function rkRun(d) {
+    if (RKI >= 0 && d.k) for (var i = 0; i < d.k.length; i++) (function (k, n) { setTimeout(function () { tvKeyIn(k); }, n * 180); })(d.k[i], i);
+    RKI = Math.max(RKI, Number(d.kn) || 0);
+  }
+  // 컴퓨터 키보드: F3 = 노랑(학습), F4 = 파랑(노래방)
+  document.addEventListener('keydown', function (e) {
+    if (e.tvapp) return;
+    var m = e.keyCode === 114 ? 405 : e.keyCode === 115 ? 406 : 0;
+    if (!m) return;
+    if (e.preventDefault) e.preventDefault();
+    tvKeyIn(m);
+  }, true);
   function loadAdmin(cb) {
     cb = cb || function () {};
     if (!CONFIG.api) { setStatus('admin', false); cb(); return; }
@@ -1638,6 +1664,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     gotServer = true;
     if (reloadToken !== null && s.reloadToken && s.reloadToken !== reloadToken) { save('admin', s); reloadToken = s.reloadToken; safeReload(true); return; }
     reloadToken = s.reloadToken || '';
+    var tb = $('testBadge'); if (tb) tb.className = s.cls && s.cls.test ? 'on' : '';
     setStatus('admin', true);
     if (!ADMIN || ADMIN.version !== s.version) { applyAdmin(s); save('admin', s); }
     if (MUSIC.st) report(MUSIC.st, MUSIC.d, true);
@@ -2004,7 +2031,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
   function TT() {
     var t = ADMIN && ADMIN.timetable, c = ADMIN && ADMIN.cls;
     if (t && t.periods && t.days) return t.className || !c ? t : { enabled: t.enabled, className: c.id, periods: t.periods, days: t.days };
-    if (c && c.id !== '1-2') return { enabled: true, className: c.id, periods: DEFAULT_TT.periods, days: [[], [], [], [], []] };
+    if (c && (c.of || c.id) !== '1-2') return { enabled: true, className: c.id, periods: DEFAULT_TT.periods, days: [[], [], [], [], []] };
     return DEFAULT_TT;
   }
   // 그날의 과목 목록: 관리자 앱에서 '하루만 변경'한 날이면 그것을, 아니면 요일별 기본 시간표
