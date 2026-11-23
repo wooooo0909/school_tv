@@ -183,6 +183,32 @@ canvas{display:block;width:100%;height:auto;image-rendering:pixelated;image-rend
 .rv .rvh{color:var(--amber);border:0;letter-spacing:.2em;font-size:.85em}
 #app.jmp .panel{opacity:.12}
 #app.jmp .hud{visibility:hidden}
+
+/* 문제 형식 */
+.qf{font-family:var(--sans);font-size:.72em;letter-spacing:.1em;color:var(--amber);margin:0 0 .5em;word-break:keep-all}
+.qf span{color:var(--dim);letter-spacing:0}
+.qtm{height:.3em;background:#1a2029;margin:0 0 .7em;overflow:hidden}
+.qtm i{display:block;height:100%;background:var(--red)}
+.qs{margin:.1em 0 .7em;font-size:1.02em;color:var(--chalk);word-break:keep-all}
+.qs.prog b{display:inline-block;min-width:1.4em;margin:0 .12em;text-align:center;border-bottom:2px solid var(--edge)}
+u.bl{display:inline-block;min-width:3.2em;height:1em;vertical-align:-.15em;border-bottom:2px solid var(--amber);text-decoration:none}
+.qo.g2 .qb{flex:1 1 40%}
+.qo.g3 .qb{flex:1 1 26%;text-align:center;justify-content:center}
+.qo.tl{justify-content:center}
+.qo.tl .qb{flex:0 0 auto;min-width:2.6em;text-align:center;font-size:1.2em;padding:.45em .7em}
+.qo.tl .qb i{display:none}
+.qo.mt .qb:nth-child(odd){font-weight:700;color:var(--chalk)}
+.qo.mm .qb{min-height:3.4em;display:flex;align-items:center;justify-content:center;font-size:.85em}
+.qo.mm .qb i{display:none}
+.qo.sl .qb{padding:.25em .75em;color:var(--dim);border-style:dashed}
+.qsp{flex:1 1 100%;margin:1px 8px;color:var(--chalk);font-size:.92em;word-break:keep-all}
+.qb.pk{border-color:var(--amber);color:var(--chalk);background:var(--btn2)}
+.qb.gone{opacity:.14;text-decoration:line-through;cursor:default}
+.mir{transform:scaleX(-1)}
+.qz.sv{border-color:#7a2222!important;box-shadow:0 0 2.5em rgba(140,20,20,.55)!important}
+.qz.okk.sv .qn{color:var(--green)}
+.cine .qf{font-size:.62em}
+.cine .qs{font-size:.88em}
 </style>
 
 <div class="wrap" id="app">
@@ -565,41 +591,149 @@ function sayNext(){if(!SAY)return;if(!SAY.full){SAY.full=true;el('sayT').textCon
   if(++SAY.i<SAY.l.length){sayLine();return}var cb=SAY.cb;SAY=null;M='play';idle();if(cb)cb()}
 function sayTick(dt){if(!SAY||SAY.full)return;SAY.t+=dt;var n=Math.min(SAY.s.length,Math.floor(SAY.t/30));if(n!=SAY.n){SAY.n=n;el('sayT').textContent=SAY.s.slice(0,n);if(n%3==1)sfx.blip();if(n>=SAY.s.length)SAY.full=true}}
 
-function ask(id,cb){var q=Q[id];QZ={id:id,q:q,first:true,cb:cb,sel:0,msg:'',at:Date.now(),hit:0};
-  if(q.t=='c')QZ.o=shuffle(q.o.map(function(t,i){return{t:t,ok:i==0}}));
-  else if(q.t=='s'){QZ.o=shuffle(q.o.map(function(t,i){return{t:t,ix:i}}));QZ.k=0}
-  else QZ.d=[0,0,0,0];
-  M='quiz';held=-1;tapd=-1;G.bl=[];thClear();qzDraw()}
 function askSeq(ids,cb,each){var i=0;(function nx(){if(i>=ids.length){cb();return}ask(ids[i++],function(){if(each)each();nx()})})()}
 function distHtml(){var d,i,e,hid=0,w;if(!G.ers.length)return '';d=near();for(i=0;i<G.ers.length;i++)if(!G.ers[i].vis)hid=1;
   if(d>90)return '<div class="qd" id="qd">'+(hid?'그것이 보이지 않는다. 초롱이 흔들리면 가까이에 나타난다.':'')+'</div>';
   w=Math.max(4,Math.min(100,Math.round((1-(d-1)/12)*100)));
   return '<div class="qd'+(d<=3?' near':'')+'" id="qd">그것이 다가온다 — '+d+'걸음<u><i style="width:'+w+'%"></i></u></div>'}
 function qzDist(){var e=el('qd'),t;if(!e||!QZ)return;t=document.createElement('div');t.innerHTML=distHtml();if(t.firstChild&&t.firstChild.innerHTML!=e.innerHTML){e.className=t.firstChild.className;e.innerHTML=t.firstChild.innerHTML}}
-function qzDraw(){var z=QZ,q=z.q,h=distHtml()+'<p class="qq">'+q.q+'</p>',i,o;
-  if(q.t=='n'){h+='<div class="dial">';for(i=0;i<4;i++)h+='<div class="dg'+(i==z.sel?' sel':'')+'"><button data-a="dg" data-v="'+i+',1" aria-label="올리기">▲</button><b>'+z.d[i]+'</b><button data-a="dg" data-v="'+i+',-1" aria-label="내리기">▼</button></div>';
-    h+='<button class="dok" data-a="qok">맞춰 본다</button></div>'}
-  else{h+='<div class="qo">';for(i=0;i<z.o.length;i++){o=z.o[i];h+='<button class="qb'+(i==z.sel?' sel':'')+(o.dead?' dead':'')+(o.done?' done':'')+'"'+(z.drawn?' style="animation:none"':'')+' data-a="qp" data-v="'+i+'"><i>'+(o.done?o.done:i+1)+'</i>'+o.t+'</button>'}h+='</div>'}
-  setPanel('quiz','<div class="qz'+(z.hit?' hit':'')+'"'+(z.drawn&&!z.hit?' style="animation:none"':'')+'>'+h+'<p class="qm">'+z.msg+'</p></div>');z.drawn=1;z.hit=0}
-function qzMove(d){var z=QZ,n,i,bs,wide,stepv,sg;if(z.q.t=='n'){if(d==1||d==3)z.sel=(z.sel+(d==1?1:3))%4;else z.d[z.sel]=(z.d[z.sel]+(d==0?1:9))%10;sfx.blip();qzDraw();return}
-  n=z.o.length;i=z.sel;bs=el('panel').querySelectorAll('.qb');wide=n==4&&bs.length>1&&bs[0].offsetTop==bs[1].offsetTop;stepv=(d==0||d==2)?(wide?2:1):1;sg=(d==0||d==3)?-1:1;
-  if(wide&&(d==1||d==3))i=i^1;else i=(i+sg*stepv+n)%n;z.sel=i;sfx.blip();qzDraw()}
-function qzPick(i){var z=QZ,q,o;if(!z)return;q=z.q;
-  if(q.t=='n'){if(z.d.join('')==q.a)qzRight();else qzWrong();return}
-  o=z.o[i];if(!o||o.dead||o.done)return;z.sel=i;
-  if(q.t=='c'){if(o.ok)qzRight();else{o.dead=1;qzWrong()}return}
-  if(o.ix==z.k){o.done=++z.k;sfx.tick();if(z.k==q.o.length)qzRight();else{z.msg='';qzDraw()}}else qzWrong()}
+/* ───── 문제 형식 20가지. 같은 문제도 볼 때마다 다른 방식으로 나온다 (바로 앞 형식은 잘 안 나옴).
+   기본 형식(고르기 · 순서 맞추기 · 숫자 자물쇠)이 아닌 형식에서 틀리면, 같은 문제를 기본 형식으로 다시 풀게 한다 ───── */
+var BASE={c:'choice',s:'order',n:'dial'},CHO='ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ';
+function strip(t){return (''+t).replace(/<[^>]+>/g,'')}
+function cho(c){var n=c.charCodeAt(0)-44032;return n<0||n>11171?c:CHO.charAt(Math.floor(n/588))}
+function hangul(q,a,b){var s=strip(q.o[0]).replace(/\s/g,'');return s.length>=a&&s.length<=b&&/^[가-힣]+$/.test(s)}
+function shortA(q){return q&&q.t=='c'&&strip(ans(q)).length<=22}
+function cIds(ex,f){var a=[],k;for(k in Q)if(k!=ex&&k.charAt(0)!='E'&&Q[k].t=='c'&&(!f||f(Q[k])))a.push({k:k,w:(SV.ok[k]?1:0)+Math.random()});a.sort(function(x,y){return y.w-x.w});return a.map(function(x){return x.k})}
+function others(n,ex,f){var a=cIds(ex,f),r=[],i,seen={};seen[strip(ans(Q[ex]))]=1;seen[Q[ex].k]=1;
+  for(i=0;i<a.length&&r.length<n;i++)if(!seen[strip(ans(Q[a[i]]))]&&!seen[Q[a[i]].k]){seen[strip(ans(Q[a[i]]))]=1;seen[Q[a[i]].k]=1;r.push(a[i])}return r}
+function isYear(q){return q.t=='n'&&/해/.test(strip(q.q))}
+function yearAll(q){var a=[],k,ys={};ys[q.a]=1;for(k in Q)if(Q[k]!==q&&isYear(Q[k])&&!ys[Q[k].a]){ys[Q[k].a]=1;a.push(Q[k])}return a}
+function nums(z){var i,n=0;for(i=0;i<z.it.length;i++)if(!z.it[i].sp&&!z.it[i].k)z.it[i].k=''+(++n)}
+function progH(z){var i,h='';for(i=0;i<z.ans.length;i++)h+='<b>'+(i<z.k?z.ans[i]:'□')+'</b>';return h}
+function pickOne(z,i){var o=z.it[i];if(!o||o.st)return 0;z.sel=i;if(o.ok)return 1;o.st='dead';return -1}
+function pickSeq(z,i){var o=z.it[i];if(!o||o.st)return 0;z.sel=i;if(o.t!=z.ans[z.k])return -1;o.st='done';z.k++;z.ex='<p class="qs prog">'+progH(z)+'</p>';return z.k>=z.ans.length?1:2}
+function pickSlot(z,i){var o=z.it[i];if(!o||o.sp||o.st)return 0;z.sel=i;if(o.slot==z.r)return 1;o.st='dead';return -1}
+function tiles(z,arr,extra){z.it=shuffle(arr.concat(extra).map(function(c){return{t:c}}));z.k=0;z.lay='tl';z.ex='<p class="qs prog">'+progH(z)+'</p>';nums(z)}
+function blankW(q){var ws=strip(q.o[0]).split(/\s+/),i,b=-1,bl=1;if(ws.length<2)return -1;for(i=0;i<ws.length;i++)if(ws[i].length>bl){bl=ws[i].length;b=i}return b}
+function pathDirs(){var a=[],k,x,y;for(k=0;k<4;k++){x=G.px+DX[k];y=G.py+DY[k];if(!solid(x,y)&&!objAt(x,y)&&!(G.fk2&&G.fk2.x==x&&G.fk2.y==y))a.push(k)}return a}
+function fadeVis(z){var f=z.tl/z.tm,i,j,s,o,out;for(i=0;i<z.it.length;i++){o=z.it[i];s=strip(o.t);out='';for(j=0;j<s.length;j++)out+=(s.charAt(j)==' '||hash(j+i*37,z.fsd)<f*1.15)?s.charAt(j):'·';o.vis=out}}
+function syls(ex,n){var a=[],k,s,i,c;for(k in Q)if(Q[k].t=='c'){s=strip(Q[k].o[0]);for(i=0;i<s.length;i++){c=s.charAt(i);if(/[가-힣]/.test(c)&&ex.indexOf(c)<0&&a.indexOf(c)<0)a.push(c)}}return shuffle(a).slice(0,n)}
+var FM={
+ choice:{t:'c',n:'고르기',init:function(z){z.it=shuffle(z.q.o.map(function(t,i){return{t:t,ok:i==0}}));nums(z)},pick:pickOne},
+ ox:{t:'c',n:'참일까, 거짓일까',init:function(z){var q=z.q,tr=Math.random()<.5,s=tr?q.o[0]:q.o[1+Math.floor(Math.random()*(q.o.length-1))];
+   z.ins='설명이 맞으면 O, 틀리면 X';z.qt='<em>'+q.k+'</em>';z.ex='<p class="qs">「'+s+'」</p>';z.it=[{t:'O — 맞다',ok:tr},{t:'X — 틀리다',ok:!tr}];z.lay='g2';nums(z)},
+   pick:function(z,i){var o=z.it[i];if(!o)return 0;z.sel=i;return o.ok?1:-1}},
+ elim:{t:'c',n:'가짜 지우기',ok:function(q){return q.o.length>=3},init:function(z){FM.choice.init(z);z.ins='가짜를 모두 지우면 진짜만 남는다';z.left=z.q.o.length-1},
+   pick:function(z,i){var o=z.it[i];if(!o||o.st)return 0;z.sel=i;if(o.ok)return -1;o.st='gone';sfx.puff();return --z.left<=0?1:3}},
+ fade:{t:'c',n:'사라지는 보기',init:function(z){FM.choice.init(z);z.ins='보기가 다 지워지기 전에';z.tm=Math.max(7000,4500+strip(z.q.o.join('')).length*45);z.tl=z.tm;z.fsd=Math.floor(Math.random()*99);fadeVis(z)},pick:pickOne,
+   tick:function(z,dt){var sp,i;z.ft=(z.ft||0)-dt;if(z.ft>0)return;z.ft=200;fadeVis(z);sp=el('panel').querySelectorAll('.qb span');for(i=0;i<sp.length&&i<z.it.length;i++)sp[i].textContent=z.it[i].vis}},
+ mirror:{t:'c',n:'거울 글씨',init:function(z){FM.choice.init(z);z.mir=1;z.ins='거울에 비친 글을 읽어라'},pick:pickOne},
+ blank:{t:'c',n:'빈칸 채우기',ok:function(q){return blankW(q)>=0},init:function(z){var q=z.q,ws=strip(q.o[0]).split(/\s+/),bi=blankW(q),w=ws[bi],ds=[],pool=[],i,j,c,tries=0;
+   for(i=1;i<q.o.length;i++){c=strip(q.o[i]).split(/\s+/);for(j=0;j<c.length;j++)if(c[j].length>=2&&c[j]!=w)pool.push(c[j])}
+   pool=shuffle(pool);for(i=0;i<pool.length&&ds.length<3;i++)if(ds.indexOf(pool[i])<0)ds.push(pool[i]);
+   while(ds.length<3&&tries++<40){c=strip(ans(Q[cIds(z.id)[Math.floor(Math.random()*20)]]||q)).split(/\s+/);c=c[Math.floor(Math.random()*c.length)];if(c&&c.length>=2&&c!=w&&ds.indexOf(c)<0)ds.push(c)}
+   ws[bi]='<u class="bl"></u>';z.qt='<em>'+q.k+'</em>';z.ex='<p class="qs">'+ws.join(' ')+'</p>';z.ins='빈칸에 들어갈 말';
+   z.it=shuffle([{t:w,ok:1}].concat(ds.map(function(t){return{t:t}})));z.lay='g2';nums(z)},pick:pickOne},
+ syll:{t:'c',n:'글자 맞추기',ok:function(q){return hangul(q,2,7)},init:function(z){var a=strip(z.q.o[0]).replace(/\s/g,'').split('');z.ans=a;z.ins='글자 조각을 순서대로';z.qt='<em>'+z.q.k+'</em>';tiles(z,a,syls(a,2))},pick:pickSeq},
+ chosung:{t:'c',n:'초성 부적',ok:function(q){return hangul(q,2,6)},init:function(z){var a=strip(z.q.o[0]).replace(/\s/g,'').split('').map(cho),ex=[],c=shuffle(CHO.split('')),i;
+   for(i=0;i<c.length&&ex.length<3;i++)if(a.indexOf(c[i])<0)ex.push(c[i]);z.ans=a;z.ins='답의 첫소리(초성)를 차례로 — '+a.length+'글자';z.qt='<em>'+z.q.k+'</em>';tiles(z,a,ex)},pick:pickSeq},
+ match:{t:'c',n:'짝 맞추기',ok:function(q){return shortA(q)},init:function(z){var ids=[z.id].concat(others(2,z.id,shortA)),R=shuffle(ids.slice()),i;
+   z.ins='낱말과 맞는 설명을 이어라';z.qt='&nbsp;';z.it=[];for(i=0;i<ids.length;i++){z.it.push({t:Q[ids[i]].k,side:0,id:ids[i],k:''+(i+1)});z.it.push({t:strip(ans(Q[R[i]])),side:1,id:R[i],k:'ㄱㄴㄷ'.charAt(i)})}
+   z.lay='g2 mt';z.pk=-1;z.left=ids.length},
+   pick:function(z,i){var o=z.it[i],p;if(!o||o.st=='done')return 0;z.sel=i;if(z.pk<0||z.it[z.pk].side==o.side){if(z.pk>=0)z.it[z.pk].st='';z.pk=i;o.st='pk';sfx.blip();return 3}
+     p=z.it[z.pk];z.pk=-1;if(p.id==o.id){p.st=o.st='done';return --z.left<=0?1:2}p.st='';return -1}},
+ memory:{t:'c',n:'기억 카드',w:.6,ok:function(q){return shortA(q)},init:function(z){var ids=[z.id].concat(others(2,z.id,shortA)),c=[],i;
+   z.ins='짝이 되는 카드 두 장을 뒤집어라 — 세 번 틀리면 끝';z.qt='&nbsp;';for(i=0;i<ids.length;i++){c.push({t:Q[ids[i]].k,id:ids[i]});c.push({t:strip(ans(Q[ids[i]])),id:ids[i]})}
+   z.it=shuffle(c);for(i=0;i<z.it.length;i++)z.it[i].vis='？';nums(z);z.lay='g3 mm';z.op=[];z.miss=0;z.left=ids.length;z.hold=0},
+   pick:function(z,i){var o=z.it[i],a,b;if(!o||o.st=='done'||z.hold>0||z.op.indexOf(i)>=0)return 0;z.sel=i;o.vis=o.t;o.st='pk';z.op.push(i);sfx.page();if(z.op.length<2)return 3;
+     a=z.it[z.op[0]];b=z.it[z.op[1]];if(a.id==b.id){a.st=b.st='done';z.op=[];return --z.left<=0?1:2}
+     if(++z.miss>=3)return -1;z.hold=1000;z.msg='짝이 아니다 ('+z.miss+'/3)';return 3},
+   tick:function(z,dt){var i;if(z.hold>0){z.hold-=dt;if(z.hold<=0){for(i=0;i<z.op.length;i++){z.it[z.op[i]].vis='？';z.it[z.op[i]].st=''}z.op=[];z.msg='';qzDraw()}}}},
+ odd:{t:'c',n:'거짓 찾기',init:function(z){var q=z.q,ids=others(3,z.id,function(x){return strip(ans(x)).length<=40}),i,bad=q.o[1+Math.floor(Math.random()*(q.o.length-1))];
+   z.ins='넷 가운데 하나만 거짓이다';z.qt='&nbsp;';z.it=[{t:'<b>'+q.k+'</b> — '+bad,ok:1}];for(i=0;i<ids.length;i++)z.it.push({t:'<b>'+Q[ids[i]].k+'</b> — '+ans(Q[ids[i]])});z.it=shuffle(z.it);nums(z)},
+   pick:function(z,i){var o=z.it[i];if(!o||o.st)return 0;z.sel=i;if(o.ok)return 1;o.st='dead';return -1}},
+ path:{t:'c',n:'갈림길',w:.8,ok:function(q){return pathDirs().length>=2},init:function(z){var ds=shuffle(pathDirs()).slice(0,Math.min(4,z.q.o.length)),os=shuffle(z.q.o.map(function(t,i){return{t:t,ok:i==0}})),ok=[],no=[],i;
+   for(i=0;i<os.length;i++)(os[i].ok?ok:no).push(os[i]);os=shuffle(ok.concat(no.slice(0,ds.length-1)));z.dirs={};z.it=[];
+   for(i=0;i<ds.length;i++){z.it.push({t:os[i].t,ok:os[i].ok,d:ds[i],k:'▲▶▼◀'.charAt(ds[i])});z.dirs[ds[i]]=i}z.ins='맞는 쪽으로 한 걸음 — 방향 버튼'},
+   move:function(z,d){if(z.dirs[d]!=null&&Date.now()-z.at>450)qzPick(z.dirs[d]);return true},
+   pick:function(z,i){var o=z.it[i],x,y;if(!o||o.st)return 0;z.sel=i;x=G.px+DX[o.d];y=G.py+DY[o.d];if(o.ok){G.px=G.fx=x;G.py=G.fy=y;G.dir=o.d;return 1}
+     o.st='dead';burst(x*16+8,y*16+8,12,'#d0604e',.06);G.shake=200;return -1}},
+ chase:{t:'c',n:'쫓기며 고르기',init:function(z){FM.choice.init(z);z.ins='그것이 닿기 전에 골라라';z.tm=8000},pick:pickOne},
+ order:{t:'s',n:'순서 맞추기',init:function(z){z.it=shuffle(z.q.o.map(function(t,i){return{t:t,ix:i}}));z.k=0;z.ins='앞에서부터 차례로';nums(z)},
+   pick:function(z,i){var o=z.it[i];if(!o||o.st)return 0;z.sel=i;if(o.ix!=z.k)return -1;o.st='done';o.k=''+(++z.k);return z.k>=z.q.o.length?1:2}},
+ insert:{t:'s',n:'끼워 넣기',init:function(z){var o=z.q.o,r=Math.floor(Math.random()*o.length),rest=o.slice(0,r).concat(o.slice(r+1)),i;
+   z.r=r;z.ins='빠진 하나가 들어갈 자리';z.ex='<p class="qs">빠진 것 — <em>'+o[r]+'</em></p>';z.it=[];
+   for(i=0;i<=rest.length;i++){z.it.push({t:'여기',slot:i,k:''+(i+1)});if(i<rest.length)z.it.push({t:rest[i],sp:1})}z.lay='sl'},pick:pickSlot},
+ first:{t:'s',n:'맨 앞 · 맨 뒤',init:function(z){z.last=Math.random()<.5;z.ins=z.last?'가장 마지막에 오는 것':'가장 처음에 오는 것';z.it=shuffle(z.q.o.map(function(t,i){return{t:t,ix:i}}));nums(z)},
+   pick:function(z,i){var o=z.it[i];if(!o||o.st)return 0;z.sel=i;if(o.ix==(z.last?z.q.o.length-1:0))return 1;o.st='dead';return -1}},
+ dial:{t:'n',n:'숫자 자물쇠',init:function(z){z.d=[0,0,0,0];z.ins='위아래로 숫자, 좌우로 자리 (숫자 버튼도 된다)'},
+   html:function(z){var h='<div class="dial">',i;for(i=0;i<4;i++)h+='<div class="dg'+(i==z.sel?' sel':'')+'"><button data-a="dg" data-v="'+i+',1" aria-label="올리기">▲</button><b>'+z.d[i]+'</b><button data-a="dg" data-v="'+i+',-1" aria-label="내리기">▼</button></div>';return h+'<button class="dok" data-a="qok">맞춰 본다</button></div>'},
+   move:function(z,d){if(d==1||d==3)z.sel=(z.sel+(d==1?1:3))%4;else z.d[z.sel]=(z.d[z.sel]+(d==0?1:9))%10;sfx.blip();qzDraw();return true},
+   pick:function(z){return z.d.join('')==z.q.a?1:-1}},
+ earlier:{t:'n',n:'먼저 일어난 일',ok:function(q){return isYear(q)&&yearAll(q).length>0},init:function(z){var ys=yearAll(z.q),o=ys[Math.floor(Math.random()*ys.length)];
+   z.ins='둘 가운데 먼저 일어난 것';z.qt='어느 쪽이 먼저였을까?';z.it=shuffle([{t:z.q.k,y:+z.q.a},{t:o.k,y:+o.a}]);z.lay='g2';nums(z)},
+   pick:function(z,i){var a=z.it[i],b=z.it[1-i];if(!a)return 0;z.sel=i;return a.y<b.y?1:-1}},
+ timeline:{t:'n',n:'연표 끼우기',ok:function(q){return isYear(q)&&yearAll(q).length>=3},init:function(z){var ys=shuffle(yearAll(z.q)).slice(0,3).sort(function(a,b){return +a.a - +b.a}),y=+z.q.a,i;
+   z.r=0;for(i=0;i<3;i++)if(+ys[i].a<y)z.r=i+1;z.ins='이 일이 연표에 들어갈 자리';z.qt='연표에 끼워 넣을 일';z.ex='<p class="qs"><em>'+z.q.k+'</em></p>';z.it=[];
+   for(i=0;i<=3;i++){z.it.push({t:'여기',slot:i,k:''+(i+1)});if(i<3)z.it.push({t:(+ys[i].a)+'년 · '+ys[i].k,sp:1})}z.lay='sl'},pick:pickSlot},
+ digits:{t:'n',n:'숫자 조각',init:function(z){var a=z.q.a.split('');z.ans=a;z.ins='숫자 조각을 순서대로';tiles(z,a,[''+Math.floor(Math.random()*10)])},pick:pickSeq}};
+function pickF(q){var a=[],k,w,tot=0,r;for(k in FM){if(FM[k].t!=q.t||(FM[k].ok&&!FM[k].ok(q)))continue;w=FM[k].w||1;if(k==G.lastF)w*=.12;a.push([k,w]);tot+=w}
+  r=Math.random()*tot;for(k=0;k<a.length;k++){r-=a[k][1];if(r<=0)return a[k][0]}return BASE[q.t]}
+function qfSet(z,f){z.f=f;z.sel=0;z.tl=0;z.tm=0;z.ins='';z.qt='';z.ex='';z.lay='';z.it=[];z.mir=0;z.drawn=0;FM[f].init(z);if(z.tm&&!z.tl)z.tl=z.tm;G.lastF=f}
+function ask(id,cb,opt){var q=Q[id];opt=opt||{};QZ={id:id,q:q,first:true,cb:cb,sel:0,msg:'',at:Date.now(),hit:0,sv:opt.sv||null};
+  qfSet(QZ,opt.f&&FM[opt.f]&&(!FM[opt.f].ok||FM[opt.f].ok(q))?opt.f:pickF(q));if(opt.tm){QZ.tm=QZ.tl=opt.tm}if(opt.ins)QZ.ins=opt.ins;
+  M='quiz';held=-1;tapd=-1;G.bl=[];thClear();qzDraw()}
+function qzDraw(){var z=QZ,q=z.q,F=FM[z.f],h=distHtml(),i,o;
+  h+='<p class="qf">'+F.n+(z.ins?' <span>— '+z.ins+'</span>':'')+'</p>';
+  if(z.tm)h+='<div class="qtm"><i id="qtm" style="width:'+Math.max(0,z.tl/z.tm*100)+'%"></i></div>';
+  h+='<div'+(z.mir?' class="mir"':'')+'><p class="qq">'+(z.qt||q.q)+'</p>'+(z.ex||'');
+  if(F.html)h+=F.html(z);
+  else{h+='<div class="qo '+(z.lay||'')+'">';for(i=0;i<z.it.length;i++){o=z.it[i];if(o.sp){h+='<p class="qsp">'+o.t+'</p>';continue}
+    h+='<button class="qb'+(i==z.sel?' sel':'')+(o.st?' '+o.st:'')+'"'+(z.drawn?' style="animation:none"':'')+' data-a="qp" data-v="'+i+'">'+(o.k?'<i>'+o.k+'</i>':'')+'<span>'+(o.vis!=null?o.vis:o.t)+'</span></button>'}h+='</div>'}
+  setPanel('quiz','<div class="qz'+(z.hit?' hit':'')+(z.sv?' sv':'')+'"'+(z.drawn&&!z.hit?' style="animation:none"':'')+'>'+h+'</div><p class="qm">'+z.msg+'</p></div>');z.drawn=1;z.hit=0}
+function qzMove(d){var z=QZ,F=FM[z.f],bs,i,b,r,r0=null,best=-1,bd=1e9,dx,dy,ds,c0x,c0y,v,list=[];
+  if(F.move&&F.move(z,d))return;
+  bs=el('panel').querySelectorAll('.qb');for(i=0;i<bs.length;i++)if(!/dead|gone|done/.test(bs[i].className))list.push(bs[i]);if(!list.length)return;
+  for(i=0;i<list.length;i++)if(+list[i].getAttribute('data-v')==z.sel)r0=list[i].getBoundingClientRect();
+  if(!r0){z.sel=+list[0].getAttribute('data-v');sfx.blip();qzDraw();return}
+  c0x=r0.left+r0.width/2;c0y=r0.top+r0.height/2;
+  for(i=0;i<list.length;i++){b=list[i];v=+b.getAttribute('data-v');if(v==z.sel)continue;r=b.getBoundingClientRect();dx=r.left+r.width/2-c0x;dy=r.top+r.height/2-c0y;
+    if((d==0&&dy>-4)||(d==2&&dy<4)||(d==1&&dx<4)||(d==3&&dx>-4))continue;ds=(d==0||d==2)?Math.abs(dy)+Math.abs(dx)*2:Math.abs(dx)+Math.abs(dy)*2;if(ds<bd){bd=ds;best=v}}
+  if(best<0){for(i=0;i<list.length;i++)if(+list[i].getAttribute('data-v')==z.sel)break;best=+list[(i+(d==0||d==3?list.length-1:1))%list.length].getAttribute('data-v')}
+  z.sel=best;sfx.blip();qzDraw()}
+function qzBtn(n){var bs=el('panel').querySelectorAll('.qb');return n>=1&&n<=bs.length?+bs[n-1].getAttribute('data-v'):-1}
+function qzPick(i){var z=QZ,r;if(!z)return;r=FM[z.f].pick(z,i);if(r==1)qzRight();else if(r==-1)qzWrong(false);else if(r==2){sfx.tick();z.msg='';qzDraw()}else if(r==3)qzDraw()}
+function qzTick(dt){var z=QZ,F=FM[z.f],e;if(F.tick)F.tick(z,dt);if(!QZ||!z.tm||z.tl<=0)return;z.tl-=dt;e=el('qtm');if(e)e.style.width=Math.max(0,z.tl/z.tm*100)+'%';
+  if(z.tl<1500){z.tk=(z.tk||0)-dt;if(z.tk<=0){z.tk=380;sfx.tick()}}if(z.tl<=0){z.tl=0;qzWrong(true)}}
+
+/* ───── 살아남기: 붙잡히거나 덮쳐질 때, 예전에 틀린 문제를 짧은 시간 안에 맞히면 벗어난다 ───── */
+function weakIds(){var a=[],k,s;for(k in SV.st){s=SV.st[k];if(Q[k]&&s[0]>s[1])a.push({k:k,w:(s[0]-s[1])+Math.random()*1.5})}a.sort(function(x,y){return y.w-x.w});return a.map(function(x){return x.k})}
+function revIds(n){var a=weakIds(),k,b=[];for(k in SV.ok)if(Q[k]&&a.indexOf(k)<0)b.push(k);a=a.concat(shuffle(b));return a.slice(0,n)}
+function survAsk(msg,win,ok,fail){var ids=revIds(4),id,q,f;if(!ids.length||M!='play'||G.c.final)return false;id=ids[Math.floor(Math.random()*Math.min(3,ids.length))];q=Q[id];
+  f=q.t=='c'?(Math.random()<.5?'ox':'chase'):q.t=='n'?(isYear(q)?'earlier':'digits'):'first';
+  G.black=Math.max(G.black,300);sfx.sting();ask(id,null,{f:f,tm:q.t=='c'&&f=='chase'?6500:5500,ins:msg,sv:{ok:ok,fail:fail,win:win}});return true}
+/* 갇힘: 문이 잠기고, 예전에 본 문제를 맞혀야 다시 열린다. 다 맞히면 초롱이 밝아진다 */
+function trapStart(){var ids=revIds(3);if(ids.length<2||M!='play')return false;G.black=700;thud(.6,0,60);toll(0,.9);G.shake=300;
+  say(['칠|기억해 내라','문이 쾅 닫혔다. 어둠 속에서 무언가 숨을 고른다.','(예전에 본 것 '+ids.length+'개를 맞혀야 문이 다시 열린다.)'],function(){var i=0;
+    (function nx(){if(i>=ids.length){if(G.lead<5){G.lead++;hud();sfx.flint()}toast('문이 열렸다. 기억이 초롱을 한 칸 밝혔다.');return}ask(ids[i++],nx)})()});return true}
+function drawPath(){var z=QZ,i,o,x,y;if(M!='quiz'||!z||z.f!='path')return;cx.textAlign='center';cx.textBaseline='middle';cx.font='700 8px sans-serif';
+  for(i=0;i<z.it.length;i++){o=z.it[i];if(o.st)continue;x=(G.px+DX[o.d])*16+8;y=(G.py+DY[o.d])*16+8;glow(x,y,12,'207,169,95',.25+.1*Math.sin(G.t/150+i));cx.fillStyle='#f2d28a';cx.fillText(o.k,x,y)}}
 function stat(ok){var s=SV.st[QZ.id]||(SV.st[QZ.id]=[0,0]);if(QZ.first){s[0]++;if(ok)s[1]++}QZ.first=false}
 function qzRight(){var z=QZ,q=z.q,first=z.first;stat(true);G.done[z.id]=1;SV.ok[z.id]=1;save();sfx.ok();hud();burst(G.px*16+8,G.py*16+4,16,'#f2d28a',.05);repel();
+  if(z.sv){QZ=null;M='qok';G.qokCb=z.sv.ok;G.qokT=1400;setPanel('quiz','<div class="qz okk sv"><p class="qn">'+z.sv.win+'</p><p class="qk">'+q.k+'</p><p class="qa">'+ans(q)+'</p></div>');return}
   if(first){if(++G.streak>=3){G.streak=0;if(G.lead<5){G.lead++;hud();sfx.flint();G.note='세 번 내리 맞혔다. 초롱이 한 칸 밝아진다.'}}}
   G.qokCb=z.cb;G.qokT=first?800:1500;QZ=null;M='qok';
   setPanel('quiz','<div class="qz okk"><p class="qk">'+q.k+'</p><p class="qa">'+ans(q)+'</p>'+(G.note?'<p class="qn">'+G.note+'</p>':'')+'</div>');G.note=''}
 function hurt(){G.lead--;G.flash=1;G.shake=400;G.glitch=320;sfx.bad();hud();burst(G.px*16+8,G.py*16+4,12,'#e6e5da',.07);if(G.lead<=0){endBad();return true}return false}
-function qzWrong(){var i;stat(false);save();G.streak=0;G.miss++;for(i=0;i<G.ers.length;i++)G.ers[i].ms=Math.max(230,G.ers[i].ms*.93);
+function qzWrong(late){var i,z=QZ,bf;stat(false);save();G.streak=0;G.miss++;
+  if(z.sv){QZ=null;M='play';setPanel('idle','');idle();z.sv.fail(late);return}   /* 살아남기 문제는 다시 기회가 없다 */
+  for(i=0;i<G.ers.length;i++)G.ers[i].ms=Math.max(230,G.ers[i].ms*.93);
   if(hurt()){QZ=null;return}
   if(G.c.final&&G.gateOn)growl(.25,1.1);else if(G.ci>=1&&Math.random()<.3)jump(1);
-  QZ.msg='틀렸다. 초롱 불이 한 칸 사그라든다.'+(G.ers.length?' 그것이 더 빨라진다.':'')+(QZ.q.h?' — '+QZ.q.h:'');QZ.hit=1;
-  lunge();if(M=='quiz'&&QZ)qzDraw()}
+  bf=BASE[z.q.t];if(z.f!=bf){qfSet(z,bf);z.msg=(late?'늦었다':'틀렸다')+'. 초롱 불이 한 칸 사그라든다. 같은 것을 다시 — 이번엔 차분히.'}
+  else z.msg='틀렸다. 초롱 불이 한 칸 사그라든다.'+(G.ers.length?' 그것이 더 빨라진다.':'');
+  if(z.q.h)z.msg+=' — '+z.q.h;z.hit=1;lunge();if(M=='quiz'&&QZ)qzDraw()}
 
 /* ───── 살펴보기 ───── */
 function interact(){var f=front(),o;if(G.fk2&&f.x==G.fk2.x&&f.y==G.fk2.y){fakeTrip();return}o=objAt(f.x,f.y);if(!o)return;sfx.page();use(o)}
@@ -660,7 +794,9 @@ function erUpdate(e,dt){var d,x,y;e.mt+=dt;
     e.cd-=dt;if(e.cd<=0&&(d=los(e))>=0){e.dd=d;e.dw=560;e.dn=10;e.t=0;sfx.shriek();G.shake=220;return}}
   e.t+=dt;if(e.t>=e.ms){e.t=0;erStep(e);d=erDist(e);if(d<12)sfx.mstep(Math.max(.012,.13-d*.011),(e.x-G.px)/8)}
   if(e.x==G.px&&e.y==G.py)caught(e)}
-function caught(e){erHome(e,2800);if(hurt())return;jump(2);
+function caught(e){erHome(e,2800);
+  if(M=='play'&&G.erSeen&&Math.random()<.75&&survAsk('붙잡혔다! 예전에 놓친 것을 기억해 내면 뿌리칠 수 있다','뿌리쳤다! 기억이 그것의 손을 풀었다.',function(){toast('뿌리치고 빠져나왔다.')},function(late){if(hurt())return;jump(2);toast((late?'너무 늦었다. ':'')+'놓아주지 않았다. 초롱 불이 한 칸 사그라든다.')}))return;
+  if(hurt())return;jump(2);
   if(M=='quiz'&&QZ){QZ.msg='차가운 것이 스쳤다. 초롱 불이 한 칸 사그라든다.';QZ.hit=1;qzDraw()}
   else if(M=='play'&&!G.erSeen){G.erSeen=true;say(["차가운 것이 스쳤다. 불이 흔들리고, 방금까지 알던 것 하나가 하얗게 비었다."])}}
 function repel(){var i,e;if(G.sw){burst(G.sw.x,G.sw.y,14,'#dcdbd0',.06);sfx.puff();G.sw=null}if(!G.ers.length)return;G.pulse=750;G.white=.28;sfx.repel();for(i=0;i<G.ers.length;i++){e=G.ers[i];if(!e.vis){e.pt+=2500;continue}puff(e);if(erDist(e)<7)erHome(e,3600);else e.sleep=3600}}
@@ -720,7 +856,8 @@ var TH={
  swarm:{u:2,iv:[12000,20000],h:'글자 조각들이 떼를 이룬다. 다가오는 떼에 닿지 말 것.'},
  drop:{u:3,iv:[11000,19000],h:'천장에서 무언가 삐걱인다. 먼지가 떨어지는 칸을 피할 것.'},
  crawl:{u:3,iv:[10000,17000],h:'바닥을 기는 소리가 난다. 붉은 줄이 비치면 그 줄에서 벗어날 것.'},
- bell:{u:4,iv:[18000,28000],h:'멀리서 종이 울릴 것 같다. 세 번 울리면 그것이 빨라진다.'}};
+ bell:{u:4,iv:[18000,28000],h:'멀리서 종이 울릴 것 같다. 세 번 울리면 그것이 빨라진다.'},
+ trap:{u:1,iv:[35000,55000],h:'어떤 방은 문이 저절로 잠긴다. 기억해 낸 만큼만 다시 열린다.'}};
 function thPool(){var a=[],k;for(k in TH)if(TH[k].u<=G.ci&&(!TH[k].w||G.wins.length))a.push(k);return a}
 function thOn(k){return !!(G.dr&&G.erOn&&G.dr.on.indexOf(k)>=0)}
 function drInit(){var pool,n;G.dr={on:[],t:{},rot:rnd(42000,62000),last:'',hint:{}};G.hd=[];G.fo=0;G.idleT=0;G.lpk='';G.foS=0;G.dp=null;G.cr=null;G.sw=null;G.fk2=null;G.bg=null;G.hp=[];G.lt=0;G.bellW=0;G.bellB=0;G.rs=0;G.bossOk=0;G.bs=null;
@@ -736,6 +873,7 @@ function drUpdate(dt){var d=G.dr,i,k,pool,old;if(!d||!d.on.length||!G.erOn)retur
   for(i=0;i<d.on.length;i++){k=d.on[i];if(!TH[k].iv[0])continue;if(d.t[k]===undefined)d.t[k]=rnd(TH[k].iv[0],TH[k].iv[1])*.6;
     d.t[k]-=dt*(G.rage?1.5:1);if(d.t[k]<=0)d.t[k]=thFire(k)?rnd(TH[k].iv[0],TH[k].iv[1]):1500}}
 function thFire(k){
+  if(k=='trap')return trapStart();
   if(k=='hand')return handSpawn();if(k=='bang')return bangWin();if(k=='fake')return fakeSpawn();if(k=='swarm')return swarmSpawn();if(k=='drop')return dropSpawn();if(k=='crawl')return crawlSpawn();
   if(k=='lights'){if(G.lt>0)return true;G.lt=rnd(2400,3400);sfx.dark();breath(.06,rnd(-.6,.6),.4);return true}
   if(k=='bell'){if(!G.ers.length||G.bellW>0||G.bellB>0)return false;toll(0,1);toll(1.5,1);toll(3,1.15);G.bellW=3200;return true}
@@ -748,7 +886,8 @@ function thUpdate(dt){
   if(G.fk2){G.fk2.t-=dt;if(G.fk2.t<=0)G.fk2=null}
   swUpdate(dt*(M=='play'?1:QSLOW));if(!lv()||M!='play')return;
   foUpdate(dt);if(!lv())return;handUpdate(dt);if(!lv())return;dropUpdate(dt);if(!lv())return;crawlUpdate(dt);if(!lv())return;drUpdate(dt)}
-function ouch(m){if(hurt())return true;jump(2);toast(m);return false}
+function ouch(m){if(M=='play'&&Math.random()<.65&&survAsk('덮쳐 온다! 기억해 내면 벗어날 수 있다','벗어났다!',function(){toast('간신히 벗어났다.')},function(late){if(hurt())return;jump(2);toast(m)}))return false;
+  if(hurt())return true;jump(2);toast(m);return false}
 
 /* 등 뒤의 것: 멈춰 있으면 다가온다. 걷거나 돌아서면 물러난다 */
 function foUpdate(dt){var k=G.px+','+G.py+','+G.dir;
@@ -924,7 +1063,7 @@ function onKey(k,e,once){var d=KD[k],n;aInit();
   if(k>=96&&k<=105)k-=48;
   if(k>=48&&k<=57){n=k-48;
     if(M=='ov'&&OV.kind=='login')ACT.d(''+n);
-    else if(M=='quiz'){if(QZ.q.t=='n'){QZ.d[QZ.sel]=n;QZ.sel=Math.min(3,QZ.sel+1);sfx.blip();qzDraw()}else if(n>=1&&n<=QZ.o.length&&Date.now()-QZ.at>450)qzPick(n-1)}
+    else if(M=='quiz'){if(QZ.f=='dial'){QZ.d[QZ.sel]=n;QZ.sel=Math.min(3,QZ.sel+1);sfx.blip();qzDraw()}else if(Date.now()-QZ.at>450&&qzBtn(n)>=0)qzPick(qzBtn(n))}
     else if(M=='boss'&&(n==1||n==2))bossPick(n-1);
     else if(M=='play'&&n==0)showNotes(resume);return}
   if(k==8||k==27||k==10009){if(e)e.preventDefault();if(M=='ov'){if(OV.kind=='login'&&k==8)ACT.del();else if(OV.back)OV.back()}else if(M=='play')showPause();return}
@@ -1221,7 +1360,7 @@ function draw(){
     else if(q.k==2){cx.globalAlpha=al*.55;p('#e4e3d9',q.x,q.y,1,1)}
     else{cx.globalAlpha=al;p('#ffd58a',q.x,q.y,.5,.5)}}
   cx.globalAlpha=1;
-  drawSw();drawCr();drawFoEyes();
+  drawSw();drawCr();drawFoEyes();drawPath();
   if(G.pulse>0){q=1-G.pulse/750;cx.globalAlpha=(1-q)*.8;cx.strokeStyle='#f2d28a';cx.lineWidth=2.5-q*2;cx.beginPath();cx.arc(mx+8,my+6,8+q*120,0,6.283);cx.stroke();cx.globalAlpha=1}
   cx.setTransform(1,0,0,1,0,0);if(G.bs)bossPaint();
   if(QL>1){q=(t*.012)%640;cx.globalAlpha=.26;cx.drawImage(FOG,-q,0,640,360);cx.drawImage(FOG,640-q,0,640,360);q=(t*.007)%640;cx.globalAlpha=.16;cx.drawImage(FOG,q-640,40,640,360);cx.drawImage(FOG,q,40,640,360);cx.globalAlpha=1}
@@ -1241,6 +1380,7 @@ function update(dt){var i,d,cb,jj;G.t+=dt;
   if(G.shake>0)G.shake-=dt;if(G.black>0)G.black-=dt;if(G.pulse>0)G.pulse-=dt;if(G.glitch>0)G.glitch-=dt;if(G.bsR>0)G.bsR-=dt;
   if(G.jq){G.jq.t-=dt;if(G.jq.t<=0){jj=G.jq;G.jq=null;jumpNow(jj.lv,jj.cb)}}else if(G.face>0){G.face-=dt;if(G.face<=0)jumpEnd()}
   if(G.jt>0){G.jt-=dt;if(G.jt<=0)jump(1)}
+  if(M=='quiz'&&QZ)qzTick(dt);
   if(G.toastT>0){G.toastT-=dt;if(G.toastT<=0)idle()}
   fxUpdate(dt);
   if(M=='say')sayTick(dt);
@@ -1271,7 +1411,7 @@ LG=lsGet('sg_last')||'';if(typeof LG!='string')LG='';
 if(TV){var hs=(location.hash||'').replace('#','');load(/^\d{5}$/.test(hs)?hs:null);showMenu()}else{load(null);showLogin()}
 requestAnimationFrame(loop);
 window.SGTV={key:function(k){onKey(k,null,true)}};
-window.SG={Q:Q,CH:CH,fn:{jump:jump,fire:thFire,boss:bossStart,start:startCh,pick:bossPick,scare:scare},use:function(o){use(o)},st:function(){return{G:G,M:M,QZ:QZ,SAY:SAY,SV:SV,SID:SID,QL:QL,ERRN:ERRN}}};
+window.SG={Q:Q,CH:CH,fn:{jump:jump,fire:thFire,boss:bossStart,start:startCh,pick:bossPick,scare:scare,ask:ask,fm:FM,surv:survAsk,caught:caught},use:function(o){use(o)},st:function(){return{G:G,M:M,QZ:QZ,SAY:SAY,SV:SV,SID:SID,QL:QL,ERRN:ERRN}}};
 })();
 </script>
 
