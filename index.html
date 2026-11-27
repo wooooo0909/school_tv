@@ -4293,7 +4293,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
 
   /* ── 노래방 (대시보드에서 파란 D 버튼) ──
      리모컨으로 한글(숫자는 숫자 버튼)을 입력해 검색 → 서버가 YouTube 공식 검색 API로 가사가 나오는 영상(가사 영상·노래방 영상)을 찾음 → ▲▼ + 가운데 버튼으로 예약 → 차례대로 재생.
-     화면은 노래방식(예약 목록·다음 곡·검색 자판). 영상 위에는 아무것도 덮지 않고, 광고는 자동으로 건너뛰지 않음(YouTube 규정) — ▲로 리모컨이 영상 안을 잠깐 조작해 직접 건너뜀. 수업 시간에는 열리지 않음 */
+     화면은 노래방식(예약 목록·다음 곡·검색 자판). 영상 위에는 아무것도 덮지 않고, 광고는 자동으로 건너뛰지 않음(YouTube 규정) — 3판 TV 앱이 있으면 곡을 TV 유튜브 앱으로 넘겨 틀어서 리모컨으로 광고를 건너뛸 수 있음. 수업 시간에는 열리지 않음 */
   var toastT = null;
   function toast(m) { var el = $('tvToast'); if (!el) return; el.innerHTML = esc(m); el.className = 'tv-toast on'; clearTimeout(toastT); toastT = setTimeout(function () { el.className = 'tv-toast'; }, 2400); }
   var KR = { on: false, mode: 'search', f: 'kb', ri: 0, jamo: [], kx: 0, ky: 0, res: [], q: '', busy: false, msg: '', queue: [], cur: null, p: null, ready: false, st: '', quitAt: 0, endT: null, seq: 0 };
@@ -4340,7 +4340,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     if (!KR.on) return;
     KR.on = false; KR.seq++; clearTimeout(KR.endT);
     if (KR.p) { try { KR.p.destroy(); } catch (e) {} KR.p = null; }
-    KR.ready = false; KR.cur = null; KR.queue = []; clearTimeout(KR.touchT);
+    KR.ready = false; KR.cur = null; KR.queue = []; 
     $('krv').className = 'kr'; setHTML('krPl', '<div id="krPlayer"></div>'); krPlBox(); document.body.classList.remove('kron');
   }
   function krSetMode(m) {
@@ -4360,13 +4360,6 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     return [bw, bh];
   }
   function krSize() { var z = krPlBox(); if (z && KR.p && KR.p.setSize) try { KR.p.setSize(z[0], z[1]); } catch (e) {} }
-  /* 광고 '건너뛰기'는 사람이 직접 누르게 한다(YouTube 규정상 자동으로 건너뛰면 안 됨): ▲ = 10초 동안 리모컨이 영상 안을 조작 */
-  function krTouch() {
-    if (!KR.p || !KR.p.getIframe) return;
-    try { KR.p.getIframe().focus(); } catch (e) { return; }
-    toast('10초 동안 영상 조작 · 방향 버튼으로 [건너뛰기]에 맞추고 가운데 버튼');
-    clearTimeout(KR.touchT); KR.touchT = setTimeout(function () { try { window.focus(); document.body.focus(); } catch (e) {} }, 10000);
-  }
   function krDraw() {
     // 오른쪽: 지금 곡 + 예약 목록
     var h = '<div class="kr-now">' + (KR.cur ? '<small>지금 부르는 곡</small><b>' + esc(KR.cur.t) + '</b>' : '<small>노래방</small><b>노래를 찾아 예약하세요</b>') + '</div><div class="kr-ql"><small>예약 ' + KR.queue.length + '곡</small>';
@@ -4395,7 +4388,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     var H = KR.mode === 'search'
       ? (KR.f === 'res' ? [lk('▲▼', '곡 고르기'), lk('ok', '예약'), lk('▲', '글자 쓰기로'), lk('복귀', KR.cur ? '노래 화면' : '나가기')]
          : [lk('ok', '글자 넣기'), lk('0~9', '숫자'), lk('rew', '지우기'), lk('play', '검색'), KR.res.length ? lk('▼', '결과 고르기') : '', lk('복귀', KR.cur ? '노래 화면' : '나가기')])
-      : [lk('ok', '노래 찾기'), lk('▲', '광고 건너뛰기'), TVAPP.yt ? lk('C', '유튜브 앱으로') : '', lk('ff', '다음 곡'), lk('pause', '멈춤'), lk('복귀', '나가기')];
+      : [lk('ok', '노래 찾기'), TVAPP.yt ? lk('C', '유튜브 앱으로') : '', lk('ff', '다음 곡'), lk('pause', '멈춤'), lk('복귀', '나가기')];
     var hh = ''; for (var q = 0; q < H.length; q++) if (H[q]) hh += '<span class="kr-h">' + H[q] + '</span>';
     setHTML('krHint', hh);
   }
@@ -4433,6 +4426,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     clearTimeout(KR.endT);
     var s = KR.queue.shift();
     if (!s) { KR.cur = null; if (KR.p) try { KR.p.stopVideo(); } catch (e) {} krSetMode('search'); return; }
+    if (TVAPP.on && TVAPP.yt) { KR.ext = s; KR.cur = null; tvAppPost({ yt: s.id, t: s.t }); krSetMode('search'); toast('TV 유튜브 앱으로 엽니다 · 광고는 리모컨으로 건너뛰기 · 다 부르면 뒤로 버튼'); return; }
     KR.cur = s; KR.st = 'loading';
     krSetMode('play');
     var seq = KR.seq;
@@ -4484,7 +4478,6 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     }
     if (KR.mode === 'play') {
       if (k === RK.OK) krSetMode('search');
-      else if (k === RK.U) krTouch();
       else if (k === 405 && TVAPP.on && TVAPP.yt && KR.cur) { var sx = KR.cur; KR.ext = sx; KR.cur = null; try { KR.p.stopVideo(); } catch (e) {} tvAppPost({ yt: sx.id, t: sx.t }); krSetMode('search'); toast('TV 유튜브 앱으로 엽니다 · 다 부르면 뒤로 버튼'); }
       else if (k === RK.FF) krNext();
       else if (k === RK.PAUSE || (k === RK.PP && KR.st === '1')) { if (KR.p) try { KR.p.pauseVideo(); } catch (e) {} }
