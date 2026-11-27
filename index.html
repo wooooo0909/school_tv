@@ -548,6 +548,8 @@ html.tvapp .tool-entry .kc{display:inline-block;}
 .kr-k.cur{background:#2fd0b4;color:#04201b;-webkit-transform:scale(1.07);transform:scale(1.07);}
 .kr-res{margin-top:26px;}
 .kr-ri{display:flex;align-items:center;margin-top:10px;padding:12px 20px;border-radius:16px;background:#0d1117;font-size:28px;font-weight:700;-webkit-animation:gmIn .35s both;animation:gmIn .35s both;}
+.kr-ri.cur{background:#2fd0b4;color:#04201b;}
+.kr-ri.cur .c{opacity:.8;}
 .kr-ri .lk{flex:none;width:44px;height:44px;line-height:44px;font-size:22px;margin-right:18px;}
 .kr-ri .t{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .kr-ri .c{flex:none;max-width:300px;margin-left:16px;font-size:20px;font-weight:500;opacity:.55;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
@@ -1827,7 +1829,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     { id: 'mkor', from: '2026-11-12', to: '2026-12-11', title: '사라진 글자 — 중세 국어 공포 학습 게임 (문제 111개)',
       steps: ['[C] 노란 버튼 → 학번 뒤 두 자리 → [채널]로 중세 국어 탭 → [OK]', '방향 버튼으로 걷고 [OK]로 살펴보기 · 문제는 숫자 1~4', '틀리거나 하얀 것에 닿으면 초롱 불이 사그라들어요'], act: 'learn' },
     { id: 'karaoke', from: '2026-11-11', to: '2026-11-30', title: '쉬는 시간 노래방',
-      steps: ['리모컨 파란 D 버튼 → 노래방', '방향 버튼으로 제목을 쓰고 ▶ 로 검색', '숫자로 예약 · ▶▶ 다음 곡 · 수업 시간엔 자동으로 닫힘'], act: 'karaoke' },
+      steps: ['리모컨 파란 D 버튼 → 노래방 (가사 나오는 영상)', '방향 버튼으로 제목을 쓰고 숫자는 숫자 버튼 · ▶ 로 검색', '▲▼로 곡 고르고 가운데 버튼 예약 · ▶▶ 다음 곡'], act: 'karaoke' },
     { id: 'game', from: '2026-11-09', to: '2026-11-26', title: '성어 도전 — 혼자 하는 한자성어 게임',
       steps: ['[C] 노란 버튼 → 학번 뒤 두 자리 → 숫자 4', '먼저 떠올리고 1~4로 골라 [OK] · 연속 정답이면 점수 업', '틀린 성어는 다음 판에 다시 · 79칸 지도를 채워 보세요'], act: 'learn' },
     { id: 'learn', from: '2026-11-08', to: '2026-11-26', title: '한자성어 2차, TV로 같이 공부해요',
@@ -4289,11 +4291,11 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
   setInterval(function () { if (YT_.want) ytApply(); }, 1000);
 
   /* ── 노래방 (대시보드에서 파란 D 버튼) ──
-     리모컨으로 한글을 입력해 검색 → 서버가 YouTube 공식 검색 API로 '공식 노래방 채널' 안에서만 찾음 → 숫자로 예약 → 차례대로 재생.
+     리모컨으로 한글(숫자는 숫자 버튼)을 입력해 검색 → 서버가 YouTube 공식 검색 API로 가사가 나오는 영상(가사 영상·노래방 영상)을 찾음 → ▲▼ + 가운데 버튼으로 예약 → 차례대로 재생.
      화면은 노래방식(예약 목록·다음 곡·검색 자판). 영상 위에는 아무것도 덮지 않고, 광고는 건드리지 않음(YouTube 규정). 수업 시간에는 열리지 않음 */
   var toastT = null;
   function toast(m) { var el = $('tvToast'); if (!el) return; el.innerHTML = esc(m); el.className = 'tv-toast on'; clearTimeout(toastT); toastT = setTimeout(function () { el.className = 'tv-toast'; }, 2400); }
-  var KR = { on: false, mode: 'search', jamo: [], kx: 0, ky: 0, res: [], q: '', busy: false, msg: '', queue: [], cur: null, p: null, ready: false, st: '', quitAt: 0, endT: null, seq: 0 };
+  var KR = { on: false, mode: 'search', f: 'kb', ri: 0, jamo: [], kx: 0, ky: 0, res: [], q: '', busy: false, msg: '', queue: [], cur: null, p: null, ready: false, st: '', quitAt: 0, endT: null, seq: 0 };
   var KR_KEYS = [['ㅂ', 'ㅈ', 'ㄷ', 'ㄱ', 'ㅅ', 'ㅛ', 'ㅕ', 'ㅑ', 'ㅐ', 'ㅔ'], ['ㅁ', 'ㄴ', 'ㅇ', 'ㄹ', 'ㅎ', 'ㅗ', 'ㅓ', 'ㅏ', 'ㅣ', '지움'], ['ㅋ', 'ㅌ', 'ㅊ', 'ㅍ', 'ㅠ', 'ㅜ', 'ㅡ', 'ㄲ', 'ㄸ', 'ㅆ'], ['ㅃ', 'ㅉ', '띄움', '띄움', '띄움', '띄움', '검색', '검색', '검색', '검색']];
   var H_CHO = 'ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ', H_JUNG = 'ㅏㅐㅑㅒㅓㅔㅕㅖㅗㅘㅙㅚㅛㅜㅝㅞㅟㅠㅡㅢㅣ';
   var H_JONG = ['', 'ㄱ', 'ㄲ', 'ㄳ', 'ㄴ', 'ㄵ', 'ㄶ', 'ㄷ', 'ㄹ', 'ㄺ', 'ㄻ', 'ㄼ', 'ㄽ', 'ㄾ', 'ㄿ', 'ㅀ', 'ㅁ', 'ㅂ', 'ㅄ', 'ㅅ', 'ㅆ', 'ㅇ', 'ㅈ', 'ㅊ', 'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ'];
@@ -4356,23 +4358,24 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     var s = '';
     if (KR.mode === 'search') {
       var txt = krText();
-      s += '<div class="kr-in' + (txt ? '' : ' ph') + '">' + (txt ? esc(txt) : '노래 제목이나 가수') + '<i></i></div><div class="kr-kb">';
+      s += '<div class="kr-in' + (txt ? '' : ' ph') + '">' + (txt ? esc(txt) : '노래 제목이나 가수 (숫자는 숫자 버튼)') + '<i></i></div><div class="kr-kb">';
       for (var y = 0; y < KR_KEYS.length; y++) {
         s += '<div class="kr-kr">';
         for (var x = 0; x < 10; x++) { var k = KR_KEYS[y][x]; if (x > 0 && KR_KEYS[y][x - 1] === k && k.length > 1) continue; var w = 1; while (KR_KEYS[y][x + w] === k && k.length > 1) w++;
-          var cur = KR.ky === y && KR.kx >= x && KR.kx < x + w;
+          var cur = KR.f === 'kb' && KR.ky === y && KR.kx >= x && KR.kx < x + w;
           s += '<span class="kr-k w' + w + (k.length > 1 ? ' fn' : '') + (k === '검색' ? ' go' : '') + (cur ? ' cur' : '') + '">' + (k === '띄움' ? '띄어쓰기' : k === '지움' ? '지우기' : k) + '</span>'; }
         s += '</div>';
       }
       s += '</div><div class="kr-res">';
       if (KR.busy) s += '<div class="kr-msg">찾는 중…</div>';
       else if (KR.msg) s += '<div class="kr-msg">' + esc(KR.msg) + '</div>';
-      else for (var r = 0; r < KR.res.length && r < 6; r++) s += '<div class="kr-ri" style="-webkit-animation-delay:' + r * 0.05 + 's;animation-delay:' + r * 0.05 + 's"><span class="lk">' + (r + 1) + '</span><span class="t">' + esc(KR.res[r].t) + '</span>' + (KR.res[r].c ? '<span class="c">' + esc(KR.res[r].c) + '</span>' : '') + '</div>';
+      else for (var r = 0; r < KR.res.length && r < 6; r++) s += '<div class="kr-ri' + (KR.f === 'res' && KR.ri === r ? ' cur' : '') + '" style="-webkit-animation-delay:' + r * 0.05 + 's;animation-delay:' + r * 0.05 + 's"><span class="lk">' + (r + 1) + '</span><span class="t">' + esc(KR.res[r].t) + '</span>' + (KR.res[r].c ? '<span class="c">' + esc(KR.res[r].c) + '</span>' : '') + '</div>';
       s += '</div>';
     }
     setHTML('krSrch', s);
     var H = KR.mode === 'search'
-      ? [lk('ok', '글자 넣기'), lk('rew', '지우기'), lk('play', '검색'), KR.res.length ? lk('1') + '<em>~</em>' + lk(String(Math.min(6, KR.res.length)), '예약') : '', lk('복귀', KR.cur ? '노래 화면' : '나가기')]
+      ? (KR.f === 'res' ? [lk('▲▼', '곡 고르기'), lk('ok', '예약'), lk('▲', '글자 쓰기로'), lk('복귀', KR.cur ? '노래 화면' : '나가기')]
+         : [lk('ok', '글자 넣기'), lk('0~9', '숫자'), lk('rew', '지우기'), lk('play', '검색'), KR.res.length ? lk('▼', '결과 고르기') : '', lk('복귀', KR.cur ? '노래 화면' : '나가기')])
       : [lk('ok', '노래 찾기'), lk('ff', '다음 곡'), lk('pause', '멈춤'), lk('복귀', '나가기')];
     var hh = ''; for (var q = 0; q < H.length; q++) if (H[q]) hh += '<span class="kr-h">' + H[q] + '</span>';
     setHTML('krHint', hh);
@@ -4388,13 +4391,13 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     var q = krText().replace(/\s+/g, ' ').replace(/^ | $/g, '');
     if (q.length < 2) { KR.msg = '두 글자 이상 입력해 주세요'; KR.res = []; krDraw(); return; }
     if (KR.busy) return;
-    KR.busy = true; KR.msg = ''; KR.q = q; krDraw();
+    KR.busy = true; KR.msg = ''; KR.q = q; KR.f = 'kb'; krDraw();
     var seq = KR.seq;
     jsonp(apiUrl('&ksearch=' + encodeURIComponent(q)), 20000, function (d) {
       if (seq !== KR.seq) return;
       KR.busy = false; KR.res = [];
       if (!d || !d.ok) KR.msg = d && d.error === 'nokey' ? '검색 준비가 아직 안 됐어요 (관리자: YouTube API 키 필요)' : d && d.error === 'quota' ? '오늘 검색 횟수를 다 썼어요 · 내일 다시 됩니다' : '검색하지 못했어요 · 잠시 뒤 다시 해 주세요';
-      else { for (var i = 0; i < d.items.length; i++) KR.res.push({ id: d.items[i].id, t: krTitle(d.items[i].t), c: d.items[i].c || '' }); if (!KR.res.length) KR.msg = '찾는 노래가 없어요 · 다른 말로 찾아 보세요'; }
+      else { for (var i = 0; i < d.items.length; i++) KR.res.push({ id: d.items[i].id, t: krTitle(d.items[i].t), c: d.items[i].c || '' }); if (!KR.res.length) KR.msg = '찾는 노래가 없어요 · 다른 말로 찾아 보세요'; else { KR.f = 'res'; KR.ri = 0; } }
       krDraw();
     }, function () { if (seq !== KR.seq) return; KR.busy = false; KR.msg = '인터넷 연결을 확인해 주세요'; krDraw(); });
   }
@@ -4443,9 +4446,9 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
       KR.ext = s; KR.cur = null; tvAppPost({ yt: s.id, t: s.t }); krSetMode('search');
       toast('이 곡은 TV 유튜브 앱으로 엽니다 · 다 부르면 뒤로 버튼'); return;
     }
-    var why = ({ 2: '주소 오류', 5: '이 TV의 재생기 오류', 100: '삭제된 영상', 101: '노래방 채널이 다른 곳 재생을 막음', 150: '노래방 채널이 다른 곳 재생을 막음', 153: '재생기 설정 오류' })[c] || '알 수 없는 오류';
+    var why = ({ 2: '주소 오류', 5: '이 TV의 재생기 오류', 100: '삭제된 영상', 101: '영상 주인이 다른 곳 재생을 막음', 150: '영상 주인이 다른 곳 재생을 막음', 153: '재생기 설정 오류' })[c] || '알 수 없는 오류';
     KR.fail = KR.lastErr === c ? (KR.fail || 0) + 1 : 1; KR.lastErr = c;
-    if (KR.fail >= 3) { KR.queue = []; KR.cur = null; krSetMode('search'); KR.msg = '연달아 재생이 막혔습니다 (오류 ' + c + ' · ' + why + ')'; krDraw(); toast('노래방 영상을 이 TV에서 틀 수 없습니다 · 오류 ' + c); return; }
+    if (KR.fail >= 3) { KR.queue = []; KR.cur = null; krSetMode('search'); KR.msg = '연달아 재생이 막혔습니다 (오류 ' + c + ' · ' + why + ')'; krDraw(); toast('이 영상들은 TV 화면에서 틀 수 없습니다 · 오류 ' + c); return; }
     toast('재생할 수 없는 곡이라 넘어갑니다 (오류 ' + c + ' · ' + why + ')'); KR.endT = setTimeout(krNext, 1500);
   }
   document.addEventListener('visibilitychange', function () {    // TV 유튜브 앱에서 돌아오면 다음 곡
@@ -4467,12 +4470,19 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
       else if (k === RK.PLAY || k === RK.PP) { if (KR.p) try { KR.p.playVideo(); } catch (e) {} }
       return;
     }
-    if (k >= 49 && k <= 54) { krReserve(k - 49); return; }
+    if ((k >= 48 && k <= 57) || (k >= 96 && k <= 105)) { KR.f = 'kb'; krType(String(k >= 96 ? k - 96 : k - 48)); return; }   // 리모컨 숫자 버튼 = 숫자 입력
+    if (KR.f === 'res') {                          // 검색 결과 고르기
+      if (k === RK.U) { if (KR.ri > 0) KR.ri--; else KR.f = 'kb'; krDraw(); return; }
+      if (k === RK.D) { KR.ri = Math.min(Math.min(6, KR.res.length) - 1, KR.ri + 1); krDraw(); return; }
+      if (k === RK.OK) { krReserve(KR.ri); return; }
+      if (k === RK.L || k === RK.R) { KR.f = 'kb'; krDraw(); return; }
+    }
     if (k === RK.REW) { krType('지움'); return; }
     if (k === RK.PLAY) { krSearch(); return; }
     if (k === RK.FF && KR.cur) { krNext(); return; }
     if (k >= 37 && k <= 40) {
       var key = KR_KEYS[KR.ky][KR.kx];
+      if (k === RK.D && KR.ky === 3 && KR.res.length && !KR.busy) { KR.f = 'res'; KR.ri = 0; krDraw(); return; }   // 맨 아래 줄에서 ▼ = 검색 결과로
       if (k === RK.U) KR.ky = (KR.ky + 3) % 4; else if (k === RK.D) KR.ky = (KR.ky + 1) % 4;
       else { var d = k === RK.L ? -1 : 1, x = KR.kx; do { x = (x + d + 10) % 10; } while (KR_KEYS[KR.ky][x] === key && key.length > 1 && x !== KR.kx); KR.kx = x; }
       krDraw(); return;
