@@ -4418,8 +4418,14 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
           playerVars: { autoplay: 1, controls: 0, disablekb: 1, fs: 0, rel: 0, iv_load_policy: 3, playsinline: 1, modestbranding: 1 },
           events: {
             onReady: function () { KR.ready = true; krSize(); if (KR.cur && KR.cur !== s) try { KR.p.loadVideoById(KR.cur.id); } catch (e) {} },
-            onStateChange: function (e) { KR.st = String(e.data); if (e.data === 0 && KR.on) { clearTimeout(KR.endT); KR.endT = setTimeout(krNext, 1500); } },
-            onError: function () { if (!KR.on) return; toast('재생할 수 없는 곡이라 넘어갑니다'); clearTimeout(KR.endT); KR.endT = setTimeout(krNext, 1200); }
+            onStateChange: function (e) { KR.st = String(e.data); if (e.data === 1) KR.fail = 0; if (e.data === 0 && KR.on) { clearTimeout(KR.endT); KR.endT = setTimeout(krNext, 1500); } },
+            onError: function (e) {
+              if (!KR.on) return;
+              var c = e && e.data, why = ({ 2: '주소 오류', 5: '이 TV의 재생기 오류', 100: '삭제된 영상', 101: '노래방 채널이 다른 곳 재생을 막음', 150: '노래방 채널이 다른 곳 재생을 막음', 153: '재생기 설정 오류' })[c] || '알 수 없는 오류';
+              KR.fail = KR.lastErr === c ? (KR.fail || 0) + 1 : 1; KR.lastErr = c; clearTimeout(KR.endT);
+              if (KR.fail >= 3) { KR.queue = []; KR.cur = null; krSetMode('search'); KR.msg = '연달아 재생이 막혔습니다 (오류 ' + c + ' · ' + why + ')'; krDraw(); toast('노래방 영상을 이 TV에서 틀 수 없습니다 · 오류 ' + c); return; }
+              toast('재생할 수 없는 곡이라 넘어갑니다 (오류 ' + c + ' · ' + why + ')'); KR.endT = setTimeout(krNext, 1500);
+            }
           } });
       } catch (e) { toast('플레이어를 만들지 못했습니다'); }
     });
