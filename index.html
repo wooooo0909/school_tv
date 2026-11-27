@@ -2,6 +2,7 @@
 <html lang="ko" data-theme="dark">
 <head>
 <meta charset="UTF-8">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>이우고 TV 대시보드</title>
 <!--
@@ -1353,6 +1354,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
       var was = TVAPP.hdmi; TVAPP.on = true; TVAPP.hdmi = !!d.hdmi;
       if (d.ver) TVAPP.ver = String(d.ver).slice(0, 20);
       if (d.dg !== undefined) TVAPP.dg = d.dg;
+      if (d.yt !== undefined) TVAPP.yt = !!d.yt;               // 3판: TV 유튜브 앱으로 넘겨 틀 수 있음
       tvAppFront(true);
       if (d.key) {                                   // 앱이 받은 리모컨 키 → 이 화면에서 직접 누른 것처럼
         TVAPP.keyName = d.name || '';
@@ -4398,7 +4400,9 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
   function krReserve(i) {
     var r = KR.res[i]; if (!r) return;
     if (KR.queue.length >= 20) { toast('예약은 20곡까지'); return; }
-    KR.queue.push({ id: r.id, t: r.t });
+    var tk = String(KR.q || '').toLowerCase().split(' '), alts = [], j, n, x;
+    for (j = 0; j < KR.res.length && alts.length < 3; j++) { x = KR.res[j]; if (x.id === r.id) continue; n = String(x.t).toLowerCase(); for (var w = 0; w < tk.length; w++) if (tk[w].length > 1 && n.indexOf(tk[w]) < 0) break; if (w === tk.length) alts.push(x.id); }
+    KR.queue.push({ id: r.id, t: r.t, alts: alts });
     toast('예약 · ' + r.t);
     if (!KR.cur) krNext(); else krDraw();
   }
@@ -4409,27 +4413,44 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     KR.cur = s; KR.st = 'loading';
     krSetMode('play');
     var seq = KR.seq;
-    ytLoadApi(function () {
-      if (seq !== KR.seq || KR.cur !== s) return;
-      if (KR.p && KR.ready) { try { KR.p.loadVideoById(s.id); } catch (e) {} return; }
-      if (KR.p) return;
-      try {
-        KR.p = new YT.Player('krPlayer', { width: 1408, height: 792, videoId: s.id,
-          playerVars: { autoplay: 1, controls: 0, disablekb: 1, fs: 0, rel: 0, iv_load_policy: 3, playsinline: 1, modestbranding: 1 },
-          events: {
-            onReady: function () { KR.ready = true; krSize(); if (KR.cur && KR.cur !== s) try { KR.p.loadVideoById(KR.cur.id); } catch (e) {} },
-            onStateChange: function (e) { KR.st = String(e.data); if (e.data === 1) KR.fail = 0; if (e.data === 0 && KR.on) { clearTimeout(KR.endT); KR.endT = setTimeout(krNext, 1500); } },
-            onError: function (e) {
-              if (!KR.on) return;
-              var c = e && e.data, why = ({ 2: '주소 오류', 5: '이 TV의 재생기 오류', 100: '삭제된 영상', 101: '노래방 채널이 다른 곳 재생을 막음', 150: '노래방 채널이 다른 곳 재생을 막음', 153: '재생기 설정 오류' })[c] || '알 수 없는 오류';
-              KR.fail = KR.lastErr === c ? (KR.fail || 0) + 1 : 1; KR.lastErr = c; clearTimeout(KR.endT);
-              if (KR.fail >= 3) { KR.queue = []; KR.cur = null; krSetMode('search'); KR.msg = '연달아 재생이 막혔습니다 (오류 ' + c + ' · ' + why + ')'; krDraw(); toast('노래방 영상을 이 TV에서 틀 수 없습니다 · 오류 ' + c); return; }
-              toast('재생할 수 없는 곡이라 넘어갑니다 (오류 ' + c + ' · ' + why + ')'); KR.endT = setTimeout(krNext, 1500);
-            }
-          } });
-      } catch (e) { toast('플레이어를 만들지 못했습니다'); }
-    });
+    ytLoadApi(function () { if (seq === KR.seq && KR.cur === s) krLoad(s); });
   }
+  /* 노래방 재생기: 막히면 차례로 — ① 다른 재생기 주소(youtube-nocookie)로 다시 ② 같은 곡의 다른 영상 ③ TV 유튜브 앱(3판 앱) ④ 다음 곡 */
+  function krLoad(s) {
+    var host = s.nc ? 'https://www.youtube-nocookie.com' : 'https://www.youtube.com';
+    if (KR.p && KR.host === host) { if (KR.ready) try { KR.p.loadVideoById(s.id); } catch (e) {} return; }
+    if (KR.p) { try { KR.p.destroy(); } catch (e) {} KR.p = null; setHTML('krPl', '<div id="krPlayer"></div>'); }
+    KR.ready = false; KR.host = host;
+    try {
+      KR.p = new YT.Player('krPlayer', { width: 1408, height: 792, videoId: s.id, host: host,
+        playerVars: { autoplay: 1, controls: 0, disablekb: 1, fs: 0, rel: 0, iv_load_policy: 3, playsinline: 1, modestbranding: 1, enablejsapi: 1,
+          origin: location.protocol + '//' + location.host, widget_referrer: location.href.split('#')[0] },
+        events: {
+          onReady: function () { KR.ready = true; krSize(); if (KR.cur && KR.cur.id !== s.id) try { KR.p.loadVideoById(KR.cur.id); } catch (e) {} },
+          onStateChange: function (e) { KR.st = String(e.data); if (e.data === 1) KR.fail = 0; if (e.data === 0 && KR.on) { clearTimeout(KR.endT); KR.endT = setTimeout(krNext, 1500); } },
+          onError: function (e) { krErr(e && e.data); }
+        } });
+    } catch (e) { toast('플레이어를 만들지 못했습니다'); }
+  }
+  function krErr(c) {
+    var s = KR.cur; if (!KR.on || !s) return;
+    clearTimeout(KR.endT);
+    if (c === 100 || c === 101 || c === 150) jsonp(apiUrl('&kbad=' + encodeURIComponent(s.id) + '&kc=' + c), 8000, function () {}, function () {});   // 다음 검색부터 빼도록 알림
+    if ((c === 2 || c === 5 || c === 153) && !s.nc) { s.nc = 1; krLoad(s); return; }
+    if (s.alts && s.alts.length) { s.id = s.alts.shift(); toast('막힌 영상이라 같은 곡의 다른 영상으로 바꿉니다'); krLoad(s); return; }
+    if (TVAPP.on && TVAPP.yt && c !== 100 && c !== 2) {
+      KR.ext = s; KR.cur = null; tvAppPost({ yt: s.id, t: s.t }); krSetMode('search');
+      toast('이 곡은 TV 유튜브 앱으로 엽니다 · 다 부르면 뒤로 버튼'); return;
+    }
+    var why = ({ 2: '주소 오류', 5: '이 TV의 재생기 오류', 100: '삭제된 영상', 101: '노래방 채널이 다른 곳 재생을 막음', 150: '노래방 채널이 다른 곳 재생을 막음', 153: '재생기 설정 오류' })[c] || '알 수 없는 오류';
+    KR.fail = KR.lastErr === c ? (KR.fail || 0) + 1 : 1; KR.lastErr = c;
+    if (KR.fail >= 3) { KR.queue = []; KR.cur = null; krSetMode('search'); KR.msg = '연달아 재생이 막혔습니다 (오류 ' + c + ' · ' + why + ')'; krDraw(); toast('노래방 영상을 이 TV에서 틀 수 없습니다 · 오류 ' + c); return; }
+    toast('재생할 수 없는 곡이라 넘어갑니다 (오류 ' + c + ' · ' + why + ')'); KR.endT = setTimeout(krNext, 1500);
+  }
+  document.addEventListener('visibilitychange', function () {    // TV 유튜브 앱에서 돌아오면 다음 곡
+    if (document.hidden || !KR.ext) return;
+    KR.ext = null; setTimeout(function () { if (!KR.on) return; if (KR.queue.length) krNext(); else krSetMode('search'); }, 1500);
+  });
   function krKey(k) {
     if (k === RK.BACK || k === RK.ESC) {
       if (KR.mode === 'search' && KR.cur) { krSetMode('play'); return; }
