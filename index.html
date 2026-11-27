@@ -549,7 +549,8 @@ html.tvapp .tool-entry .kc{display:inline-block;}
 .kr-res{margin-top:26px;}
 .kr-ri{display:flex;align-items:center;margin-top:10px;padding:12px 20px;border-radius:16px;background:#0d1117;font-size:28px;font-weight:700;-webkit-animation:gmIn .35s both;animation:gmIn .35s both;}
 .kr-ri .lk{flex:none;width:44px;height:44px;line-height:44px;font-size:22px;margin-right:18px;}
-.kr-ri .t{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.kr-ri .t{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.kr-ri .c{flex:none;max-width:300px;margin-left:16px;font-size:20px;font-weight:500;opacity:.55;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .kr-msg{padding:60px 0;text-align:center;font-size:28px;font-weight:600;color:#5b6573;}
 .kr-hint{position:absolute;left:0;right:0;bottom:40px;display:flex;justify-content:center;}
 .kr-h{display:flex;align-items:center;margin:0 18px;font-size:24px;font-weight:700;color:#8d97a6;}
@@ -4366,7 +4367,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
       s += '</div><div class="kr-res">';
       if (KR.busy) s += '<div class="kr-msg">찾는 중…</div>';
       else if (KR.msg) s += '<div class="kr-msg">' + esc(KR.msg) + '</div>';
-      else for (var r = 0; r < KR.res.length && r < 6; r++) s += '<div class="kr-ri" style="-webkit-animation-delay:' + r * 0.05 + 's;animation-delay:' + r * 0.05 + 's"><span class="lk">' + (r + 1) + '</span><span class="t">' + esc(KR.res[r].t) + '</span></div>';
+      else for (var r = 0; r < KR.res.length && r < 6; r++) s += '<div class="kr-ri" style="-webkit-animation-delay:' + r * 0.05 + 's;animation-delay:' + r * 0.05 + 's"><span class="lk">' + (r + 1) + '</span><span class="t">' + esc(KR.res[r].t) + '</span>' + (KR.res[r].c ? '<span class="c">' + esc(KR.res[r].c) + '</span>' : '') + '</div>';
       s += '</div>';
     }
     setHTML('krSrch', s);
@@ -4393,7 +4394,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
       if (seq !== KR.seq) return;
       KR.busy = false; KR.res = [];
       if (!d || !d.ok) KR.msg = d && d.error === 'nokey' ? '검색 준비가 아직 안 됐어요 (관리자: YouTube API 키 필요)' : d && d.error === 'quota' ? '오늘 검색 횟수를 다 썼어요 · 내일 다시 됩니다' : '검색하지 못했어요 · 잠시 뒤 다시 해 주세요';
-      else { for (var i = 0; i < d.items.length; i++) KR.res.push({ id: d.items[i].id, t: krTitle(d.items[i].t) }); if (!KR.res.length) KR.msg = '찾는 노래가 없어요 · 다른 말로 찾아 보세요'; }
+      else { for (var i = 0; i < d.items.length; i++) KR.res.push({ id: d.items[i].id, t: krTitle(d.items[i].t), c: d.items[i].c || '' }); if (!KR.res.length) KR.msg = '찾는 노래가 없어요 · 다른 말로 찾아 보세요'; }
       krDraw();
     }, function () { if (seq !== KR.seq) return; KR.busy = false; KR.msg = '인터넷 연결을 확인해 주세요'; krDraw(); });
   }
