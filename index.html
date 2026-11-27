@@ -507,6 +507,7 @@ html.tvapp .tool-entry .kc{display:inline-block;}
 .gm-opts.ox .gm-o{font-size:46px;justify-content:center;}
 .gm-hl{color:#2fd0b4;}
 /* ── 노래방 ── */
+body.kron .tv-toast{top:880px;}
 .tv-toast{position:absolute;left:50%;top:26px;z-index:60;max-width:1200px;padding:18px 34px;border-radius:18px;background:rgba(9,12,17,.94);color:#f2f5f8;font-size:28px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:0;pointer-events:none;-webkit-transform:translate(-50%,-16px);transform:translate(-50%,-16px);-webkit-transition:opacity .25s,-webkit-transform .25s;transition:opacity .25s,transform .25s;box-shadow:0 20px 60px rgba(0,0,0,.5);}
 .tv-toast.on{opacity:1;-webkit-transform:translate(-50%,0);transform:translate(-50%,0);}
 .kc.kcb{background:#2450c4;color:#fff;box-shadow:inset 0 -3px 0 rgba(0,0,0,.25);}
@@ -4292,7 +4293,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
 
   /* ── 노래방 (대시보드에서 파란 D 버튼) ──
      리모컨으로 한글(숫자는 숫자 버튼)을 입력해 검색 → 서버가 YouTube 공식 검색 API로 가사가 나오는 영상(가사 영상·노래방 영상)을 찾음 → ▲▼ + 가운데 버튼으로 예약 → 차례대로 재생.
-     화면은 노래방식(예약 목록·다음 곡·검색 자판). 영상 위에는 아무것도 덮지 않고, 광고는 건드리지 않음(YouTube 규정). 수업 시간에는 열리지 않음 */
+     화면은 노래방식(예약 목록·다음 곡·검색 자판). 영상 위에는 아무것도 덮지 않고, 광고는 자동으로 건너뛰지 않음(YouTube 규정) — ▲로 리모컨이 영상 안을 잠깐 조작해 직접 건너뜀. 수업 시간에는 열리지 않음 */
   var toastT = null;
   function toast(m) { var el = $('tvToast'); if (!el) return; el.innerHTML = esc(m); el.className = 'tv-toast on'; clearTimeout(toastT); toastT = setTimeout(function () { el.className = 'tv-toast'; }, 2400); }
   var KR = { on: false, mode: 'search', f: 'kb', ri: 0, jamo: [], kx: 0, ky: 0, res: [], q: '', busy: false, msg: '', queue: [], cur: null, p: null, ready: false, st: '', quitAt: 0, endT: null, seq: 0 };
@@ -4331,7 +4332,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     if (KR.on) return;
     if (!krAllowed()) { if (inClass) toast('노래방은 쉬는 시간에만 열 수 있어요'); return; }
     KR.on = true; KR.mode = 'search'; KR.jamo = []; KR.res = []; KR.q = ''; KR.msg = ''; KR.kx = 0; KR.ky = 0; KR.queue = []; KR.cur = null;
-    $('krv').className = 'kr on srch';
+    $('krv').className = 'kr on srch'; document.body.classList.add('kron');
     krDraw();
     try { if (audio && !audio.paused) audio.pause(); } catch (e) {}
   }
@@ -4339,15 +4340,33 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     if (!KR.on) return;
     KR.on = false; KR.seq++; clearTimeout(KR.endT);
     if (KR.p) { try { KR.p.destroy(); } catch (e) {} KR.p = null; }
-    KR.ready = false; KR.cur = null; KR.queue = [];
-    $('krv').className = 'kr'; setHTML('krPl', '<div id="krPlayer"></div>');
+    KR.ready = false; KR.cur = null; KR.queue = []; clearTimeout(KR.touchT);
+    $('krv').className = 'kr'; setHTML('krPl', '<div id="krPlayer"></div>'); krPlBox(); document.body.classList.remove('kron');
   }
   function krSetMode(m) {
     KR.mode = m;
     $('krv').className = 'kr on' + (m === 'search' ? ' srch' : '') + (KR.cur ? ' playing' : '');
     krSize(); krDraw();
   }
-  function krSize() { var s = KR.mode === 'search' ? [640, 360] : [1408, 792]; if (KR.p && KR.p.setSize) try { KR.p.setSize(s[0], s[1]); } catch (e) {} }
+  /* 노래방 재생기는 화면 맞춤(transform)·둥근 모서리 밖(body 바로 아래)에 둔다 — 일부 TV는 그 안의 영상이 검게 나옴 */
+  function krPlBox() {
+    var pl = $('krPl'); if (!pl) return null;
+    if (pl.parentNode !== document.body) { document.body.appendChild(pl); pl.style.position = 'fixed'; pl.style.borderRadius = '0'; pl.style.overflow = 'visible'; pl.style.zIndex = '50'; pl.style.background = '#000'; }
+    var w = window.innerWidth || document.documentElement.clientWidth, h = window.innerHeight || document.documentElement.clientHeight;
+    var sc = Math.min(w / 1920, h / 1080), ox = (w - 1920 * sc) / 2, oy = (h - 1080 * sc) / 2, r = KR.mode === 'search' ? [1240, 56, 640, 360] : [40, 56, 1408, 792];
+    var bw = Math.round(r[2] * sc), bh = Math.round(r[3] * sc);
+    pl.style.display = KR.on && KR.cur ? 'block' : 'none';
+    pl.style.left = Math.round(ox + r[0] * sc) + 'px'; pl.style.top = Math.round(oy + r[1] * sc) + 'px'; pl.style.width = bw + 'px'; pl.style.height = bh + 'px';
+    return [bw, bh];
+  }
+  function krSize() { var z = krPlBox(); if (z && KR.p && KR.p.setSize) try { KR.p.setSize(z[0], z[1]); } catch (e) {} }
+  /* 광고 '건너뛰기'는 사람이 직접 누르게 한다(YouTube 규정상 자동으로 건너뛰면 안 됨): ▲ = 10초 동안 리모컨이 영상 안을 조작 */
+  function krTouch() {
+    if (!KR.p || !KR.p.getIframe) return;
+    try { KR.p.getIframe().focus(); } catch (e) { return; }
+    toast('10초 동안 영상 조작 · 방향 버튼으로 [건너뛰기]에 맞추고 가운데 버튼');
+    clearTimeout(KR.touchT); KR.touchT = setTimeout(function () { try { window.focus(); document.body.focus(); } catch (e) {} }, 10000);
+  }
   function krDraw() {
     // 오른쪽: 지금 곡 + 예약 목록
     var h = '<div class="kr-now">' + (KR.cur ? '<small>지금 부르는 곡</small><b>' + esc(KR.cur.t) + '</b>' : '<small>노래방</small><b>노래를 찾아 예약하세요</b>') + '</div><div class="kr-ql"><small>예약 ' + KR.queue.length + '곡</small>';
@@ -4376,7 +4395,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     var H = KR.mode === 'search'
       ? (KR.f === 'res' ? [lk('▲▼', '곡 고르기'), lk('ok', '예약'), lk('▲', '글자 쓰기로'), lk('복귀', KR.cur ? '노래 화면' : '나가기')]
          : [lk('ok', '글자 넣기'), lk('0~9', '숫자'), lk('rew', '지우기'), lk('play', '검색'), KR.res.length ? lk('▼', '결과 고르기') : '', lk('복귀', KR.cur ? '노래 화면' : '나가기')])
-      : [lk('ok', '노래 찾기'), lk('ff', '다음 곡'), lk('pause', '멈춤'), lk('복귀', '나가기')];
+      : [lk('ok', '노래 찾기'), lk('▲', '광고 건너뛰기'), TVAPP.yt ? lk('C', '유튜브 앱으로') : '', lk('ff', '다음 곡'), lk('pause', '멈춤'), lk('복귀', '나가기')];
     var hh = ''; for (var q = 0; q < H.length; q++) if (H[q]) hh += '<span class="kr-h">' + H[q] + '</span>';
     setHTML('krHint', hh);
   }
@@ -4421,13 +4440,13 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
   }
   /* 노래방 재생기: 막히면 차례로 — ① 다른 재생기 주소(youtube-nocookie)로 다시 ② 같은 곡의 다른 영상 ③ TV 유튜브 앱(3판 앱) ④ 다음 곡 */
   function krLoad(s) {
-    var host = s.nc ? 'https://www.youtube-nocookie.com' : 'https://www.youtube.com';
+    var host = s.nc ? 'https://www.youtube-nocookie.com' : 'https://www.youtube.com', z = krPlBox() || [1408, 792];
     if (KR.p && KR.host === host) { if (KR.ready) try { KR.p.loadVideoById(s.id); } catch (e) {} return; }
     if (KR.p) { try { KR.p.destroy(); } catch (e) {} KR.p = null; setHTML('krPl', '<div id="krPlayer"></div>'); }
     KR.ready = false; KR.host = host;
     try {
-      KR.p = new YT.Player('krPlayer', { width: 1408, height: 792, videoId: s.id, host: host,
-        playerVars: { autoplay: 1, controls: 0, disablekb: 1, fs: 0, rel: 0, iv_load_policy: 3, playsinline: 1, modestbranding: 1, enablejsapi: 1,
+      KR.p = new YT.Player('krPlayer', { width: z[0], height: z[1], videoId: s.id, host: host,
+        playerVars: { autoplay: 1, controls: 0, disablekb: 0, fs: 0, rel: 0, iv_load_policy: 3, playsinline: 1, modestbranding: 1, enablejsapi: 1,
           origin: location.protocol + '//' + location.host, widget_referrer: location.href.split('#')[0] },
         events: {
           onReady: function () { KR.ready = true; krSize(); if (KR.cur && KR.cur.id !== s.id) try { KR.p.loadVideoById(KR.cur.id); } catch (e) {} },
@@ -4465,6 +4484,8 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     }
     if (KR.mode === 'play') {
       if (k === RK.OK) krSetMode('search');
+      else if (k === RK.U) krTouch();
+      else if (k === 405 && TVAPP.on && TVAPP.yt && KR.cur) { var sx = KR.cur; KR.ext = sx; KR.cur = null; try { KR.p.stopVideo(); } catch (e) {} tvAppPost({ yt: sx.id, t: sx.t }); krSetMode('search'); toast('TV 유튜브 앱으로 엽니다 · 다 부르면 뒤로 버튼'); }
       else if (k === RK.FF) krNext();
       else if (k === RK.PAUSE || (k === RK.PP && KR.st === '1')) { if (KR.p) try { KR.p.pauseVideo(); } catch (e) {} }
       else if (k === RK.PLAY || k === RK.PP) { if (KR.p) try { KR.p.playVideo(); } catch (e) {} }
@@ -4693,6 +4714,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     var tr = 'translate(' + ((w - 1920 * s) / 2 + o[0] * s) + 'px,' + ((h - 1080 * s) / 2 + o[1] * s) + 'px) scale(' + s + ')';
     var st = $('stage').style;
     st.webkitTransform = tr; st.transform = tr;
+    if (typeof KR !== 'undefined' && KR && KR.on) krSize();
   }
 
   /* ───────────── 미리보기 (?demo=1) ───────────── */
