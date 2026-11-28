@@ -171,6 +171,13 @@ canvas{display:block;width:100%;height:auto;image-rendering:pixelated;image-rend
 .bb.ok{border-color:var(--green);color:var(--chalk);background:#13241a}
 .bb.no{border-color:var(--red);background:#2a1414}
 .bb.dim{opacity:.4}
+.bb span{min-width:0}
+.bcb{font-style:normal;margin-left:.8em;color:var(--amber);font-family:var(--sans);font-size:.95em;white-space:nowrap}
+.bcb.fire{color:#ffb35a;text-shadow:0 0 .6em rgba(255,140,40,.9);animation:bl .35s steps(2) infinite}
+.bat{font:700 2.6em/1.15 var(--serif);color:#ffe9d6;text-align:center;margin:.05em 0 .15em;letter-spacing:.12em;text-shadow:0 0 .5em rgba(208,96,78,.9);animation:bl .3s steps(2) infinite}
+.bz.rage{border-color:#7a1c1c!important;box-shadow:0 0 3em rgba(150,20,20,.6)!important}
+.bo.swp{animation:hit .3s}
+.bo.b3 .bb{font-size:.92em}
 .bm{min-height:1.4em;margin:.6em 0 0;color:var(--amber);font-size:.95em;word-break:keep-all}
 .bm b{color:var(--chalk)}
 .cine .panel.p-boss{left:12%;right:12%;bottom:5%}
@@ -294,19 +301,19 @@ B5:{t:'c',k:"향찰의 실질 형태소",q:"<em>향찰에서 뜻을 지닌 실�
 B6:{t:'c',k:"향찰의 형식 형태소",q:"<em>문법적 구실을 하는 형식 형태소는 어떻게 적었는가?</em>",o:["음차 — 한자의 소리를 빌려","훈차 — 한자의 뜻을 빌려","적지 않고 비워 두어","초성 글자를 다시 써서"]},
 /* 셋째 마당 — 창제 원리: 초성 */
 C0:{t:'s',k:"음절의 세 자리",q:"<em>한 음절을 이루는 세 자리를 소리 나는 차례로.</em>",o:["초성","중성","종성"]},
-C1:{t:'n',k:"초성·중성 글자 수",q:"궤 자물쇠 — <em>초성의 글자 수, 그리고 중성의 글자 수</em>",a:'1711',h:"초성 열일곱, 중성 열하나. 이어서 맞춘다."},
+C1:{t:'n',k:"초성·중성 글자 수",d:'초성 17 · 중성 11',q:"궤 자물쇠 — <em>초성의 글자 수, 그리고 중성의 글자 수</em>",a:'1711',h:"초성 열일곱, 중성 열하나. 이어서 맞춘다."},
 C1b:{t:'c',k:"초성을 만든 원리",q:"<em>초성 글자를 만든 두 원리는?</em>",o:["상형과 가획","상형과 합용","음차와 훈차","연철과 분철"]},
 C2:{t:'c',k:"초성 기본자가 본뜬 것",q:B("ㄱ ㄴ ㅁ ㅅ ㅇ")+"<em>초성의 기본자는 무엇을 본떴는가?</em>",o:["발음 기관의 모양","하늘 · 땅 · 사람","한자의 획","해 · 달 · 별"]},
 C3:{t:'s',k:"초성 기본자 다섯",q:"받침대 다섯 개에 글자가 하나씩. <em>아음 → 설음 → 순음 → 치음 → 후음 차례로.</em>",o:["ㄱ","ㄴ","ㅁ","ㅅ","ㅇ"],h:"아(어금니) · 설(혀) · 순(입술) · 치(이) · 후(목구멍)."},
-C3b:{t:'c',k:"ㅁ",q:B("ㅁ")+"<em>어느 소리의 기본자인가?</em>",o:["순음","아음","설음","후음"]},
-C3c:{t:'c',k:"ㅅ",q:B("ㅅ")+"<em>어느 소리의 기본자인가?</em>",o:["치음","설음","순음","아음"]},
-C3d:{t:'c',k:"ㅇ",q:B("ㅇ")+"<em>어느 소리의 기본자인가?</em>",o:["후음","치음","아음","순음"]},
+C3b:{t:'c',k:"기본자 ㅁ",q:B("ㅁ")+"<em>어느 소리의 기본자인가?</em>",o:["순음","아음","설음","후음"]},
+C3c:{t:'c',k:"기본자 ㅅ",q:B("ㅅ")+"<em>어느 소리의 기본자인가?</em>",o:["치음","설음","순음","아음"]},
+C3d:{t:'c',k:"기본자 ㅇ",q:B("ㅇ")+"<em>어느 소리의 기본자인가?</em>",o:["후음","치음","아음","순음"]},
 C4:{t:'c',k:"획을 더하면",q:"<em>기본자에 획을 더할수록 소리는?</em>",o:["세진다","약해진다","길어진다","사라진다"]},
-C5e:{t:'c',k:"ㄱ의 가획",q:B("ㄱ → ?")+"<em>획을 더하면?</em>",o:["ㅋ","ㄲ","ㆁ","ㅎ"]},
-C5a:{t:'c',k:"ㄴ의 가획",q:B("ㄴ → ㄷ → ?")+"<em>한 번 더 더하면?</em>",o:["ㅌ","ㄹ","ㅋ","ㅍ"]},
-C5d:{t:'c',k:"ㅁ의 가획",q:B("ㅁ → ? → ㅍ")+"<em>가운데 글자는?</em>",o:["ㅂ","ㅸ","ㅃ","ㄷ"]},
-C5c:{t:'c',k:"ㅅ의 가획",q:B("ㅅ → ㅈ → ?")+"<em>한 번 더 더하면?</em>",o:["ㅊ","ㅿ","ㅆ","ㅉ"]},
-C5b:{t:'c',k:"ㅇ의 가획",q:B("ㅇ → ? → ㅎ")+"<em>가운데 글자는?</em>",o:["ㆆ","ㆁ","ㅿ","ㅈ"]},
+C5e:{t:'c',k:"ㄱ에 획을 더하면",q:B("ㄱ → ?")+"<em>획을 더하면?</em>",o:["ㅋ","ㄲ","ㆁ","ㅎ"]},
+C5a:{t:'c',k:"ㄴ → ㄷ → ?",q:B("ㄴ → ㄷ → ?")+"<em>한 번 더 더하면?</em>",o:["ㅌ","ㄹ","ㅋ","ㅍ"]},
+C5d:{t:'c',k:"ㅁ → ? → ㅍ",q:B("ㅁ → ? → ㅍ")+"<em>가운데 글자는?</em>",o:["ㅂ","ㅸ","ㅃ","ㄷ"]},
+C5c:{t:'c',k:"ㅅ → ㅈ → ?",q:B("ㅅ → ㅈ → ?")+"<em>한 번 더 더하면?</em>",o:["ㅊ","ㅿ","ㅆ","ㅉ"]},
+C5b:{t:'c',k:"ㅇ → ? → ㅎ",q:B("ㅇ → ? → ㅎ")+"<em>가운데 글자는?</em>",o:["ㆆ","ㆁ","ㅿ","ㅈ"]},
 C6:{t:'c',k:"이체자 셋",q:"<em>가획의 원리를 따르지 않은 '이체자' 셋은?</em>",o:["ㆁ ㄹ ㅿ","ㅋ ㅌ ㅍ","ㄱ ㄴ ㅁ","ㆆ ㅎ ㅊ"]},
 C6b:{t:'c',k:"종성의 'ㅇ' 소리를 적던 글자",q:"<em>오늘날 받침 'ㅇ'의 소리를 적던 글자는?</em>",o:["ㆁ","ㅇ","ㆆ","ㅿ"]},
 C6c:{t:'c',k:"ㆁ의 별명",q:B("ㆁ")+"<em>이 글자를 달리 부르는 이름은?</em>",o:["꼭지 이응","여린히읗","반치음","아래아"]},
@@ -578,7 +585,7 @@ function mk(i){var c=CH[i];return{ci:i,c:c,map:c.map.slice(),px:c.start[0],py:c.
 function T(x,y){return(y<0||y>=H||x<0||x>=W)?'#':G.map[y].charAt(x)}
 function bossAt(){return G.c.final&&!G.gateOn&&G.gate<GATE}
 function lv(){return M=='play'||M=='quiz'||M=='qok'}
-function ans(q){return q.t=='c'?q.o[0]:q.t=='s'?q.o.join(' → '):q.a}
+function ans(q){return q.t=='c'?q.o[0]:q.t=='s'?q.o.join(' → '):q.d||(isYear(q)?(+q.a)+'년':q.a)}
 function solid(x,y){var ch=T(x,y);if(ch!='.'&&ch!=',')return true;return bossAt()&&y==2&&(x==9||x==10)}
 function objAt(x,y){var a=G.c.objs,i,o;for(i=0;i<a.length;i++){o=a[i];if(o.y==y&&x>=o.x&&x<=(o.x2||o.x)){if(o.n=='바랜 것'&&!bossAt())continue;return o}}return null}
 function front(){return{x:G.px+DX[G.dir],y:G.py+DY[G.dir]}}
@@ -629,8 +636,12 @@ function cho(c){var n=c.charCodeAt(0)-44032;return n<0||n>11171?c:CHO.charAt(Mat
 function hangul(q,a,b){var s=strip(q.o[0]).replace(/\s/g,'');return s.length>=a&&s.length<=b&&/^[가-힣]+$/.test(s)}
 function shortA(q){return q&&q.t=='c'&&strip(ans(q)).length<=22}
 function cIds(ex,f){var a=[],k;for(k in Q)if(k!=ex&&k.charAt(0)!='E'&&Q[k].t=='c'&&(!f||f(Q[k])))a.push({k:k,w:(SV.ok[k]?1:0)+Math.random()});a.sort(function(x,y){return y.w-x.w});return a.map(function(x){return x.k})}
-function others(n,ex,f){var a=cIds(ex,f),r=[],i,seen={};seen[strip(ans(Q[ex]))]=1;seen[Q[ex].k]=1;
-  for(i=0;i<a.length&&r.length<n;i++)if(!seen[strip(ans(Q[a[i]]))]&&!seen[Q[a[i]].k]){seen[strip(ans(Q[a[i]]))]=1;seen[Q[a[i]].k]=1;r.push(a[i])}return r}
+function fam(k){return k.replace(/[a-z]+$/,'')}
+function clash(a,b){var x=strip(ans(Q[a])),y=strip(ans(Q[b]));
+  return a==b||fam(a)==fam(b)||x==y||Q[a].k==Q[b].k||Q[b].k.indexOf(x)>=0||Q[a].k.indexOf(y)>=0||x.indexOf(Q[b].k)>=0||y.indexOf(Q[a].k)>=0}
+function others(n,ex,f){var a=cIds(ex,f),r=[ex],i,j,ok;
+  for(i=0;i<a.length&&r.length<=n;i++){ok=1;for(j=0;j<r.length;j++)if(clash(a[i],r[j])){ok=0;break}if(ok)r.push(a[i])}
+  return r.slice(1)}
 function isYear(q){return q.t=='n'&&/해/.test(strip(q.q))}
 function yearAll(q){var a=[],k,ys={};ys[q.a]=1;for(k in Q)if(Q[k]!==q&&isYear(Q[k])&&!ys[Q[k].a]){ys[Q[k].a]=1;a.push(Q[k])}return a}
 function nums(z){var i,n=0;for(i=0;i<z.it.length;i++)if(!z.it[i].sp&&!z.it[i].k)z.it[i].k=''+(++n)}
@@ -968,53 +979,112 @@ function crawlUpdate(dt){var c=G.cr,pp;if(!c)return;
 /* ───── 문지기: 둘째·넷째·여섯째 마당 끝. 빠른 복습 — 둘 중 맞는 것을 재빨리 고른다 ─────
    틀리거나 늦은 것은 곧 다시 나오고, 끝나면 '외워 둘 것'으로 정리한다. 예전에 자주 틀린 문제가 먼저 나온다 */
 var BOSS={
- 2:{n:'서고지기',s:'빌린 글자를 지키는 것',hp:8,fv:0,pre:['문고리에 손을 대자, 서고 전체가 숨을 멈춘다.','칠|되찾은 글을 기억하느냐','문 앞을 막아선 것이 있다 — 문지기다.']},
- 4:{n:'입 없는 것',s:'소리를 삼킨 것',hp:10,fv:1,pre:['문이 안쪽에서 잠긴다. 바닥에서 무언가 기어 나온다.','칠|소리를 돌려받고 싶으냐','얼굴이 지워진 것이 문을 가로막는다.']},
- 6:{n:'눈 많은 것',s:'모든 글자를 본 것',hp:12,fv:2,pre:['벽에 붙은 글자들이 일제히 눈을 뜬다.','칠|다 보았다 다 기억하느냐','마지막 문지기다.']}};
+ 2:{n:'서고지기',s:'빌린 글자를 지키는 것',hp:16,fv:0,mech:'swap',rk:'demon',ph:['책장이 넘어간다 — 이제 보기가 자리를 바꾼다','마지막 발악 — 손이 쉴 새 없이 뻗어 온다'],pre:['문고리에 손을 대자, 서고 전체가 숨을 멈춘다.','칠|되찾은 글을 기억하느냐','문 앞을 막아선 것이 있다 — 문지기다.']},
+ 4:{n:'입 없는 것',s:'소리를 삼킨 것',hp:20,fv:1,mech:'fade',rk:'breathy',ph:['소리를 삼킨다 — 이제 보기 글자가 지워진다','마지막 발악 — 더 빨리 지워지고, 손이 쏟아진다'],pre:['문이 안쪽에서 잠긴다. 바닥에서 무언가 기어 나온다.','칠|소리를 돌려받고 싶으냐','얼굴이 지워진 것이 문을 가로막는다.']},
+ 6:{n:'눈 많은 것',s:'모든 글자를 본 것',hp:24,fv:2,mech:'three',rk:'chorus',ph:['눈이 하나 더 뜬다 — 이제 셋 중 하나 (◀ ▼ ▶)','마지막 발악 — 보기가 자리를 바꾸고, 손이 쏟아진다'],pre:['벽에 붙은 글자들이 일제히 눈을 뜬다.','칠|다 보았다 다 기억하느냐','마지막 문지기다.']}};
 function bossPool(ci){var a=[],i,j,ids,k,st,seen={};
   for(i=0;i<=ci&&i<CH.length;i++){ids=chQ(CH[i]);for(j=0;j<ids.length;j++){k=ids[j];if(seen[k]||!Q[k]||!Q[k].k)continue;seen[k]=1;st=SV.st[k]||[0,0];
     a.push({k:k,w:(st[0]-st[1])*1.5+(i>=ci-1?1.2:0)+(SV.ok[k]?0:.5)+Math.random()*1.4})}}
   a.sort(function(x,y){return y.w-x.w});return a.map(function(x){return x.k})}
-function bossQ(id){var q=Q[id],ok,bad,o,a,i,y,d;
-  if(q.t=='c'){ok=q.o[0];bad=q.o[1+Math.floor(Math.random()*(q.o.length-1))]}
-  else if(q.t=='n'&&!isYear(q)){y=parseInt(q.a,10);d=[1,100,101,-1,-100,99][Math.floor(Math.random()*6)];if(y+d<=0)d=-d;ok=Math.floor(y/100)+' · '+(y%100);bad=Math.floor((y+d)/100)+' · '+((y+d)%100)}
-  else if(q.t=='n'){y=parseInt(q.a,10);d=[1,2,3,9,10,11,100][Math.floor(Math.random()*7)]*(Math.random()<.5?-1:1);if(y+d<=0)d=-d;ok=y+'년';bad=(y+d)+'년'}
-  else{ok=q.o.join(' → ');a=q.o.slice();i=Math.floor(Math.random()*(a.length-1));o=a[i];a[i]=a[i+1];a[i+1]=o;bad=a.join(' → ')}
-  o=Math.random()<.5?[ok,bad]:[bad,ok];return{id:id,k:q.k,o:o,ok:o[0]==ok?0:1,a:ok}}
+function nFmt(v){return Math.floor(v/100)+' · '+(v%100)}
+function bossQ(id,n){var q=Q[id],ok,bads=[],o,a,i,j,y,ds,tries=0;n=n||2;
+  function addB(b){if(b!=null&&b!==ok&&bads.indexOf(b)<0)bads.push(b)}
+  if(q.t=='c'){ok=q.o[0];o=shuffle(q.o.slice(1));for(i=0;i<o.length;i++)addB(o[i])}
+  else if(q.t=='n'&&!isYear(q)){y=parseInt(q.a,10);ok=nFmt(y);ds=shuffle([1,100,101,-1,-100,99,-101]);for(i=0;i<ds.length;i++)if(y+ds[i]>0)addB(nFmt(y+ds[i]))}
+  else if(q.t=='n'){y=parseInt(q.a,10);ok=y+'년';ds=shuffle([1,2,3,9,10,11,100,-1,-2,-3,-9,-10,-11,-100]);for(i=0;i<ds.length;i++)if(y+ds[i]>0)addB((y+ds[i])+'년')}
+  else{ok=q.o.join(' → ');while(bads.length<4&&tries++<40){a=q.o.slice();i=Math.floor(Math.random()*(a.length-1));o=a[i];a[i]=a[i+1];a[i+1]=o;
+    if(a.length>2&&Math.random()<.4){j=Math.floor(Math.random()*(a.length-1));o=a[j];a[j]=a[j+1];a[j+1]=o}addB(a.join(' → '))}}
+  o=shuffle([ok].concat(bads.slice(0,n-1)));return{id:id,k:q.k,o:o,ok:o.indexOf(ok),a:ok}}
+function bossMinT(){var B=G.bs;return [3200,2900,2500][B.ph-1]+(B.b.mech=='three'&&B.ph>=2?500:0)}
+function roar(k,v){v=v||.45;screamK(k||'demon',v,0);growl(v*.55,1.4);hitK('cluster',.6)}
 function bossStart(cb){var b=BOSS[G.ci];G.ers=[];G.bl=[];G.sw=null;G.fk2=null;thClear();aDanger(0);
-  G.bs={b:b,hp:b.hp,max:b.hp,q:null,t:0,tm:5200,qu:shuffle(bossPool(G.ci).slice(0,b.hp+6)),miss:[],ms:{},st:'in',w:3200,cb:cb,sc:0,sd:Math.floor(Math.random()*997),msg:'',pick:-1,tk:0};
+  G.bs={b:b,hp:b.hp,max:b.hp,q:null,t:0,tm:5200,qu:shuffle(bossPool(G.ci).slice(0,b.hp+6)),miss:[],ms:{},st:'in',w:3400,cb:cb,sc:0,sd:Math.floor(Math.random()*997),msg:'',pick:-1,tk:0,
+    ph:1,cbo:0,mx:0,nA:3+Math.floor(Math.random()*2),hb:0,lg:0,atk:null,na:0,dg:0,pend:0,sw:0,fd:0,ft:0,fin:0,need:9};
   M='boss';held=-1;tapd=-1;duck(1);G.black=3200;toll(0,1.1);toll(1.4,1.1);growl(.25,2.6);
-  setPanel('boss','<div class="bz in"><p class="bn">'+b.n+'</p><p class="bs">'+b.s+'</p><p class="bh2">빠른 복습 — 둘 중 맞는 것을 재빨리 고른다<br>'+(TV?'◀ ▶ 버튼':TOUCH?'왼쪽 · 오른쪽 버튼':'← → 방향키 (또는 1 · 2)')+' · 늦거나 틀리면 덮쳐 온다 · 빨리 맞히면 두 배로 밀어낸다</p></div>')}
-function bossNext(){var B=G.bs,id;if(!B.qu.length)B.qu=shuffle(bossPool(G.ci).slice(0,8));id=B.qu.shift();B.q=bossQ(id);B.t=B.tm;B.st='ask';B.at=Date.now();B.pick=-1;B.tk=0;bossDraw()}
-function bossDraw(){var B=G.bs,q=B.q,h,i,c;
-  h='<div class="bz"><div class="bhp"><b>'+B.b.n+'</b><u><i style="width:'+(B.hp/B.max*100)+'%"></i></u></div>';
-  h+='<div class="btm" id="btmw"><i id="btm" style="width:'+Math.max(0,B.t/B.tm*100)+'%"></i></div><p class="bq">'+q.k+'</p><div class="bo">';
-  for(i=0;i<2;i++){c=B.st=='ask'?'':i==q.ok?' ok':B.pick==i?' no':' dim';h+='<button class="bb'+c+'" data-a="bp" data-v="'+i+'"><i>'+(i?'▶':'◀')+'</i>'+q.o[i]+'</button>'}
-  h+='</div><p class="bm">'+(B.msg||'')+'</p></div>';setPanel('boss',h)}
-function bossPick(i){var B=G.bs,q,ok,fast,st;if(M!='boss'||!B||B.st!='ask'||i<0||i>1||Date.now()-B.at<350)return;
+  setPanel('boss','<div class="bz in"><p class="bn">'+b.n+'</p><p class="bs">'+b.s+'</p><p class="bh2">빠른 복습 — 맞는 것을 재빨리 고른다 · '+(TV?'◀ ▶ 버튼':TOUCH?'아래 버튼':'← → 방향키 (또는 1 · 2)')+
+    '<br>손이 뻗어 오면 화살표 쪽으로 피한다 · 연달아 맞히면 불꽃이 붙는다<br>쓰러뜨리면 가운데 버튼을 연타해 몰아낸다</p></div>')}
+function bossNext(){var B=G.bs,id,n;if(!B.qu.length)B.qu=shuffle(bossPool(G.ci).slice(0,8));id=B.qu.shift();
+  n=B.b.mech=='three'&&B.ph>=2?3:2;B.q=bossQ(id,n);B.t=B.tm;B.st='ask';B.at=Date.now();B.pick=-1;B.tk=0;
+  B.sw=(B.b.mech=='swap'&&B.ph>=2)||(B.b.mech=='three'&&B.ph>=3)?B.tm*rnd(.38,.62):0;          /* 남은 시간이 이만큼 되면 보기가 자리를 바꾼다 */
+  B.fd=B.b.mech=='fade'&&B.ph>=2?1:0;B.ft=0;bossDraw()}
+function bossDraw(){var B=G.bs,q=B.q,h,i,c,n,a,ar='▲▶▼◀';
+  h='<div class="bz'+(B.ph>=3?' rage':'')+'"><div class="bhp"><b>'+B.b.n+'</b><u><i style="width:'+Math.max(0,B.hp/B.max*100)+'%"></i></u>'+(B.cbo>=2?'<em class="bcb'+(B.cbo>=4?' fire':'')+'">연속 ×'+B.cbo+'</em>':'')+'</div>';
+  if(B.st=='atk'||(B.st=='hurt'||B.st=='dodged')&&B.atk){a=B.atk;
+    h+='<p class="bat">'+(B.st=='atk'?ar.charAt(a.need):B.st=='dodged'?'피했다':'으윽')+'</p><p class="bq">'+(B.st=='atk'?['위에서 덮쳐 온다','오른쪽에서 손이 뻗어 온다','',"왼쪽에서 손이 뻗어 온다"][a.from]+' — '+ar.charAt(a.need)+' 쪽으로!':B.msg)+'</p>';
+    if(TOUCH&&B.st=='atk')h+='<div class="bo b3"><button class="bb" data-a="bd" data-v="3">◀</button><button class="bb" data-a="bd" data-v="2">▼</button><button class="bb" data-a="bd" data-v="1">▶</button></div>';
+    return setPanel('boss',h+'</div>')}
+  if(B.st=='fin'){h+='<p class="bat">빛을 모아라!</p><div class="btm"><i id="bfin" style="width:'+(B.fin/B.need*100)+'%"></i></div><div class="btm low"><i id="bftm" style="width:100%"></i></div>'+
+    '<p class="bq">가운데 버튼을 연타해 몰아낸다 — <span id="bfn">'+B.fin+' / '+B.need+'</span></p>'+(TOUCH?'<div class="bo"><button class="bb" data-a="bmash">빛</button></div>':'');return setPanel('boss',h+'</div>')}
+  h+='<div class="btm" id="btmw"><i id="btm" style="width:'+Math.max(0,B.t/B.tm*100)+'%"></i></div><p class="bq">'+q.k+'</p><div class="bo'+(q.o.length==3?' b3':'')+'">';n=q.o.length;
+  for(i=0;i<n;i++){c=B.st=='ask'?'':i==q.ok?' ok':B.pick==i?' no':' dim';h+='<button class="bb'+c+'" data-a="bp" data-v="'+i+'"><i>'+(i==0?'◀':i==n-1?'▶':'▼')+'</i><span>'+q.o[i]+'</span></button>'}
+  h+='</div><p class="bm">'+(B.msg||'')+'</p></div>';setPanel('boss',h);if(B.fd&&B.st=='ask')bossFade()}
+function bossFade(){var B=G.bs,q=B.q,sp=el('panel').querySelectorAll('.bb span'),i,j,t,out,rem=B.t/B.tm*(B.ph>=3?1.2:1.5);
+  for(i=0;i<sp.length&&i<q.o.length;i++){t=strip(q.o[i]);out='';for(j=0;j<t.length;j++)out+=(t.charAt(j)==' '||hash(j*7+t.length,B.sd+t.charCodeAt(0))<rem)?t.charAt(j):'·';sp[i].textContent=out}}
+function bossSwap(){var B=G.bs,q=B.q,e;if(q.o.length==2)q.o.reverse();else q.o.push(q.o.shift());q.ok=q.o.indexOf(q.a);
+  B.at=Math.max(B.at,Date.now()-150);sfx.page();nz(.12,.05,5000,'highpass',.05);G.white=.1;G.shake=160;bossDraw();e=el('panel').querySelector('.bo');if(e)e.className+=' swp'}
+function bossPhaseChk(){var B=G.bs;if(B.ph<3&&B.hp>0&&B.hp<=B.max*(B.ph==1?2/3:1/3))B.pend=1}
+function bossPhase(){var B=G.bs;B.pend=0;B.ph++;B.st='ph';B.w=2800;B.lg=1100;B.tm=Math.max(bossMinT(),B.tm-300);B.nA=1+Math.floor(Math.random()*2);
+  roar(B.b.rk,.5);G.shake=900;G.flash=.55;G.glitch=420;duck(1);
+  setPanel('boss','<div class="bz in"><p class="bn">'+B.b.n+' — '+(B.ph==2?'둘째 막':'마지막 막')+'</p><p class="bs">'+B.b.ph[B.ph-2]+'</p></div>')}
+function flameFx(){[523,659,784,1047].forEach(function(f,i){tone(f,.55,'triangle',.05,0,i*.05,.5)});hitK('clang',.6);G.white=.28}
+function bossPick(i){var B=G.bs,q,ok,fast,st,dmg;if(M!='boss'||!B||B.st!='ask'||!B.q||i<0||i>=B.q.o.length||Date.now()-B.at<350)return;
   q=B.q;ok=i==q.ok;B.pick=i;st=SV.st[q.id]||(SV.st[q.id]=[0,0]);if(!B.ms['a'+q.id]){B.ms['a'+q.id]=1;st[0]++;if(ok)st[1]++}save();
   if(!ok){bossMiss(false);return}
-  fast=B.tm-B.t<1700;B.hp-=fast?2:1;B.sc++;B.msg=fast?'빠르다! 두 배로 밀려난다.':'맞았다.';B.tm=Math.max(3000,B.tm-180);
-  hit(fast?.8:.55);scream(fast?.35:.25,.55,rnd(560,720));G.shake=fast?300:180;G.white=fast?.22:.12;G.bsR=500;
-  if(B.hp<=0){B.hp=0;B.st='end';B.w=1800;B.msg='물러간다…';bossDraw();scream(.5,1.6,rnd(380,460));hit(1);glass(.7);G.white=.5;G.shake=900;return}
-  B.st='right';B.w=fast?400:560;bossDraw()}
-function bossMiss(late){var B=G.bs,q=B.q,st;B.st='wrong';B.w=1900;B.msg=(late?'늦었다. ':'틀렸다. ')+'정답은 <b>'+q.a+'</b>';
+  fast=B.tm-B.t<1500;B.cbo++;B.mx=Math.max(B.mx,B.cbo);dmg=fast?2:1;
+  if(B.cbo>=4&&B.cbo%2==0){dmg+=2;B.msg='불꽃 — 연달아 '+B.cbo+'번! 크게 밀려난다.';flameFx()}else B.msg=fast?'빠르다! 두 배로 밀려난다.':'맞았다.';
+  B.hp-=dmg;B.sc++;B.tm=Math.max(bossMinT(),B.tm-180);
+  hit(fast?.8:.55);scream(fast?.35:.25,.55,rnd(560,720));G.shake=fast?300:180;G.white=Math.max(G.white||0,fast?.22:.12);G.bsR=500;
+  if(B.hp<=0){bossFin();return}
+  bossPhaseChk();B.st='right';B.w=fast?420:580;bossDraw()}
+function bossMiss(late){var B=G.bs,q=B.q,st;B.st='wrong';B.w=1900;B.cbo=0;B.msg=(late?'늦었다. ':'틀렸다. ')+'정답은 <b>'+q.a+'</b>';
   if(!B.ms[q.id]){B.ms[q.id]=1;B.miss.push(q)}B.qu.splice(Math.min(2,B.qu.length),0,q.id);   /* 틀린 것은 곧 다시 나온다 */
   if(late&&!B.ms['a'+q.id]){B.ms['a'+q.id]=1;st=SV.st[q.id]||(SV.st[q.id]=[0,0]);st[0]++;save()}
   B.tm=Math.min(5200,B.tm+250);bossDraw();G.lead--;hud();
   if(G.lead<=0){B.st='dead';B.w=1100}jump(2)}
+/* 공격: 손이 뻗어 오는 쪽의 반대(위에서 오면 아래)로 피한다. 피하면 빈틈에 한 대 */
+var BATK=[[3,1],[1,3],[0,2]];
+function bossAtkSet(a,ex){var k;do{k=Math.floor(Math.random()*(G.bs.ph>=2?3:2))}while(k==ex);a.k=k;a.from=BATK[k][0];a.need=BATK[k][1];a.t=a.tm;
+  swell(a.tm/1000*.85,.1,200,2600,'bandpass',0,a.from==3?-.8:a.from==1?.8:0);scratch(.06,a.from==3?-.6:a.from==1?.6:0);G.bsR=0}
+function bossAtk(){var B=G.bs,a={tm:B.ph==1?1400:B.ph==2?1200:1000,dbl:B.ph>=3&&Math.random()<.5};bossAtkSet(a,-1);B.atk=a;B.st='atk';B.at=Date.now();B.na++;
+  B.nA=B.ph==1?3+Math.floor(Math.random()*2):B.ph==2?2+Math.floor(Math.random()*2):2;growl(.22,.9);bossDraw()}
+function bossDodge(d){var B=G.bs,a;if(M!='boss'||!B||B.st!='atk'||Date.now()-B.at<120)return;a=B.atk;
+  if(d!=a.need){bossHurt(false);return}
+  nz(.3,.14,900,'highpass',0,.3,a.need==1?.7:a.need==3?-.7:0,7000);hitK('clang',.5);B.dg++;
+  if(a.dbl){a.dbl=0;a.tm=Math.round(a.tm*.85);bossAtkSet(a,a.k);B.at=Date.now();bossDraw();return}   /* 마지막 막: 연달아 두 번 */
+  B.hp-=1;B.msg='빈틈에 빛을 비춘다';G.white=.15;G.bsR=500;scream(.22,.5,rnd(520,680));
+  if(B.hp<=0){bossFin();return}
+  bossPhaseChk();B.st='dodged';B.w=700;bossDraw()}
+function bossHurt(late){var B=G.bs;B.st='hurt';B.w=1400;B.cbo=0;B.atk.t=0;B.msg=late?'늦었다 — 손이 초롱을 내리친다':'반대쪽이다 — 손이 초롱을 내리친다';
+  G.lead--;hud();hitK('boom',.8);jump(2);if(G.lead<=0){B.st='dead';B.w=1100}bossDraw()}
+function bossDir(d){var B=G.bs,n;if(!B)return;if(B.st=='atk'){bossDodge(d);return}if(B.st!='ask'||!B.q)return;n=B.q.o.length;
+  if(d==3)bossPick(0);else if(d==1)bossPick(n-1);else if(d==2&&n==3)bossPick(1)}
+/* 마무리: 쓰러뜨리면 가운데 버튼 연타로 몰아낸다. 모자라면 다시 일어선다 */
+function bossFin(){var B=G.bs;B.hp=0;B.st='fin';B.fin=0;B.need=TOUCH?7:9;B.ft=3200;B.at=Date.now();roar(B.b.rk,.38);G.shake=500;bossDraw()}
+function bossOk(){var B=G.bs,e;if(!B||M!='boss'||B.st!='fin')return;B.fin++;tone(300+B.fin*70,.14,'triangle',.08,0,0,.3);G.white=.1+B.fin/B.need*.2;G.bsR=300;
+  e=el('bfin');if(e)e.style.width=Math.min(100,B.fin/B.need*100)+'%';e=el('bfn');if(e)e.textContent=B.fin+' / '+B.need;
+  if(B.fin>=B.need){B.st='end';B.w=1800;B.msg='물러간다…';setPanel('boss','<div class="bz in"><p class="bn">물러간다…</p></div>');scream(.5,1.6,rnd(380,460));hit(1);glass(.7);G.white=.5;G.shake=900}}
+function bossRise(){var B=G.bs;B.hp=Math.ceil(B.max*.15);B.ph=3;B.st='rise';B.w=1700;B.lg=900;B.msg='빛이 모자랐다 — 다시 일어선다';roar(B.b.rk,.5);G.shake=700;
+  setPanel('boss','<div class="bz in"><p class="bn">다시 일어선다</p><p class="bs">빛이 모자랐다 — 조금만 더</p></div>')}
 function bossUpdate(dt){var B=G.bs,e;if(!B)return;
+  if(B.lg>0)B.lg-=dt;
+  if(B.st!='in'&&B.st!='end'&&B.st!='dead'){B.hb-=dt;if(B.hb<=0){B.hb=[950,720,520][B.ph-1];sfx.beat(.08+.04*B.ph)}}   /* 막이 바뀔수록 빨라지는 심장 소리 */
   if(B.st=='in'){B.w-=dt;if(B.w<=0){duck(0);bossNext()}return}
   if(B.st=='ask'){B.t-=dt;e=el('btm');if(e)e.style.width=Math.max(0,B.t/B.tm*100)+'%';
-    if(B.t<1600){if(B.tk<=0){B.tk=380;sfx.tick();sfx.beat(.16);e=el('btmw');if(e)e.className='btm low'}B.tk-=dt}
+    if(B.sw&&B.t<=B.sw){B.sw=0;bossSwap()}
+    if(B.fd){B.ft-=dt;if(B.ft<=0){B.ft=150;bossFade()}}
+    if(B.t<1600){if(B.tk<=0){B.tk=380;sfx.tick();e=el('btmw');if(e)e.className='btm low'}B.tk-=dt}
     aDanger(Math.min(1,1-B.t/B.tm));if(B.t<=0){B.pick=-1;bossMiss(true)}return}
+  if(B.st=='atk'){B.atk.t-=dt;aDanger(Math.min(1,1-B.atk.t/B.atk.tm));if(B.atk.t<=0)bossHurt(true);return}
+  if(B.st=='fin'){B.ft-=dt;e=el('bftm');if(e)e.style.width=Math.max(0,B.ft/3200*100)+'%';if(B.ft<=0)bossRise();return}
   B.w-=dt;if(B.w>0)return;
-  if(B.st=='right'||B.st=='wrong'){B.msg='';bossNext();return}
+  if(B.st=='ph'){duck(0);bossNext();return}
+  if(B.st=='right'||B.st=='wrong'||B.st=='dodged'||B.st=='hurt'||B.st=='rise'){B.msg='';if(B.pend){bossPhase();return}
+    if((B.st=='right'||B.st=='wrong')&&--B.nA<=0){bossAtk();return}bossNext();return}
   if(B.st=='end'){bossWin();return}
   if(B.st=='dead')bossLose()}
 function rvHtml(ms){var h='',i;if(!ms.length)return '';h='<div class="rv"><p class="rvh">외워 둘 것</p>';for(i=0;i<ms.length;i++)h+='<p><span>'+ms[i].k+'</span><b>'+ms[i].a+'</b></p>';return h+'</div>'}
 function bossWin(){var B=G.bs;G.bs=null;aDanger(0);duck(0);G.bcb=B.cb;setPanel('idle','');
-  setOv('<p class="endk">문지기 · 빠른 복습</p><h2>「'+B.b.n+'」 — 물러갔다</h2><p class="who">맞힌 것 '+B.sc+' · 틀리거나 늦은 것 '+B.miss.length+'</p>'+(B.miss.length?rvHtml(B.miss):'<p class="who">하나도 놓치지 않았다.</p>')+mi('bcont','계속'),null,'list')}
+  setOv('<p class="endk">문지기 · 빠른 복습</p><h2>「'+B.b.n+'」 — 물러갔다</h2><p class="who">맞힌 것 '+B.sc+' · 틀리거나 늦은 것 '+B.miss.length+' · 최대 연속 '+B.mx+' · 피한 손 '+B.dg+'</p>'+(B.miss.length?rvHtml(B.miss):'<p class="who">하나도 놓치지 않았다.</p>')+mi('bcont','계속'),null,'list')}
 function bossLose(){var B=G.bs;G.bs=null;aDanger(0);duck(0);G.bfail=B;setPanel('idle','');
   setOv('<p class="endk">문지기 · 빠른 복습</p><h2>초롱이 꺼졌다</h2><p class="who">「'+B.b.n+'」에게 삼켜졌다 · 맞힌 것 '+B.sc+'</p>'+rvHtml(B.miss)+mi('bretry','문지기에게 다시 도전<small>위의 것을 외운 뒤 · 초롱 불 3칸으로</small>')+mi('menu','처음 화면으로'),null,'list')}
 /* ───── 마당 시작 ───── */
@@ -1072,16 +1142,17 @@ var ACT={
  notes:function(){var k=OV.kind;showNotes(k=='pause'?showPause:showMenu)},back:function(){if(OV.back)OV.back()},rec:function(){showRec()},
  retry:function(){startCh(G.ci)},resume:resume,pause:function(){if(M=='play')showPause()},
  mute:function(){mute=!mute;if(MG)MG.gain.value=mute?0:.9;el('btM').textContent=mute?'소리 끔':'소리 켬'},mute2:function(){ACT.mute();showPause()},
- bp:function(v){bossPick(+v)},bcont:function(){var cb=G.bcb;G.bcb=null;hideOv();M='play';idle();if(cb)cb()},bretry:function(){var B=G.bfail;G.bfail=null;hideOv();G.lead=Math.max(G.lead,3);hud();bossStart(B.cb)},
+ bp:function(v){bossPick(+v)},bd:function(v){bossDodge(+v)},bmash:function(){bossOk()},bcont:function(){var cb=G.bcb;G.bcb=null;hideOv();M='play';idle();if(cb)cb()},bretry:function(){var B=G.bfail;G.bfail=null;hideOv();G.lead=Math.max(G.lead,3);hud();bossStart(B.cb)},
  qp:function(v){if(M=='quiz'&&Date.now()-QZ.at>450)qzPick(+v)},qok:function(){if(M=='quiz'&&Date.now()-QZ.at>450)qzPick(0)},dg:function(v){if(M!='quiz'||Date.now()-QZ.at<450)return;var p=v.split(',');QZ.sel=+p[0];QZ.d[QZ.sel]=(QZ.d[QZ.sel]+(+p[1])+10)%10;sfx.blip();qzDraw()}};
 
 /* ───── 입력 ───── */
 function action(){
   if(M=='ov'){if(OV.kind=='login'&&LG.length==2){ACT.go();return}var it=ovItems();if(it.length)it[OV.sel].click();return}
   if(M=='say'){sayNext();return}
+  if(M=='boss'){bossOk();return}
   if(M=='quiz'){if(Date.now()-QZ.at>450)qzPick(QZ.sel);return}
   if(M=='play'&&!G.moving)interact()}
-function dirKey(d){if(M=='ov')ovMove(d);else if(M=='quiz')qzMove(d);else if(M=='play')held=d;else if(M=='boss'){if(d==3)bossPick(0);else if(d==1)bossPick(1)}}
+function dirKey(d){if(M=='ov')ovMove(d);else if(M=='quiz')qzMove(d);else if(M=='play')held=d;else if(M=='boss')bossDir(d)}
 var KD={38:0,39:1,40:2,37:3,87:0,68:1,83:2,65:3};
 function onKey(k,e,once){var d=KD[k],n;aInit();
   if(d!==undefined&&!(M=='ov'&&k>60)){if(e)e.preventDefault();if(M=='boss'&&e&&e.repeat)return;if(M=='play'){if(once)tapd=d;else{down[d]=1;held=d}}else dirKey(d);return}
@@ -1090,7 +1161,7 @@ function onKey(k,e,once){var d=KD[k],n;aInit();
   if(k>=48&&k<=57){n=k-48;
     if(M=='ov'&&OV.kind=='login')ACT.d(''+n);
     else if(M=='quiz'){if(QZ.f=='dial'){QZ.d[QZ.sel]=n;QZ.sel=Math.min(3,QZ.sel+1);sfx.blip();qzDraw()}else if(Date.now()-QZ.at>450&&qzBtn(n)>=0)qzPick(qzBtn(n))}
-    else if(M=='boss'&&(n==1||n==2))bossPick(n-1);
+    else if(M=='boss'&&n>=1&&n<=3)bossPick(n-1);
     else if(M=='play'&&n==0)showNotes(resume);return}
   if(k==8||k==27||k==10009){if(e)e.preventDefault();if(M=='ov'){if(OV.kind=='login'&&k==8)ACT.del();else if(OV.back)OV.back()}else if(M=='play')showPause();return}
   if(k==78&&M=='play'){showNotes(resume);return}
@@ -1383,13 +1454,28 @@ function drawCr(){var c=G.cr,x,y,i,k;if(!c)return;
 function drawFake(){var f=G.fk2,ex,ey,t=G.t;if(!f||(M=='ov'&&(OV.kind=='login'||OV.kind=='menu')))return;ex=f.x*16+8;ey=f.y*16+4+Math.sin(t/300)*1.5;
   cx.globalAlpha=(.5+.4*Math.sin(t/250))*(hash(Math.floor(t/90),9)>.8?.2:1);p('#d98a6a',ex-.5,ey-2.5,1,5);p('#d98a6a',ex-2.5,ey-.5,5,1);cx.globalAlpha=1}
 /* 문지기 얼굴: 시간이 흐를수록 다가오고 입이 벌어진다. 맞히면 뒤로 밀려나고 금이 간다 */
+function bossHand(from,p,sd){var e=Math.min(1,p*1.12),L,i,fl,y0,cl;
+  cx.save();if(from==3)cx.translate(-40,150);else if(from==1){cx.translate(680,150);cx.scale(-1,1)}else{cx.translate(320,-50);cx.rotate(Math.PI/2)}cx.scale(1.65,1.65);
+  L=30+e*e*(from==0?120:200);cx.fillStyle='#bdbab0';cx.beginPath();cx.moveTo(0,-17);cx.lineTo(L,-12);cx.lineTo(L,12);cx.lineTo(0,19);cx.closePath();cx.fill();
+  cx.strokeStyle='rgba(60,58,54,.55)';cx.lineWidth=1.5;cx.beginPath();cx.moveTo(10,-5);cx.lineTo(L-10,-3);cx.moveTo(14,7);cx.lineTo(L-14,5);cx.stroke();
+  cx.fillStyle='#d6d3c8';ell(L+12,0,22,19);cx.fill();cx.lineCap='round';
+  for(i=0;i<5;i++){fl=(i==0?22:36+hash(i,sd)*16)*(.75+e*.25);y0=-15+i*7.5;cl=Math.sin(G.t/110+i)*3*(1-e);
+    cx.strokeStyle='#d6d3c8';cx.lineWidth=5;cx.beginPath();cx.moveTo(L+24,y0);cx.lineTo(L+24+fl*.55,y0*1.3+cl);cx.lineTo(L+24+fl,y0*1.5+cl*2);cx.stroke();
+    cx.fillStyle='#161212';cx.fillRect(L+22+fl,y0*1.5+cl*2-2,4,4)}
+  cx.restore()}
 function bossPaint(){var B=G.bs,th,a,s,W2;if(!B)return;
-  th=B.st=='ask'?1-B.t/B.tm:B.st=='wrong'||B.st=='dead'?1:B.st=='in'?.2:.1;
-  a=B.st=='in'?Math.min(1,(3200-B.w)/1600):B.st=='end'?Math.max(0,B.w/1800):1;
-  cx.globalAlpha=.6*a;cx.fillStyle='#000';cx.fillRect(0,0,640,360);cx.globalAlpha=1;if(G.face>0)return;
-  if(G.t-PFt>=70||PFt>G.t||PFs!==B.sd+1000){PFt=G.t;PFs=B.sd+1000;s=(1+th*.75)*(1-(G.bsR>0?G.bsR/500*.25:0));W2=58*s;
-    pfRun(function(){faceV(320+rnd(-1,1)*(1+th*4),118+th*18,W2,W2*1.28,Math.min(1,th*1.2),B.b.fv,G.t,B.sd,1-B.hp/B.max)},false)}
+  th=B.st=='ask'?1-B.t/B.tm:B.st=='wrong'||B.st=='dead'||B.st=='hurt'?1:B.st=='atk'?.75:B.st=='fin'?Math.max(.05,.6-B.fin/B.need*.55):B.st=='ph'||B.st=='rise'?.95:B.st=='in'?.2:.1;
+  a=B.st=='in'?Math.min(1,(3400-B.w)/1600):B.st=='end'?Math.max(0,B.w/1800):1;
+  cx.globalAlpha=(B.ph>=3?.7:.6)*a;cx.fillStyle='#000';cx.fillRect(0,0,640,360);cx.globalAlpha=1;if(G.face>0)return;
+  if(G.t-PFt>=70||PFt>G.t||PFs!==B.sd+1000){PFt=G.t;PFs=B.sd+1000;s=(1+th*.75)*(1-(G.bsR>0?G.bsR/500*.25:0))*(1+(B.lg>0?B.lg/1100*.5:0));W2=58*s;
+    pfRun(function(){var i,w,ox=0;
+      if(B.b.mech=='three'&&B.ph>=2)for(i=0;i<(B.ph>=3?7:4);i++){w=14+hash(i+9,B.sd)*12;faceV(60+hash(i,B.sd)*520,40+hash(i+5,B.sd)*150,w,w*1.28,.35+.3*Math.sin(G.t/300+i),2,G.t+i*90,B.sd+i,0)}  /* 여기저기 뜨는 눈 */
+      if(B.st=='atk')ox=B.atk.from==3?-40:B.atk.from==1?40:0;
+      faceV(320+ox+rnd(-1,1)*(1+th*4),118+th*18,W2,W2*1.28,Math.min(1,th*1.2),B.b.fv,G.t,B.sd,1-Math.max(0,B.hp)/B.max);
+      if(B.st=='atk')bossHand(B.atk.from,1-B.atk.t/B.atk.tm,B.sd);else if(B.st=='hurt'&&B.atk)bossHand(B.atk.from,1,B.sd)},false)}
   pfShow(a);
+  if(B.ph>=3&&B.st!='end'){cx.globalAlpha=(.1+.07*Math.sin(G.t/160))*a;cx.fillStyle='#6a0a0a';cx.fillRect(0,0,640,360)}   /* 마지막 막: 붉게 맥박 친다 */
+  if(B.cbo>=4&&B.st!='end'){cx.globalAlpha=1;glow(320,360,170,'255,150,60',.2+.07*Math.sin(G.t/90))}                     /* 불꽃 */
   if(B.st=='end'){cx.globalAlpha=(1-B.w/1800)*.8;cx.fillStyle='#f4f3ea';cx.fillRect(0,0,640,360)}
   cx.globalAlpha=1}
 function draw(){
